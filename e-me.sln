@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-me.mobile", "e-me.mobile\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-me.server.Mvc", "e-me.server\e-me.server.Mvc.csproj", "{57D6951C-2C54-4C74-9A8E-4EEFF2AB7ACD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-me.Shared", "e-me.Shared\e-me.Shared.csproj", "{0658E900-7FA4-4E20-913E-F2404F684FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-me.Shared", "e-me.Shared\e-me.Shared.csproj", "{0658E900-7FA4-4E20-913E-F2404F684FEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

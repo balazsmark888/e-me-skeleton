@@ -17,8 +17,7 @@ namespace e_me.server.Mvc
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("https://localhost:5001",
-                        $"https://{Dns.GetHostEntry(Dns.GetHostName()).AddressList.Last()}:5001");
+                    //webBuilder.UseUrls($"https://{Dns.GetHostEntry(Dns.GetHostName()).AddressList.Last()}:44335");
                     webBuilder.UseStartup<Startup>();
                 });
     }

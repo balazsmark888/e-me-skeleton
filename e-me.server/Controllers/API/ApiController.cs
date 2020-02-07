@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace e_me.server.Mvc.Controllers.API
 {
-    
+
     public class ApiController : Controller
     {
         private IConfiguration Configuration { get; }
@@ -29,19 +29,15 @@ namespace e_me.server.Mvc.Controllers.API
         /// Handles the API requests related to remote login
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Login([FromForm]EmeLoginModel loginModel)
+        public async Task<IActionResult> Login([FromForm]SimpleLoginModel simpleLoginModel)
         {
-            var result = await SignInManager.CheckPasswordSignInAsync(new ApplicationUser
-            {
-                Email = loginModel.Input.Email
-            }, loginModel.Input.Password, false);
-
+            var result = await SignInManager.PasswordSignInAsync(simpleLoginModel.Email, simpleLoginModel.Password, true, false);
             if (result.Succeeded)
             {
                 var claims = new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                    new Claim(JwtRegisteredClaimNames.Email, loginModel.Input.Email),
+                    new Claim(JwtRegisteredClaimNames.Email, simpleLoginModel.Email),
                 };
 
                 var credentials =
