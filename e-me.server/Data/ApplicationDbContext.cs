@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using e_me.Shared.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace e_me.server.Data
+namespace e_me.server.Mvc.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        #region Public Properties
+
+        public DbSet<Item> Items { get; set; }
+
+        #endregion
+
+        public ApplicationDbContext(DbContextOptions options)
             : base(options)
         {
         }

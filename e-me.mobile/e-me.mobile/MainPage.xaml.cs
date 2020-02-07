@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace e_me.mobile
@@ -13,17 +9,9 @@ namespace e_me.mobile
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
-        public int Counter { get; set; } = 0;
-
         public MainPage()
         {
             InitializeComponent();
-        }
-
-        private void Button_OnClicked(object sender, EventArgs e)
-        {
-            Counter++;
-            ((Button)sender).Text = $"You clicked {Counter} times.";
         }
     }
 }

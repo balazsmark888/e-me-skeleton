@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
+using System.Net.Sockets;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace e_me.server
+namespace e_me.server.Mvc
 {
     public class Program
     {
@@ -20,6 +17,8 @@ namespace e_me.server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseUrls("https://localhost:5001",
+                        $"https://{Dns.GetHostEntry(Dns.GetHostName()).AddressList.Last()}:5001");
                     webBuilder.UseStartup<Startup>();
                 });
     }

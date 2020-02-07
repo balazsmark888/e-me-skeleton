@@ -7,7 +7,8 @@
              x:Class="e_me.mobile.MainPage">
 
     <StackLayout>
-        <Button Text="Click me!" Clicked="Button_OnClicked"></Button>
+        <Button x:Name="Button" Text="Click me!"></Button>
+        <Label x:Name="Label" BindingContext="Label"></Label>
     </StackLayout>
 
 </ContentPage>
