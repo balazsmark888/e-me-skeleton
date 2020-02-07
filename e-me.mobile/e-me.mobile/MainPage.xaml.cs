@@ -20,8 +20,8 @@ namespace e_me.mobile
             var client = new HttpClient();
             var values = new Dictionary<string, string>
             {
-                {"Email", EntryEmail.Text},
-                {"Password", EntryPassword.Text}
+                {"Email", "asd@asd.com"},
+                {"Password", "Alma222..."}
             };
 
             var content = new FormUrlEncodedContent(values);
