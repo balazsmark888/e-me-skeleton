@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System.Net;
+using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
@@ -14,6 +15,7 @@ namespace e_me.mobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            ServicePointManager.ServerCertificateValidationCallback += (o, cert, chain, errors) => true;
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

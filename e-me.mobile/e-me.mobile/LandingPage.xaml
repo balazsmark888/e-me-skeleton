@@ -4,12 +4,13 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="e_me.mobile.SampleLoginPage">
+             x:Class="e_me.mobile.LandingPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label x:Name="LabelLoggedIn"
+            <Label x:Name="LabelWelcome"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
+            <Button x:Name="ButtonRetry" Text="Retry" IsVisible="False" IsEnabled="False"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

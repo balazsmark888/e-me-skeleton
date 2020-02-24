@@ -29,7 +29,6 @@ namespace e_me.server.Mvc.Controllers.API
         /// Handles the API requests related to remote login
         /// </summary>
         [HttpPost]
-        [RequireHttps]
         public async Task<IActionResult> Login([FromForm]SimpleLoginModel simpleLoginModel)
         {
             var result = await SignInManager.PasswordSignInAsync(simpleLoginModel.Email, simpleLoginModel.Password, true, false);

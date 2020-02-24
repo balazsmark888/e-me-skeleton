@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.Http;
+using e_me.mobile.Settings;
 
 namespace e_me.mobile
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
     [DesignTimeVisible(false)]
     public partial class MainPage
     {
@@ -17,18 +16,32 @@ namespace e_me.mobile
 
         private async void ButtonLogin_OnClicked(object sender, EventArgs e)
         {
-            var client = new HttpClient();
+            // This bypasses HTTPS certificate problems
+            // TODO: remove after development
+            var clientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (s, cert, chain, sslPolicyErrors) => true
+            };
+
+            var client = new HttpClient(clientHandler);
             var values = new Dictionary<string, string>
             {
-                {"Email", "asd@asd.com"},
-                {"Password", "Alma222..."}
+                {"Email", EntryEmail.Text},
+                {"Password", EntryPassword.Text}
             };
 
             var content = new FormUrlEncodedContent(values);
 
-            var response = await client.PostAsync("https://192.168.100.80:45455/api/login", content);
+            var response = await client.PostAsync("http://10.0.2.2:5000/api/login", content);
 
-            ButtonLogin.Text = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                ApplicationSettings.SetSetting(ApplicationSettingConstants.UsernameKey, EntryEmail.Text);
+                ApplicationSettings.SetSetting(ApplicationSettingConstants.JwtTokenKey,
+                    await response.Content.ReadAsStringAsync());
+            }
+
+            await Navigation.PushModalAsync(new LandingPage(response.StatusCode == System.Net.HttpStatusCode.OK));
         }
     }
 }
