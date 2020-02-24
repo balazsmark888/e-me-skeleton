@@ -1,11 +1,17 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR.Client;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace e_me.mobile
 {
-    public partial class App : Application
+    public partial class App
     {
+        public HubConnection HubConnection { get; set; }
+
+        public Button Button { get; set; }
+
+        public Label Label { get; set; }
+
+
         public App()
         {
             InitializeComponent();

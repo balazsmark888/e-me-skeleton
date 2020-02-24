@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Numerics;
+using e_me.server.Mvc.Data;
+using e_me.server.Mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using e_me.server.Models;
 
-namespace e_me.server.Controllers
+namespace e_me.server.Mvc.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        protected ApplicationDbContext ApplicationContext { get; set; }
+
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext applicationContext)
         {
+            ApplicationContext = applicationContext;
             _logger = logger;
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }

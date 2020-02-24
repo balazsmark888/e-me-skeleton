@@ -7,7 +7,9 @@
              x:Class="e_me.mobile.MainPage">
 
     <StackLayout>
-        <Button Text="Click me!" Clicked="Button_OnClicked"></Button>
+        <Entry x:Name="EntryEmail" Placeholder="Email"></Entry>
+        <Entry x:Name="EntryPassword" Placeholder="Password" IsPassword="True"></Entry>
+        <Button x:Name="ButtonLogin" BackgroundColor="Orange" Text="Login" Clicked="ButtonLogin_OnClicked"></Button>
     </StackLayout>
 
 </ContentPage>

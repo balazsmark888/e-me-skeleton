@@ -1,29 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
+using System.Net.Http;
+using e_me.mobile.Settings;
 
 namespace e_me.mobile
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
     [DesignTimeVisible(false)]
-    public partial class MainPage : ContentPage
+    public partial class MainPage
     {
-        public int Counter { get; set; } = 0;
-
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void Button_OnClicked(object sender, EventArgs e)
+        private async void ButtonLogin_OnClicked(object sender, EventArgs e)
         {
-            Counter++;
-            ((Button)sender).Text = $"You clicked {Counter} times.";
+            // This bypasses HTTPS certificate problems
+            // TODO: remove after development
+            var clientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (s, cert, chain, sslPolicyErrors) => true
+            };
+
+            var client = new HttpClient(clientHandler);
+            var values = new Dictionary<string, string>
+            {
+                {"Email", EntryEmail.Text},
+                {"Password", EntryPassword.Text}
+            };
+
+            var content = new FormUrlEncodedContent(values);
+
+            var response = await client.PostAsync("http://10.0.2.2:5000/api/login", content);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                ApplicationSettings.SetSetting(ApplicationSettingConstants.UsernameKey, EntryEmail.Text);
+                ApplicationSettings.SetSetting(ApplicationSettingConstants.JwtTokenKey,
+                    await response.Content.ReadAsStringAsync());
+            }
+
+            await Navigation.PushModalAsync(new LandingPage(response.StatusCode == System.Net.HttpStatusCode.OK));
         }
     }
 }
