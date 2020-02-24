@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using e_me.Model.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using e_me.server.Mvc.Data;
-using e_me.Shared.Models;
 
 namespace e_me.server.Mvc.Controllers
 {

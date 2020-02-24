@@ -1,6 +1,6 @@
 using System.Text;
+using e_me.Model.Models;
 using e_me.server.Mvc.Data;
-using e_me.Shared.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
