@@ -1,36 +1,35 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using e_me.Model.Models;
+using e_me.server.Mvc.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using e_me.server.Mvc.Data;
+using e_me.server.Mvc.Repositories.Interfaces;
 
 namespace e_me.server.Mvc.Controllers
 {
     public class ItemsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ItemsController(ApplicationDbContext context)
+        public ItemsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Items.ToListAsync());
+            return View(_unitOfWork.Items.FindAll());
         }
 
         // GET: Items/Details/5
-        public async Task<IActionResult> Details(string id)
+        public IActionResult Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var item = _unitOfWork.Items.Find(id);
             if (item == null)
             {
                 return NotFound();
@@ -50,26 +49,26 @@ namespace e_me.server.Mvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description")] Item item)
+        public IActionResult Create([Bind("Id,Title,Description")] Item item)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
+                _unitOfWork.Items.Add(item);
+                _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             return View(item);
         }
 
         // GET: Items/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public IActionResult Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var item = await _context.Items.FindAsync(id);
+            var item = _unitOfWork.Items.Find(id);
             if (item == null)
             {
                 return NotFound();
@@ -82,7 +81,7 @@ namespace e_me.server.Mvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,Description")] Item item)
+        public IActionResult Edit(string id, [Bind("Id,Title,Description")] Item item)
         {
             if (id != item.Id)
             {
@@ -93,8 +92,10 @@ namespace e_me.server.Mvc.Controllers
             {
                 try
                 {
-                    _context.Update(item);
-                    await _context.SaveChangesAsync();
+                    var current = _unitOfWork.Items.Find(item.Id);
+                    current.Description = item.Description;
+                    current.Title = item.Title;
+                    _unitOfWork.Complete();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -102,10 +103,8 @@ namespace e_me.server.Mvc.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -113,15 +112,14 @@ namespace e_me.server.Mvc.Controllers
         }
 
         // GET: Items/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public IActionResult Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var item = _unitOfWork.Items.Find(id);
             if (item == null)
             {
                 return NotFound();
@@ -133,17 +131,17 @@ namespace e_me.server.Mvc.Controllers
         // POST: Items/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public IActionResult DeleteConfirmed(string id)
         {
-            var item = await _context.Items.FindAsync(id);
-            _context.Items.Remove(item);
-            await _context.SaveChangesAsync();
+            var item = _unitOfWork.Items.Find(id);
+            _unitOfWork.Items.Remove(item);
+            _unitOfWork.Complete();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ItemExists(string id)
         {
-            return _context.Items.Any(e => e.Id == id);
+            return _unitOfWork.Items.FindAll().Any(e => e.Id == id);
         }
     }
 }

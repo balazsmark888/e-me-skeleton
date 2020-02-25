@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using e_me.Model.Models;
 
 namespace e_me.server.Mvc.Repositories.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IItemRepository : IRepository<Item>
     {
-        IItemRepository Items { get; }
-        int Complete();
+
     }
 }

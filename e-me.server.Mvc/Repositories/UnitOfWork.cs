@@ -1,25 +1,29 @@
-﻿using e_me.server.Mvc.Repositories.Interfaces;
+﻿using e_me.server.Mvc.Data;
+using e_me.server.Mvc.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace e_me.server.Mvc.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DbContext context;
+        private readonly ApplicationDbContext _context;
 
-        public UnitOfWork(DbContext context)
+        public UnitOfWork(ApplicationDbContext context)
         {
-            this.context = context;
+            _context = context;
+            Items = new ItemRepository(_context);
         }
+
+        public IItemRepository Items { get; }
 
         public int Complete()
         {
-            return context.SaveChanges();
+            return _context.SaveChanges();
         }
 
         public void Dispose()
         {
-            context.Dispose();
+            _context.Dispose();
         }
     }
 }
