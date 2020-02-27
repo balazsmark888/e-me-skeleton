@@ -1,4 +1,4 @@
-﻿using e_me.Shared.Models;
+﻿using e_me.Model.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

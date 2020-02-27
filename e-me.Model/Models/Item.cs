@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace e_me.Shared.Models
+namespace e_me.Model.Models
 {
-    public class Item
+    public class Item : Entity
     {
-        [Key]
-        public string Id { get; set; }
-
         [Required]
         [MaxLength(100)]
         public string Title { get; set; }

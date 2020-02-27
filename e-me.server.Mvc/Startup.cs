@@ -1,6 +1,8 @@
 using System.Text;
+using e_me.Model.Models;
 using e_me.server.Mvc.Data;
-using e_me.Shared.Models;
+using e_me.server.Mvc.Repositories;
+using e_me.server.Mvc.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -38,6 +40,7 @@ namespace e_me.server.Mvc
 
             services.AddRazorPages();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAuthentication()
                 .AddJwtBearer(options =>
