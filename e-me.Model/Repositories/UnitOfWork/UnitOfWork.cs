@@ -9,8 +9,8 @@ namespace e_me.Model.Repositories.UnitOfWork
 
         public UnitOfWork(ApplicationDbContext applicationDbContext)
         {
-            _applicationDbContext.Database.EnsureCreated();
             _applicationDbContext = applicationDbContext;
+            _applicationDbContext.Database.EnsureCreated();
             SettingRepository = new SettingRepository(_applicationDbContext);
         }
 
