@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using e_me.Model.Model;
 using e_me.Model.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +9,9 @@ namespace e_me.Model.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
-        protected readonly Microsoft.EntityFrameworkCore.DbContext Context;
+        private readonly Microsoft.EntityFrameworkCore.DbContext Context;
 
-        public Repository(Microsoft.EntityFrameworkCore.DbContext context)
+        protected Repository(Microsoft.EntityFrameworkCore.DbContext context)
         {
             Context = context;
         }
