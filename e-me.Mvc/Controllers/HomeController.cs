@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using e_me.Model.Repositories.UnitOfWork;
+﻿using e_me.Model.Repositories.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +17,7 @@ namespace e_me.Mvc.Controllers
 
         public IActionResult Index()
         {
-            return Json(_unitOfWork.SettingRepository.GetAll().ToList());
+            return View();
         }
     }
 }

@@ -1,6 +1,7 @@
 using e_me.Model.DbContext;
 using e_me.Model.Model;
 using e_me.Model.Repositories.UnitOfWork;
+using e_me.Mvc.SignalRHubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -30,8 +31,10 @@ namespace e_me.Mvc
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,12 +57,17 @@ namespace e_me.Mvc
 
             app.UseAuthentication();
 
+            app.UseStaticFiles();
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<TestHub>("/testhub");
             });
+
         }
     }
 }

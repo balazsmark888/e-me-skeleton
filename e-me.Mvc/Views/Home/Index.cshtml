@@ -1,1 +1,15 @@
-﻿<h1>Hello World!</h1>
+﻿@page
+
+
+
+<div id="messages"></div>
+
+<textarea name="message" id="message"></textarea>
+<input type="button" id="sendButton" value="Send" />
+
+@section scripts
+{
+    <script src="lib/aspnet-signalr/signalr.js"></script>
+    <script src="lib/aspnet-signalr/signalr.min.js"></script>
+    <script src="~/js/signalR.js"></script>
+}

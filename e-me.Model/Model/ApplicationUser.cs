@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace e_me.Model.Model
 {
-    [Table("User", Schema = "dbo")]
-    public class User : IdentityUser
+    [Table("ApplicationUser", Schema = "dbo")]
+    public class ApplicationUser : IdentityUser
     {
+        
     }
 }

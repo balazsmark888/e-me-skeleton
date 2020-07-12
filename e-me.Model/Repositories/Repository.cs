@@ -7,51 +7,51 @@ using Microsoft.EntityFrameworkCore;
 
 namespace e_me.Model.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IBaseEntity
     {
-        private readonly Microsoft.EntityFrameworkCore.DbContext Context;
+        private readonly Microsoft.EntityFrameworkCore.DbContext _context;
 
         protected Repository(Microsoft.EntityFrameworkCore.DbContext context)
         {
-            Context = context;
+            _context = context;
         }
 
         public TEntity Get(int id)
         {
-            return Context.Set<TEntity>().Find(id);
+            return _context.Set<TEntity>().Find(id);
         }
 
         public IQueryable<TEntity> GetAll()
         {
-            return Context.Set<TEntity>().AsQueryable();
+            return _context.Set<TEntity>().AsQueryable();
         }
 
         public IQueryable<TEntity> GetAllIncluding(params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            return includeProperties.Aggregate<Expression<Func<TEntity, object>>, IQueryable<TEntity>>(Context.Set<TEntity>(), (current, includeProperty) => current.Include(includeProperty));
+            return includeProperties.Aggregate<Expression<Func<TEntity, object>>, IQueryable<TEntity>>(_context.Set<TEntity>(), (current, includeProperty) => current.Include(includeProperty));
         }
 
         public void InsertOrUpdate(TEntity entity)
         {
             if (entity.Id == default)
             {
-                Context.Set<TEntity>().Add(entity);
+                _context.Set<TEntity>().Add(entity);
             }
             else
             {
-                Context.Entry(entity).State = EntityState.Modified;
+                _context.Entry(entity).State = EntityState.Modified;
             }
         }
 
         public void Delete(int id)
         {
-            Context.Set<TEntity>().Remove(Context.Set<TEntity>().Find(id));
+            _context.Set<TEntity>().Remove(_context.Set<TEntity>().Find(id));
         }
 
         public void Save()
         {
-            using var transaction = Context.Database.BeginTransaction();
-            Context.SaveChanges();
+            using var transaction = _context.Database.BeginTransaction();
+            _context.SaveChanges();
             transaction.Commit();
         }
     }

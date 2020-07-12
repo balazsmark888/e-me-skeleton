@@ -6,8 +6,11 @@ namespace e_me.Model.Model
 {
     [Table("Setting", Schema = "dbo")]
     [Serializable]
-    public class Setting : BaseEntity
+    public class Setting : IBaseEntity
     {
+        [Key]
+        public int Id { get; set; }
+
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }

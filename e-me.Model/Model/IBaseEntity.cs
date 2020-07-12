@@ -2,7 +2,7 @@
 
 namespace e_me.Model.Model
 {
-    public class BaseEntity
+    public interface IBaseEntity
     {
         [Key]
         public int Id { get; set; }
