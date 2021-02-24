@@ -2,6 +2,6 @@
 {
     public interface IApplicationUserContextFactory
     {
-        public ApplicationUserContext Create();
+        ApplicationUserContext Create();
     }
 }

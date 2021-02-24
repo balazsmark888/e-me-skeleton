@@ -19,8 +19,6 @@ namespace e_me.Core.Application
             return CreateApplicationUserContext(sessionId, httpContext);
         }
 
-
-
         private string GetCurrentUserName(HttpContext httpContext)
         {
             if (!IsAuthenticated(httpContext))
@@ -37,6 +35,7 @@ namespace e_me.Core.Application
             var principal = httpContext.User;
             return principal != null && principal.Identity.IsAuthenticated;
         }
+
         private ApplicationUserContext CreateApplicationUserContext(string sessionId, HttpContext httpContext)
         {
             return new ApplicationUserContext
@@ -44,7 +43,7 @@ namespace e_me.Core.Application
                 ApplicationKey = ApplicationConfiguration.Instance.ApplicationKey,
                 ConnectionString = ApplicationConfiguration.Instance.ConnectionString,
                 CurrentSessionId = sessionId,
-                CurrentUserName = GetCurrentUserName(httpContext)
+                CurrentUserName = GetCurrentUserName(httpContext),
             };
         }
     }
