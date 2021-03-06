@@ -9,5 +9,9 @@
         public string ApplicationKey { get; set; }
 
         public string ConnectionString { get; set; }
+
+        public string SslTcpServerCertificatePath { get; set; }
+
+        public int SslTcpServerPort { get; set; }
     }
 }

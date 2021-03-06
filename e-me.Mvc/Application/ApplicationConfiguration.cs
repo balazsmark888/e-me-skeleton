@@ -1,4 +1,4 @@
-﻿namespace e_me.Core.Application
+﻿namespace e_me.Mvc.Application
 {
     public class ApplicationConfiguration
     {

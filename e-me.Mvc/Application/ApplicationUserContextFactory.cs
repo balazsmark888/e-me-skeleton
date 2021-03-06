@@ -1,7 +1,8 @@
 ﻿using System;
+using e_me.Core.Application;
 using Microsoft.AspNetCore.Http;
 
-namespace e_me.Core.Application
+namespace e_me.Mvc.Application
 {
     public class ApplicationUserContextFactory : IApplicationUserContextFactory
     {

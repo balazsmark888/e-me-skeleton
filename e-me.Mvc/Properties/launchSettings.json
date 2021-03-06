@@ -3,12 +3,12 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://localhost/e-me.Mvc",
+      "applicationUrl": "https://localhost/e-me.Mvc",
       "sslPort": 0
     },
     "iisExpress": {
       "applicationUrl": "http://localhost:53839",
-      "sslPort": 0
+      "sslPort": 44365
     }
   },
   "profiles": {
@@ -30,7 +30,7 @@
     "IIS": {
       "commandName": "IIS",
       "launchBrowser": true,
-      "launchUrl": "http://localhost/e-me.Mvc",
+      "launchUrl": "https://localhost/e-me.Mvc",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

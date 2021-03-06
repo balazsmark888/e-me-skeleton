@@ -11,7 +11,7 @@ namespace e_me.Core.Logging
 {
     public class ApplicationLoggerFactory
     {
-        private static readonly string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        private static readonly string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
         public static ILoggerFactory Create(IConfiguration configuration)
         {
@@ -27,12 +27,12 @@ namespace e_me.Core.Logging
                 .ReadFrom.Configuration(configuration)
                 .WriteTo.Console(theme: AnsiConsoleTheme.Code)
                 .WriteTo.File(LogFilePath, rollingInterval: RollingInterval.Day)
-                .WriteTo.MSSqlServer(configuration.GetConnectionString("A2000TemplateDb"),
+                .WriteTo.MSSqlServer(configuration.GetConnectionString("EMeDb"),
                     new MSSqlServerSinkOptions { TableName = "Log", AutoCreateSqlTable = true })
                 .CreateLogger();
         }
 
         private static string LogFilePath =>
-            Path.Combine(baseDirectory, "Logs", "Log.txt");
+            Path.Combine(BaseDirectory, "Logs", "Log.txt");
     }
 }
