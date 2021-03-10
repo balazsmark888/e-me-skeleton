@@ -1,3 +1,4 @@
+using System.Threading;
 using e_me.Core.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +29,7 @@ namespace e_me.Mvc
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -36,6 +38,19 @@ namespace e_me.Mvc
                 endpoints.MapControllerRoute(
                     name: "defaultApi",
                     pattern: "api/{controller}/{id?}");
+            });
+
+            app.UseWebSockets();
+            app.Use(async (httpContext, next) =>
+            {
+                if (httpContext.WebSockets.IsWebSocketRequest && httpContext.Request.Path.StartsWithSegments("/wss"))
+                {
+                    /*TODO: check if ECDF handshake*/
+                }
+                else
+                {
+                    await next();
+                }
             });
 
         }

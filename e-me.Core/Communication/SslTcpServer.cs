@@ -5,7 +5,7 @@ using e_me.Core.Application;
 
 namespace e_me.Core.Communication
 {
-    public class SslTcpServer
+    public class SslTcpServer : ITcpServer
     {
         private readonly X509Certificate _serverCertificate;
 
@@ -20,6 +20,11 @@ namespace e_me.Core.Communication
         public void RunServer()
         {
             _listener.Start();
+        }
+
+        public void StopServer()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
