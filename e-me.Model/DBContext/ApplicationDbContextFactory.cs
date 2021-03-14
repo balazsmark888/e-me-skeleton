@@ -9,18 +9,16 @@ namespace e_me.Model.DBContext
         private readonly IConfiguration _configuration;
         private readonly ApplicationUserContext _applicationUserContext;
 
-
         public ApplicationDbContextFactory(IConfiguration configuration, ApplicationUserContext applicationUserContext)
         {
-            _applicationUserContext = applicationUserContext;
-            _configuration = configuration;
+            this._configuration = configuration;
+            this._applicationUserContext = applicationUserContext;
         }
 
-        public DbContext GetDbContext()
+        public ApplicationDbContext Create()
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             var connectionString = GetConnectionString();
-
             optionsBuilder.UseSqlServer(connectionString);
 
             return new ApplicationDbContext(optionsBuilder.Options);

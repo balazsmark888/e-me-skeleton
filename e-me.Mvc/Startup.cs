@@ -1,7 +1,15 @@
-using System.Threading;
+using System;
+using e_me.Business;
+using e_me.Business.Interfaces;
+using e_me.Core.Application;
 using e_me.Core.Logging;
+using e_me.Model;
+using e_me.Model.DBContext;
+using e_me.Mvc.Application;
+using e_me.Mvc.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +28,25 @@ namespace e_me.Mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddSingleton(sp => ApplicationLoggerFactory.Create(Configuration));
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<IApplicationUserContextFactory, ApplicationUserContextFactory>();
+            services.AddTransient(sp => sp.GetRequiredService<IApplicationUserContextFactory>().Create());
+
+            services.AddSingleton(ApplicationLoggerFactory.Create(Configuration));
+
+            services.AddTransient<IApplicationDbContextFactory, ApplicationDbContextFactory>();
+            services.AddTransient(sp => sp.GetRequiredService<IApplicationDbContextFactory>().Create());
+
+            services.AddRepositories();
+			services.AddTransient<Configuration>();
+
+            services.AddTransient<IUserService, UserService>();
+
+            services.AddJwtBearerAuthentication(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -33,6 +59,9 @@ namespace e_me.Mvc
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -41,6 +70,7 @@ namespace e_me.Mvc
             });
 
             app.UseWebSockets();
+
             app.Use(async (httpContext, next) =>
             {
                 if (httpContext.WebSockets.IsWebSocketRequest && httpContext.Request.Path.StartsWithSegments("/wss"))

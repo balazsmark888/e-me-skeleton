@@ -14,13 +14,22 @@ namespace e_me.Model.DBContext
         {
         }
 
-        public DbSet<ClientECDHKeyPair> ClientKeyPairs { get; set; }
+        public DbSet<ClientEcdhKeyPair> ClientEcdhKeyPairs { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder
-                .UseSqlServer("Data Source=.;Initial Catalog=E-me;Integrated Security=True");
-        }
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<JwtToken> JwtTokens { get; set; }
+
+        public DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
+
+        public DbSet<SecurityRole> SecurityRoles { get; set; }
+
+        public DbSet<UserSecurityRole> UserSecurityRoles { get; set; }
+
+        public DbSet<ApplicationSetting> ApplicationSettings { get; set; }
+
+        public DbSet<UserAvatar> UserAvatars { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

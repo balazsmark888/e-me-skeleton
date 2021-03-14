@@ -2,7 +2,7 @@
 {
     public class ApplicationConfiguration
     {
-        private static readonly object LockInstanceManager = new object();
+        private static readonly object LockInstanceManager = new();
 
         private static volatile ApplicationConfiguration _instance;
 

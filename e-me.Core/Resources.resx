@@ -117,7 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="SecurityType_Administrator" xml:space="preserve">
+    <value>Application administrator</value>
+  </data>
+  <data name="SecurityType_RegularUser" xml:space="preserve">
+    <value>Application user</value>
+  </data>
+  <data name="SecurityType_Viewer" xml:space="preserve">
+    <value>Viewer</value>
+  </data>
+  <data name="SessionStatus_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="SessionStatus_Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
   <data name="msgUserNotFound" xml:space="preserve">
     <value>User not found!</value>
+  </data>
+  <data name="msgOldAndNewPasswordsShouldDiffer" xml:space="preserve">
+    <value>The 'New password' should differ from the 'Old password' !</value>
+  </data>
+  <data name="msgOldPasswordInputIncorrect" xml:space="preserve">
+    <value>The old password entered is incorrect!</value>
+  </data>
+  <data name="msgOldPasswordMandatory" xml:space="preserve">
+    <value>The old password is mandatory!</value>
+  </data>
+  <data name="msgPasswordMandatory" xml:space="preserve">
+    <value>The password is mandatory!</value>
+  </data>
+  <data name="msgPasswordConfirmMandatory" xml:space="preserve">
+    <value>The password confirmation is mandatory!</value>
+  </data>
+  <data name="msgPasswordConfirmIncorrect" xml:space="preserve">
+    <value>Passwords do not match!</value>
+  </data>
+  <data name="msgAdminUserCannotBeDeleted" xml:space="preserve">
+    <value>Admin user cannot be deleted!</value>
   </data>
 </root>

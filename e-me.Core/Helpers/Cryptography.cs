@@ -2,7 +2,7 @@
 
 namespace e_me.Core.Helpers
 {
-    public static class Encryption
+    public static class Cryptography
     {
         public static string Encrypt(string stringToEncrypt)
         {
