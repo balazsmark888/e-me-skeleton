@@ -47,8 +47,6 @@ namespace e_me.Business
 
         public async Task<User> CreateAsync() => await _userRepository.CreateEmptyUserAsync();
 
-        public User Create() => _userRepository.CreateEmptyUser();
-
         public async Task<bool> ChangePasswordLoggedUserAsync(User user)
         {
             var oldUser = await _userRepository.GetByIdAsync(user.Id);
@@ -205,20 +203,23 @@ namespace e_me.Business
             return true;
         }
 
-        public async Task<User> CreateAsync(User user)
+        public async Task<User> CreateAsync(User user, string password)
         {
             if (user == null)
             {
                 return null;
             }
-            user.CreationDate = DateTime.Now;
-            user.Status = false;
 
-            var password = PasswordGeneration.GenerateRandomPassword();
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ApplicationException(Resources.msgPasswordMandatory);
+            }
+
+            user.CreationDate = DateTime.Now;
+            user.Status = true;
+
             var encryptedPassword = Cryptography.GetEncryptedPassword(password);
             user.Password = encryptedPassword;
-            user.ChangePasswordNextLogon = user.ChangePasswordNextLogon;
-
 
             await _userRepository.AddOrUpdateAsync(user);
             await _userRepository.SaveAsync();
@@ -408,31 +409,41 @@ namespace e_me.Business
             return true;
         }
 
-        public async Task<UserProfileDto> CreateUserAsync(UserProfileDto userProfileDto)
+        public async Task<UserProfileDto> CreateUserAsync(UserRegistrationDto userRegistrationDto)
         {
-            var existingUserEmail = await All.AnyAsync(s => s.Email == userProfileDto.Email.Trim().ToLowerInvariant());
+            var existingUserEmail = await All.AnyAsync(s => s.Email == userRegistrationDto.Email.Trim().ToLowerInvariant());
             if (existingUserEmail)
             {
-                throw new Exception("User email already exists! If you want to update please use the Edit action!");
+                throw new ApplicationException(Resources.msgEmailAlreadyExists);
             }
 
-            var userToBeAdded = _mapper.Map<User>(userProfileDto);
-            userToBeAdded.SecurityRoleId = userProfileDto.SecurityRoleDto?.SecurityRoleId ?? default;
-            var user = await CreateAsync(userToBeAdded);
-            await SetUserRole(user.Id, userProfileDto.SecurityRoleDto);
+            var existingPersonalCode = await All.AnyAsync(s => s.PersonalNumericCode == userRegistrationDto.PersonalNumericCode.Trim().ToLowerInvariant());
+            if (existingPersonalCode)
+            {
+                throw new ApplicationException(Resources.msgPersonalCodeAlreadyExists);
+            }
+
+            var defaultSecurityRole = _securityRoleRepository.All
+                .FirstOrDefault(p => p.SecurityType == (int)Enums.SecurityType.RegularUser);
+
+            if (defaultSecurityRole == null)
+            {
+                throw new ApplicationException(Resources.msgDefaultSecurityRoleNotFound);
+            }
+
+            var userToBeAdded = _mapper.Map<User>(userRegistrationDto);
+            userToBeAdded.SecurityRoleId = defaultSecurityRole.Id;
+
+            var user = await CreateAsync(userToBeAdded, userRegistrationDto.Password);
+            await SetUserRole(user.Id, defaultSecurityRole);
             var mappedUser = await GetUserDtoAsync(user.Id);
             return mappedUser;
         }
 
-        private async Task SetUserRole(Guid userId, SecurityRoleDto securityRoleDto)
+        private async Task SetUserRole(Guid userId, SecurityRole securityRole)
         {
-            if (securityRoleDto != null)
+            if (securityRole != null)
             {
-                var dbSecurityRole = await _securityRoleRepository.All.FirstOrDefaultAsync(s => s.Id == securityRoleDto.SecurityRoleId);
-                if (dbSecurityRole == null)
-                {
-                    throw new Exception("Security role does not exist!");
-                }
                 var userRole = await _userSecurityRoleRepository.All.FirstOrDefaultAsync(s => s.UserId == userId);
 
                 if (userRole == null)
@@ -440,14 +451,14 @@ namespace e_me.Business
                     userRole = new UserSecurityRole()
                     {
                         UserId = userId,
-                        SecurityRoleId = securityRoleDto.SecurityRoleId
+                        SecurityRoleId = securityRole.Id
                     };
                 }
                 else
                 {
-                    if (userRole.SecurityRoleId != securityRoleDto.SecurityRoleId)
+                    if (userRole.SecurityRoleId != securityRole.Id)
                     {
-                        userRole.SecurityRoleId = securityRoleDto.SecurityRoleId;
+                        userRole.SecurityRoleId = securityRole.Id;
                     }
                 }
                 await _userSecurityRoleRepository.AddOrUpdateAsync(userRole);

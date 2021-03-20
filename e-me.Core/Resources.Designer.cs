@@ -70,6 +70,24 @@ namespace e_me.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find default security role!.
+        /// </summary>
+        public static string msgDefaultSecurityRoleNotFound {
+            get {
+                return ResourceManager.GetString("msgDefaultSecurityRoleNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User email already exists!.
+        /// </summary>
+        public static string msgEmailAlreadyExists {
+            get {
+                return ResourceManager.GetString("msgEmailAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;New password&apos; should differ from the &apos;Old password&apos; !.
         /// </summary>
         public static string msgOldAndNewPasswordsShouldDiffer {
@@ -120,6 +138,15 @@ namespace e_me.Core {
         public static string msgPasswordMandatory {
             get {
                 return ResourceManager.GetString("msgPasswordMandatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User personal code already exists!.
+        /// </summary>
+        public static string msgPersonalCodeAlreadyExists {
+            get {
+                return ResourceManager.GetString("msgPersonalCodeAlreadyExists", resourceCulture);
             }
         }
         

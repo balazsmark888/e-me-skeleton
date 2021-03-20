@@ -30,7 +30,7 @@ namespace e_me.Business.Interfaces
 
         Task<bool> ResetUserPassword(User user, string newPassword);
 
-        Task<UserProfileDto> CreateUserAsync(UserProfileDto userProfileDto);
+        Task<UserProfileDto> CreateUserAsync(UserRegistrationDto userRegistrationDto);
 
         Task<string> ChangePasswordAsync(Guid id);
     }

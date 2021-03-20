@@ -156,4 +156,13 @@
   <data name="msgAdminUserCannotBeDeleted" xml:space="preserve">
     <value>Admin user cannot be deleted!</value>
   </data>
+  <data name="msgDefaultSecurityRoleNotFound" xml:space="preserve">
+    <value>Could not find default security role!</value>
+  </data>
+  <data name="msgEmailAlreadyExists" xml:space="preserve">
+    <value>User email already exists!</value>
+  </data>
+  <data name="msgPersonalCodeAlreadyExists" xml:space="preserve">
+    <value>User personal code already exists!</value>
+  </data>
 </root>

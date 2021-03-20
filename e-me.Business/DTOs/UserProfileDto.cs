@@ -14,14 +14,13 @@ namespace e_me.Business.DTOs
         public string FullName { get; set; }
 
         [Required]
-        public Guid TenantId { get; set; }
-
-        public string TenantName { get; set; }
-
-        [Required]
         public string Email { get; set; }
 
-        public DateTime? ExpirationDate { get; set; }
+        [Required]
+        public string PersonalNumericCode { get; set; }
+
+        [Required]
+        public string Password { get; set; }
 
         public SecurityRoleDto SecurityRoleDto { get; set; }
     }

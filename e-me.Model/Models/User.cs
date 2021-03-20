@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using e_me.Model.Resources;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace e_me.Model.Models
@@ -35,6 +36,9 @@ namespace e_me.Model.Models
         public byte[] RowVersion { get; set; }
 
         public bool ChangePasswordNextLogon { get; set; }
+
+        [MaxLength(50)]
+        public string PersonalNumericCode { get; set; }
 
         [MaxLength(200)]
         [NotMapped]

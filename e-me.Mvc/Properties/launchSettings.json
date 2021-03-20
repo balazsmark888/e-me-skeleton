@@ -33,7 +33,8 @@
       "launchUrl": "https://localhost/e-me.Mvc",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "nativeDebugging": true
     }
   }
 }

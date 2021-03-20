@@ -268,51 +268,6 @@ namespace e_me.Model
             }
         }
 
-        public ApplicationSetting EmailPersonalDataChange
-        {
-            get => _applicationSettingRepository.GetSettingByElement("EmailPersonalDataChange");
-
-            set => _applicationSettingRepository.AddOrUpdate(value);
-        }
-
-        public string EmailPersonalDataChangeProperty
-        {
-            get => EmailPersonalDataChange == null ? string.Empty : EmailPersonalDataChange.Value;
-
-            set
-            {
-                var emailPersonalDataChange = EmailPersonalDataChange;
-                if (emailPersonalDataChange != null)
-                {
-                    emailPersonalDataChange.Value = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
-                    _applicationSettingRepository.AddOrUpdate(emailPersonalDataChange);
-                }
-            }
-        }
-
-        public ApplicationSetting EmailCopy
-        {
-            get => _applicationSettingRepository.GetSettingByElement("emailCopy");
-
-            set => _applicationSettingRepository.AddOrUpdate(value);
-        }
-
-        public string EmailCopyProperty
-        {
-            get => EmailCopy == null ? @"ipetcu@advance2000.com" : EmailCopy.Value;
-
-            set
-            {
-                var emailCopy = EmailCopy;
-                if (emailCopy != null)
-                {
-                    emailCopy.Value = string.IsNullOrWhiteSpace(value) ? @"ipetcu@advance2000.com" : value;
-                    _applicationSettingRepository.AddOrUpdate(emailCopy);
-                }
-            }
-        }
-
-
         public ApplicationSetting ApplicationLink
         {
             get => _applicationSettingRepository.GetSettingByElement("ApplicationLink");
@@ -353,35 +308,6 @@ namespace e_me.Model
                 {
                     tokenTimeOut.Value = value.ToString(CultureInfo.InvariantCulture);
                     _applicationSettingRepository.AddOrUpdate(tokenTimeOut);
-                }
-            }
-        }
-
-        public ApplicationSetting TollFreeBeginnings
-        {
-            get => _applicationSettingRepository.GetSettingByElement("TollFreeBeginnings");
-
-            set => _applicationSettingRepository.AddOrUpdate(value);
-        }
-
-        public ApplicationSetting InternationalBeginnings
-        {
-            get => _applicationSettingRepository.GetSettingByElement("InternationalBeginnings");
-
-            set => _applicationSettingRepository.AddOrUpdate(value);
-        }
-
-        public string InternationalBeginningsProperty
-        {
-            get => InternationalBeginnings == null || string.IsNullOrWhiteSpace(InternationalBeginnings.Value) ? string.Empty : InternationalBeginnings.Value;
-
-            set
-            {
-                var internationalBeginnings = InternationalBeginnings;
-                if (internationalBeginnings != null)
-                {
-                    internationalBeginnings.Value = value.ToString(CultureInfo.InvariantCulture);
-                    _applicationSettingRepository.AddOrUpdate(internationalBeginnings);
                 }
             }
         }

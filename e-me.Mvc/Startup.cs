@@ -71,17 +71,17 @@ namespace e_me.Mvc
 
             app.UseWebSockets();
 
-            app.Use(async (httpContext, next) =>
-            {
-                if (httpContext.WebSockets.IsWebSocketRequest && httpContext.Request.Path.StartsWithSegments("/wss"))
-                {
-                    /*TODO: check if ECDF handshake*/
-                }
-                else
-                {
-                    await next();
-                }
-            });
+            //app.Use(async (httpContext, next) =>
+            //{
+            //    if (httpContext.WebSockets.IsWebSocketRequest && httpContext.Request.Path.StartsWithSegments("/wss"))
+            //    {
+            //        /*TODO: check if ECDF handshake*/
+            //    }
+            //    else
+            //    {
+            //        await next();
+            //    }
+            //});
 
         }
     }

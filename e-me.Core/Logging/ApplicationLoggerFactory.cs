@@ -27,7 +27,7 @@ namespace e_me.Core.Logging
                 .ReadFrom.Configuration(configuration)
                 .WriteTo.Console(theme: AnsiConsoleTheme.Code)
                 .WriteTo.File(LogFilePath, rollingInterval: RollingInterval.Day)
-                .WriteTo.MSSqlServer(configuration.GetConnectionString("EMeDb"),
+                .WriteTo.MSSqlServer(configuration.GetConnectionString("DbConnection"),
                     new MSSqlServerSinkOptions { TableName = "Log", AutoCreateSqlTable = true })
                 .CreateLogger();
         }

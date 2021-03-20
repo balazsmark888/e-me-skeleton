@@ -2,11 +2,9 @@
 {
     public class SecurityRoleCreationDto
     {
-        public string Code { get; set; }
-
         public string Name { get; set; }
 
-        public bool IsActive { get; set; }
+        public int SecurityType { get; set; }
 
         public byte[] RowVersion { get; set; }
     }
