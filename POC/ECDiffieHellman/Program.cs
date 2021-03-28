@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Text.Unicode;
 using Newtonsoft.Json;
 
 namespace ECDiffieHellman
@@ -21,18 +22,17 @@ with the release of Letraset sheets containing Lorem Ipsum passages, and more re
 software like Aldus PageMaker including versions of Lorem Ipsum."
             };
 
-            var participant1 = new EcdhParticipant();
-            var participant2 = new EcdhParticipant();
+            var participant1 = new EcdhParty();
+            var participant2 = new EcdhParty();
 
-            participant1.SetClientPublicKey(participant2.PublicKey);
-            participant2.SetClientPublicKey(participant1.PublicKey);
-
+            participant1.SetOtherPartyPublicKey(participant2.PublicKey);
+            participant2.SetOtherPartyPublicKey(participant1.PublicKey);
             var json = JsonConvert.SerializeObject(package);
-
-            var (encryptedMessage, iv) = participant1.Encrypt(json);
+            var (encryptedMessage, iv, hash) = participant1.Encrypt(json);
             Console.WriteLine("Encrypted object:");
             Console.WriteLine(Encoding.UTF32.GetString(encryptedMessage));
-            var decryptedMessage = participant2.Decrypt(encryptedMessage, iv);
+            encryptedMessage[0] = Byte.MaxValue;
+            var decryptedMessage = participant2.Decrypt(encryptedMessage, iv, hash);
             var decryptedPackage = JsonConvert.DeserializeObject<Package>(decryptedMessage);
             Console.WriteLine("Decrypted object:");
             Console.WriteLine(decryptedPackage);
