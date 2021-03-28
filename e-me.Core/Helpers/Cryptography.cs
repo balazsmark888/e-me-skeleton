@@ -16,7 +16,7 @@ namespace e_me.Core.Helpers
             return encryptor.Decrypt(stringToDecrypt);
         }
 
-        public static string HashMD5(string stringToHash)
+        public static string HashMd5(string stringToHash)
         {
             var encryptor = new Encryptor();
             return encryptor.HashMD5(stringToHash);

@@ -103,7 +103,7 @@ namespace e_me.Mvc.Auth
                 return;
             }
 
-            _logger.LogInformation("Deauthenticated user:{User}", user.FullName);
+            _logger.LogInformation($"De-authenticated user: {user.FullName}");
 
             _jwtTokenRepository.DeleteByUserId(user.Id);
             await _jwtTokenRepository.SaveAsync();
@@ -147,14 +147,6 @@ namespace e_me.Mvc.Auth
             }
 
             return await _userRepository.GetByUsernameAsync(userName);
-        }
-
-        public async Task<IList<Claim>> GetUserClaims(Guid userId)
-        {
-            var result = await _userSecurityRoleRepository.All.Include(s => s.SecurityRole)
-                .FirstOrDefaultAsync(s => s.UserId == userId);
-            var claims = new List<Claim>();
-            return claims;
         }
 
         private async Task SaveTokenAsync(Guid userId, string tokenValue, DateTime validTo, bool cancelled = false)

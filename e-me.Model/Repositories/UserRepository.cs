@@ -37,7 +37,7 @@ namespace e_me.Model.Repositories
             {
                 throw new Exception(ModelResources.msgUserNotFound);
             }
-            var userSecurityRole = _userSecurityRoleRepository.AllIncluding(s => s.SecurityRole).FirstOrDefault(s => s.Id == id);
+            var userSecurityRole = _userSecurityRoleRepository.AllIncluding(s => s.SecurityRole).FirstOrDefault(s => s.UserId == id);
             if (userSecurityRole == null)
             {
                 throw new Exception("User does not have a SecurityRole attached!");

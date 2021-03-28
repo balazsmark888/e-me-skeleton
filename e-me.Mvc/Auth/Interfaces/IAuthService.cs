@@ -14,7 +14,6 @@ namespace e_me.Mvc.Auth.Interfaces
         Task DeAuthenticateAsync();
         Task<bool> IsValidCurrentTokenAsync();
         Task<User> GetAuthenticatedUserAsync();
-        Task<IList<Claim>> GetUserClaims(Guid userId);
         Task<bool> IsValidCurrentResetPasswordTokenAsync(string resetPasswordToken);
         Task<bool> ResetUserPassword(string token, string password);
         Task<(string FullName, string Email, string Token)> GenerateResetPasswordAsync(string email);

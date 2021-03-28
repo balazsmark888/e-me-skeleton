@@ -17,19 +17,12 @@ namespace e_me.Core.Helpers
         public static string GenerateNCharPassword(int numberOfChar)
         {
             var password = string.Empty;
-
-            // there is no logon profile to give additional password creation rules
-            // normal algorithm
-            // We make a list of sets of characters to help with the random order
             var sets = new List<char[]> { UpperCaseLetters, LowerCaseLetters, Digits };
             var random = new Random();
             for (var i = 0; i < numberOfChar; i++)
             {
-                // We choose a random set
                 var setIndex = random.Next(sets.Count);
                 var set = sets[setIndex];
-
-                // We choose a random character from the set
                 var charIndex = random.Next(set.Length);
                 var character = set[charIndex];
                 password += character;
@@ -45,11 +38,8 @@ namespace e_me.Core.Helpers
             var random = new Random();
             for (var i = 0; i < numberOfChar; i++)
             {
-                // We choose a random set
                 var setIndex = random.Next(sets.Count);
                 var set = sets[setIndex];
-
-                // We choose a random character from the set
                 var charIndex = random.Next(set.Length);
                 var character = set[charIndex];
                 digits += character;

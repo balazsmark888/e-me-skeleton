@@ -253,13 +253,13 @@ namespace e_me.Business
             var userId = await _userRepository.SaveAsync();
             if (isNewUser)
             {
-                _logger.LogInformation("Created user:{UserName} with id:{UserId} by {CurrentUserName}", user.LoginName, userId, _userRepository.CurrentUser.LoginName);
+                _logger.LogInformation("Created user:{LoginName} with id:{UserId} by {CurrentUserName}", user.LoginName, userId, _userRepository.CurrentUser.LoginName);
             }
             else
             {
                 if (user.ChangePasswordNextLogon)
                 {
-                    _logger.LogInformation("Password was reset for user:{UserName} by {CurrentUserName}", user.LoginName, _userRepository.CurrentUser.LoginName);
+                    _logger.LogInformation("Password was reset for user:{LoginName} by {CurrentUserName}", user.LoginName, _userRepository.CurrentUser.LoginName);
                 }
             }
 
@@ -282,7 +282,7 @@ namespace e_me.Business
                 }
             }
 
-            _logger.LogInformation("User:{UserName} was deleted by {CurrentUserName}", user.LoginName, _userRepository.CurrentUser.LoginName);
+            _logger.LogInformation("User:{LoginName} was deleted by {CurrentUserName}", user.LoginName, _userRepository.CurrentUser.LoginName);
 
             _jwtTokenRepository.DeleteByUserId(id);
             _resetPasswordTokenRepository.DeleteByUserId(id);

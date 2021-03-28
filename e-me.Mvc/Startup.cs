@@ -6,6 +6,7 @@ using e_me.Core.Logging;
 using e_me.Model;
 using e_me.Model.DBContext;
 using e_me.Mvc.Application;
+using e_me.Mvc.Auth;
 using e_me.Mvc.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,13 @@ namespace e_me.Mvc
         {
             services.AddControllersWithViews();
 
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(1);
+            });
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -51,15 +59,14 @@ namespace e_me.Mvc
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseJwtTokenValidator(new JwtTokenValidatorOptions());
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

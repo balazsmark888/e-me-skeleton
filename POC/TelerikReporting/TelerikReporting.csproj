@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+    <PackageReference Include="Telerik.Documents.Core" Version="2021.1.222" />
+    <PackageReference Include="Telerik.Documents.Fixed" Version="2021.1.222" />
+    <PackageReference Include="Telerik.Documents.Flow" Version="2021.1.222" />
+    <PackageReference Include="Telerik.Documents.Flow.FormatProviders.Pdf" Version="2021.1.222" />
+    <PackageReference Include="Telerik.Documents.ImageUtils" Version="2021.1.222" />
+    <PackageReference Include="TiffLibrary.ImageSharpAdapter" Version="0.5.260" />
+  </ItemGroup>
+
+</Project>

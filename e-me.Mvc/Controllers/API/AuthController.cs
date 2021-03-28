@@ -26,14 +26,14 @@ namespace e_me.Mvc.Controllers.API
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] AuthDto authDto)
+        public async Task<IActionResult> Login([FromForm] AuthDto authDto)
         {
             try
             {
-                var response = await _authService.AuthenticateAsync(authDto.UserName, authDto.Password);
+                var response = await _authService.AuthenticateAsync(authDto.LoginName, authDto.Password);
                 if (response == null)
                 {
-                    return BadRequest(new { message = "Username or password is incorrect!" });
+                    return BadRequest(new { message = "LoginName or password is incorrect!" });
                 }
 
                 return Ok(response);
@@ -74,7 +74,6 @@ namespace e_me.Mvc.Controllers.API
         [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
         {
-            ApplicationConfiguration.Instance.RemoveConnectedUser(HttpContext.User.UserId());
             await _authService.DeAuthenticateAsync();
 
             return Ok();

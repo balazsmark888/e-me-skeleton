@@ -10,7 +10,7 @@ namespace e_me.Business.DTOs
 
         [Required]
         [MaxLength(50)]
-        public string Username { get; set; }
+        public string LoginName { get; set; }
 
         [Required]
         [EmailAddress]

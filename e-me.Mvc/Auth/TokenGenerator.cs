@@ -31,7 +31,7 @@ namespace e_me.Mvc.Auth
                 }),
                 Claims = new Dictionary<string, object>
                 {
-                    {ClaimTypes.Role, role }
+                    {ClaimTypes.Role, role},
                 },
                 Expires = validTo,
                 SigningCredentials = CreateSigningCredentials()
