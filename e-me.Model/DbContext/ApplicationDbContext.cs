@@ -16,13 +16,11 @@ namespace e_me.Model.DBContext
         {
         }
 
-        public DbSet<ClientEcdhKeyPair> ClientEcdhKeyPairs { get; set; }
+        public DbSet<UserEcdhKeyInformation> ClientEcdhKeyPairs { get; set; }
 
         public DbSet<User> Users { get; set; }
 
         public DbSet<JwtToken> JwtTokens { get; set; }
-
-        public DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
 
         public DbSet<SecurityRole> SecurityRoles { get; set; }
 
@@ -31,6 +29,10 @@ namespace e_me.Model.DBContext
         public DbSet<ApplicationSetting> ApplicationSettings { get; set; }
 
         public DbSet<UserAvatar> UserAvatars { get; set; }
+
+        public DbSet<UserDetail> UserDetails { get; set; }
+
+        public DbSet<DocumentType> DocumentTypes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,9 +43,13 @@ namespace e_me.Model.DBContext
             {
                 e.HasIndex(p => p.Email)
                     .IsUnique();
-                e.HasIndex(p => p.PersonalNumericCode)
-                    .IsUnique();
                 e.HasIndex(p => p.LoginName)
+                    .IsUnique();
+            });
+
+            modelBuilder.Entity<UserDetail>(e =>
+            {
+                e.HasIndex(p => p.PersonalNumericCode)
                     .IsUnique();
             });
 
@@ -52,13 +58,13 @@ namespace e_me.Model.DBContext
                 {
                     Id = Guid.NewGuid(),
                     Name = "Administrator",
-                    SecurityType = (int) Enums.SecurityType.AppAdministrator
+                    SecurityType = (int)Enums.SecurityType.AppAdministrator
                 },
                 new SecurityRole
                 {
                     Id = Guid.NewGuid(),
                     Name = "Regular User",
-                    SecurityType = (int) Enums.SecurityType.RegularUser
+                    SecurityType = (int)Enums.SecurityType.RegularUser
                 }
             );
         }

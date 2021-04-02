@@ -4,9 +4,15 @@ using e_me.Model.Models;
 
 namespace e_me.Mvc.Profiles
 {
-    public class UsersProfile : Profile
+    /// <summary>
+    /// Auto-mapper profiles for user-related models.
+    /// </summary>
+    public class UserProfile : Profile
     {
-        public UsersProfile()
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public UserProfile()
         {
             CreateMap<User, UserDto>();
             CreateMap<User, UserProfileDto>();

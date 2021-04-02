@@ -13,5 +13,7 @@ namespace e_me.Business.DTOs
         public string Role { get; set; }
 
         public string FullName { get; set; }
+
+        public string PublicKey { get; set; }
     }
 }

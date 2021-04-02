@@ -11,8 +11,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace e_me.Mvc.Extensions
 {
+    /// <summary>
+    /// Extension methods for IServiceCollection typed objects.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds JWT Authentication Service, Token Generator and Authorization Service to the service collection.
+        /// </summary>
+        /// <param name="services">IServiceCollection that defines the collection of services defined for the API.</param>
+        /// <param name="configuration">The application configuration.</param>
         public static void AddJwtBearerAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var authSettingsSection = configuration.GetSection("AuthSettings");
@@ -56,15 +64,20 @@ namespace e_me.Mvc.Extensions
             services.AddScoped<IAuthService, AuthService>();
         }
 
+        /// <summary>
+        /// Adds repositories to the service collection.
+        /// </summary>
+        /// <param name="services">IServiceCollection that defines the collection of services defined for the API.</param>
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddTransient<IJwtTokenRepository, JwtTokenRepository>();
-            services.AddTransient<IResetPasswordTokenRepository, ResetPasswordTokenRepository>();
             services.AddTransient<ISecurityRoleRepository, SecurityRoleRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserSecurityRoleRepository, UserSecurityRoleRepository>();
             services.AddTransient<IApplicationSettingRepository, ApplicationSettingRepository>();
             services.AddTransient<IUserAvatarRepository, UserAvatarRepository>();
+            services.AddTransient<IUserDetailsRepository, UserDetailsRepository>();
+            services.AddTransient<IDocumentTypeRepository, DocumentTypeRepository>();
         }
     }
 }

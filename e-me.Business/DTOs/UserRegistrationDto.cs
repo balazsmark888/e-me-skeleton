@@ -17,10 +17,6 @@ namespace e_me.Business.DTOs
         public string Email { get; set; }
 
         [Required]
-        [StringLength(13)]
-        public string PersonalNumericCode { get; set; }
-
-        [Required]
         [MaxLength(200)]
         public string Password { get; set; }
 

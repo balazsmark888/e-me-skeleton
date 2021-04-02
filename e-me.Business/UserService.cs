@@ -22,7 +22,6 @@ namespace e_me.Business
         private readonly IMapper _mapper;
         private readonly ISecurityRoleRepository _securityRoleRepository;
         private readonly IJwtTokenRepository _jwtTokenRepository;
-        private readonly IResetPasswordTokenRepository _resetPasswordTokenRepository;
 
         public UserService(IUserRepository userRepository,
                      IUserSecurityRoleRepository userSecurityRoleRepository,
@@ -30,8 +29,7 @@ namespace e_me.Business
                      ILogger<UserService> logger,
                      IMapper mapper,
                      ISecurityRoleRepository securityRoleRepository,
-                     IJwtTokenRepository jwtTokenRepository,
-                     IResetPasswordTokenRepository resetPasswordTokenRepository)
+                     IJwtTokenRepository jwtTokenRepository)
         {
             _userRepository = userRepository;
             _userSecurityRoleRepository = userSecurityRoleRepository;
@@ -40,7 +38,6 @@ namespace e_me.Business
             _mapper = mapper;
             _securityRoleRepository = securityRoleRepository;
             _jwtTokenRepository = jwtTokenRepository;
-            _resetPasswordTokenRepository = resetPasswordTokenRepository;
         }
 
         public IQueryable<User> All => _userRepository.All;
@@ -285,7 +282,6 @@ namespace e_me.Business
             _logger.LogInformation("User:{LoginName} was deleted by {CurrentUserName}", user.LoginName, _userRepository.CurrentUser.LoginName);
 
             _jwtTokenRepository.DeleteByUserId(id);
-            _resetPasswordTokenRepository.DeleteByUserId(id);
             _userRepository.DeleteById(id);
             await _userRepository.SaveAsync();
             return true;
@@ -415,12 +411,6 @@ namespace e_me.Business
             if (existingUserEmail)
             {
                 throw new ApplicationException(Resources.msgEmailAlreadyExists);
-            }
-
-            var existingPersonalCode = await All.AnyAsync(s => s.PersonalNumericCode == userRegistrationDto.PersonalNumericCode.Trim().ToLowerInvariant());
-            if (existingPersonalCode)
-            {
-                throw new ApplicationException(Resources.msgPersonalCodeAlreadyExists);
             }
 
             var defaultSecurityRole = _securityRoleRepository.All

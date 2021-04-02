@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
 using e_me.Business.DTOs;
 using e_me.Business.Interfaces;
-using e_me.Mvc.Application;
 using e_me.Mvc.Auth.Interfaces;
-using e_me.Mvc.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +24,11 @@ namespace e_me.Mvc.Controllers.API
             _authService = authService;
             _userService = userService;
         }
-
+        /// <summary>
+        /// This POST method allows users to authenticate and obtain their JWT token to access protected endpoints.
+        /// </summary>
+        /// <param name="authDto">DTO containing login information</param>
+        /// <returns>Auth information with JWT token</returns>
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromForm] AuthDto authDto)
@@ -80,60 +82,6 @@ namespace e_me.Mvc.Controllers.API
             await _authService.DeAuthenticateAsync();
 
             return Ok();
-        }
-
-        [AllowAnonymous]
-        [HttpPost("ResetPassword")]
-        public async Task<IActionResult> ResetPassword([FromBody] PasswordResetEmail passwordResetEmail)
-        {
-            //var (fullName, email, token) = await authService.GenerateResetPasswordAsync(passwordResetEmail.Email);
-            //await _emailService.SendResetPasswordEmailAsync(Request.Headers["Origin"], email, fullName, token);
-            return Ok();
-        }
-
-        [AllowAnonymous]
-        [HttpPost("CheckResetPasswordToken/{token}")]
-        public async Task<IActionResult> CheckTokenValidation([FromRoute] string token)
-        {
-            if (token == null)
-            {
-                return BadRequest("Reset Password Token not valid!");
-            }
-
-            var result = await _authService.IsValidCurrentResetPasswordTokenAsync(token);
-            if (result == false)
-            {
-                return BadRequest("Invalid token!");
-            }
-
-            return Ok();
-        }
-
-        [AllowAnonymous]
-        [HttpPost("ConfirmResetPassword/{token}")]
-        public async Task<IActionResult> ConfirmResetPassword([FromRoute] string token, [FromBody] ResetPasswordDto resetPasswordDto)
-        {
-            if (token == null)
-            {
-                return BadRequest("Reset Password Token not valid!");
-            }
-            if (!ModelState.IsValid || resetPasswordDto.ConfirmPassword != resetPasswordDto.Password)
-            {
-                return BadRequest("Password validation not good!");
-            }
-
-            var result = await _authService.IsValidCurrentResetPasswordTokenAsync(token);
-            if (result == false)
-            {
-                return BadRequest("Invalid token!");
-            }
-
-            result = await _authService.ResetUserPassword(token, resetPasswordDto.Password);
-            if (result)
-            {
-                return Ok();
-            }
-            return BadRequest("Cannot change password!");
         }
     }
 }

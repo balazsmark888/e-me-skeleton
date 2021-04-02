@@ -1,37 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
+using System.Net.Http;
 using System.Threading.Tasks;
 using e_me.Business.DTOs;
-using e_me.Business.Interfaces;
 using e_me.Model.Models;
 using e_me.Model.Repositories;
 using e_me.Mvc.Auth.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace e_me.Mvc.Auth
 {
+    /// <summary>
+    /// Service implementation for auth-related operations.
+    /// </summary>
     public class AuthService : IAuthService
     {
         public readonly AuthSettings AuthSettings;
         private readonly IUserRepository _userRepository;
-        private readonly IUserService _userService;
-        private readonly IUserSecurityRoleRepository _userSecurityRoleRepository;
         private readonly IJwtTokenRepository _jwtTokenRepository;
-        private readonly IResetPasswordTokenRepository _resetPasswordTokenRepository;
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<AuthService> _logger;
 
         public AuthService(IUserRepository userRepository,
-                     IUserService userService,
-                     IUserSecurityRoleRepository userSecurityRoleRepository,
                      IJwtTokenRepository jwtTokenRepository,
-                     IResetPasswordTokenRepository resetPasswordTokenRepository,
                      ITokenGenerator tokenGenerator,
                      IHttpContextAccessor httpContextAccessor,
                      IOptions<AuthSettings> authSettings,
@@ -39,15 +33,18 @@ namespace e_me.Mvc.Auth
         {
             AuthSettings = authSettings.Value;
             _userRepository = userRepository;
-            _userService = userService;
-            _userSecurityRoleRepository = userSecurityRoleRepository;
             _jwtTokenRepository = jwtTokenRepository;
-            _resetPasswordTokenRepository = resetPasswordTokenRepository;
             _tokenGenerator = tokenGenerator;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Authenticates the user.
+        /// </summary>
+        /// <param name="userName">User's login name.</param>
+        /// <param name="password">User's password.</param>
+        /// <returns></returns>
         public async Task<UserDto> AuthenticateAsync(string userName, string password)
         {
             var user = _userRepository.GetByUsernameAndPassword(userName, password);
@@ -61,7 +58,7 @@ namespace e_me.Mvc.Auth
             var token = _tokenGenerator.Generate(userName, validTo, role);
             await SaveTokenAsync(user.Id, token, validTo);
 
-            _logger.LogInformation("Successfully authenticated user:{User} as {Role}", userName, role);
+            _logger.LogInformation($"Successfully authenticated user:{userName} as {role}");
 
             return new UserDto
             {
@@ -72,23 +69,10 @@ namespace e_me.Mvc.Auth
             };
         }
 
-        public async Task<(string FullName, string Email, string Token)> GenerateResetPasswordAsync(string email)
-        {
-            var user = await _userRepository.All.FirstOrDefaultAsync(s => s.Email == email);
-            if (user == null)
-            {
-                return (null, null, null);
-            }
-
-            var validTo = DateTime.UtcNow.AddHours(24);
-            var token = _tokenGenerator.GeneratePasswordResetToken(user.FullName, validTo);
-            await SaveResetPasswordTokenAsync(user.Id, token, validTo);
-            _jwtTokenRepository.DeleteByUserId(user.Id);
-            await _jwtTokenRepository.SaveAsync();
-            _logger.LogInformation("Successfully generated reset token for user: {User}", user.FullName);
-            return (user.FullName, user.Email, token);
-        }
-
+        /// <summary>
+        /// De-authenticates the user.
+        /// </summary>
+        /// <returns></returns>
         public async Task DeAuthenticateAsync()
         {
             var user = await GetCurrentUserAsync();
@@ -109,6 +93,10 @@ namespace e_me.Mvc.Auth
             await _jwtTokenRepository.SaveAsync();
         }
 
+        /// <summary>
+        /// Checks whether the current user's jwt token is valid or not.
+        /// </summary>
+        /// <returns>True if the token is valid, false otherwise.</returns>
         public async Task<bool> IsValidCurrentTokenAsync()
         {
             var user = await GetCurrentUserAsync();
@@ -129,12 +117,10 @@ namespace e_me.Mvc.Auth
                    !jwtToken.Cancelled;
         }
 
-        public async Task<bool> IsValidCurrentResetPasswordTokenAsync(string resetPasswordToken)
-        {
-            var resetPasswordEntity = await _resetPasswordTokenRepository.GetByTokenAsync(resetPasswordToken);
-            return resetPasswordEntity != null && !resetPasswordEntity.Expired && resetPasswordEntity.ValidTo >= DateTime.UtcNow;
-        }
-
+        /// <summary>
+        /// Gets the authenticated user.
+        /// </summary>
+        /// <returns>The current user</returns>
         public async Task<User> GetAuthenticatedUserAsync() =>
             await GetCurrentUserAsync();
 
@@ -155,23 +141,8 @@ namespace e_me.Mvc.Auth
             token.Cancelled = cancelled;
             token.ValidTo = validTo;
 
-            _jwtTokenRepository.Add(token);
+            await _jwtTokenRepository.AddAsync(token);
             await _jwtTokenRepository.SaveAsync();
-        }
-
-        private async Task SaveResetPasswordTokenAsync(Guid userId, string tokenValue, DateTime validTo)
-        {
-            var tokenDbEntry = new ResetPasswordToken
-            {
-                Expired = false,
-                TokenString = tokenValue,
-                UserId = userId,
-                ValidTo = validTo
-            };
-            _jwtTokenRepository.DeleteByUserId(userId);
-            await _jwtTokenRepository.SaveAsync();
-            _resetPasswordTokenRepository.Add(tokenDbEntry);
-            await _resetPasswordTokenRepository.SaveAsync();
         }
 
         private JwtToken CreateToken(Guid userId, string tokenValue)
@@ -186,30 +157,10 @@ namespace e_me.Mvc.Auth
             return token;
         }
 
-
-        public async Task<bool> ResetUserPassword(string token, string password)
-        {
-            var tokenEntry = await _resetPasswordTokenRepository.GetByTokenAsync(token);
-            if (tokenEntry == null || tokenEntry.Expired || tokenEntry.ValidTo < DateTime.UtcNow)
-            {
-                return false;
-            }
-
-            var user = await _userRepository.GetByIdAsync(tokenEntry.UserId);
-            if (user == null)
-            {
-                return false;
-            }
-
-            _resetPasswordTokenRepository.Delete(tokenEntry);
-            return await _userService.ResetUserPassword(user, password);
-        }
-
-
         private string GetCurrentUserName() =>
             _httpContextAccessor.HttpContext?.User.Identity?.Name;
 
         private async Task<string> GetCurrentTokenAsync() =>
-            await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+            await (_httpContextAccessor.HttpContext ?? throw new HttpRequestException("No http context found!")).GetTokenAsync("access_token");
     }
 }
