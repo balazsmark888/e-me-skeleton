@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using e_me.Business.DTOs;
 using e_me.Model.Models;
 
-namespace e_me.Business.Interfaces
+namespace e_me.Business.Services.Interfaces
 {
     public interface IUserService
     {

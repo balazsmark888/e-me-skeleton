@@ -27,9 +27,10 @@ namespace e_me.Core.Communication
             PublicKey = DiffieHellmanCng.PublicKey;
         }
 
-        public EcdhKeyStore(ECDiffieHellmanPublicKey publicKey) : this()
+        public EcdhKeyStore(byte[] publicKey) : this()
         {
-            SetOtherPartyPublicKey(publicKey);
+            var ecdhKey = new ApplicationEcDiffieHellmanPublicKey(publicKey);
+            SetOtherPartyPublicKey(ecdhKey);
         }
 
         public void SetOtherPartyPublicKey(ECDiffieHellmanPublicKey publicKey)

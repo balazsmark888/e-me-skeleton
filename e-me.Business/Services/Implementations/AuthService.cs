@@ -1,71 +1,101 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AutoMapper;
 using e_me.Business.DTOs;
+using e_me.Business.Services.Interfaces;
+using e_me.Core.Communication;
 using e_me.Model.Models;
 using e_me.Model.Repositories;
-using e_me.Mvc.Auth.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace e_me.Mvc.Auth
+namespace e_me.Business.Services.Implementations
 {
     /// <summary>
     /// Service implementation for auth-related operations.
     /// </summary>
     public class AuthService : IAuthService
     {
-        public readonly AuthSettings AuthSettings;
+        private readonly AuthSettings _authSettings;
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenRepository _jwtTokenRepository;
-        private readonly ITokenGenerator _tokenGenerator;
+        private readonly IUserEcdhKeyInformationRepository _userEcdhKeyInformationRepository;
+        private readonly ITokenGeneratorService _tokenGeneratorService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<AuthService> _logger;
+        private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Constructor that initializes services and repositories needed for auth-related operations using DI.
+        /// </summary>
+        /// <param name="userRepository">Data-access layer object for Users.</param>
+        /// <param name="jwtTokenRepository">Data-access layer object for JwtTokens</param>
+        /// <param name="tokenGeneratorService">Token Generator service.</param>
+        /// <param name="httpContextAccessor">Http context accessor service.</param>
+        /// <param name="authSettings">Authentication settings object.</param>
+        /// <param name="logger">Logger object.</param>
+        /// <param name="mapper">Auto-mapper object.</param>
+        /// <param name="userEcdhKeyInformationRepository">Data-access layer object for UserEcdhKeyInformation.</param>
         public AuthService(IUserRepository userRepository,
                      IJwtTokenRepository jwtTokenRepository,
-                     ITokenGenerator tokenGenerator,
+                     ITokenGeneratorService tokenGeneratorService,
                      IHttpContextAccessor httpContextAccessor,
                      IOptions<AuthSettings> authSettings,
-                     ILogger<AuthService> logger)
+                     ILogger<AuthService> logger,
+                     IMapper mapper,
+                     IUserEcdhKeyInformationRepository userEcdhKeyInformationRepository)
         {
-            AuthSettings = authSettings.Value;
+            _authSettings = authSettings.Value;
             _userRepository = userRepository;
             _jwtTokenRepository = jwtTokenRepository;
-            _tokenGenerator = tokenGenerator;
+            _tokenGeneratorService = tokenGeneratorService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+            _mapper = mapper;
+            _userEcdhKeyInformationRepository = userEcdhKeyInformationRepository;
         }
 
         /// <summary>
         /// Authenticates the user.
         /// </summary>
-        /// <param name="userName">User's login name.</param>
-        /// <param name="password">User's password.</param>
+        /// <param name="authDto">Contains auth information</param>
         /// <returns></returns>
-        public async Task<UserDto> AuthenticateAsync(string userName, string password)
+        public async Task<UserDto> AuthenticateAsync(AuthDto authDto)
         {
-            var user = _userRepository.GetByUsernameAndPassword(userName, password);
+            var loginName = authDto.LoginName;
+            var password = authDto.Password;
+            var clientPublicKey = authDto.PublicKey;
+
+            var user = _userRepository.GetByUsernameAndPassword(loginName, password);
             if (user == null)
             {
                 return null;
             }
 
             var role = await _userRepository.GetUserRoleAsync(user.Id);
-            var validTo = DateTime.UtcNow + AuthSettings.TokenLifeTimeDuration;
-            var token = _tokenGenerator.Generate(userName, validTo, role);
+            var validTo = DateTime.UtcNow + _authSettings.TokenLifeTimeDuration;
+            var token = _tokenGeneratorService.Generate(loginName, validTo, role);
             await SaveTokenAsync(user.Id, token, validTo);
 
-            _logger.LogInformation($"Successfully authenticated user:{userName} as {role}");
+            _logger.LogInformation($"Successfully authenticated user:{loginName} as {role}");
+
+            var keyStore = new EcdhKeyStore(clientPublicKey);
+            var userKeyInfo = _mapper.Map<UserEcdhKeyInformation>(keyStore);
+            userKeyInfo.UserId = user.Id;
+            _userEcdhKeyInformationRepository.DeleteByUserId(user.Id);
+            await _userEcdhKeyInformationRepository.AddAsync(userKeyInfo);
+            await _userEcdhKeyInformationRepository.SaveAsync();
 
             return new UserDto
             {
-                UserName = userName,
+                UserName = loginName,
                 FullName = user.FullName,
                 Token = token,
-                ValidTo = validTo
+                ValidTo = validTo,
+                PublicKey = keyStore.PublicKey.ToByteArray()
             };
         }
 
@@ -90,6 +120,7 @@ namespace e_me.Mvc.Auth
             _logger.LogInformation($"De-authenticated user: {user.FullName}");
 
             _jwtTokenRepository.DeleteByUserId(user.Id);
+            _userEcdhKeyInformationRepository.DeleteByUserId(user.Id);
             await _jwtTokenRepository.SaveAsync();
         }
 

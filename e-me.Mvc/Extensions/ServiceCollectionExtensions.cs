@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using e_me.Business.Services;
+using e_me.Business.Services.Implementations;
+using e_me.Business.Services.Interfaces;
 using e_me.Model.Repositories;
 using e_me.Mvc.Auth;
-using e_me.Mvc.Auth.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,7 +62,7 @@ namespace e_me.Mvc.Extensions
                         }
                     };
                 });
-            services.AddTransient<ITokenGenerator, TokenGenerator>();
+            services.AddTransient<ITokenGeneratorService, TokenGeneratorService>();
             services.AddScoped<IAuthService, AuthService>();
         }
 

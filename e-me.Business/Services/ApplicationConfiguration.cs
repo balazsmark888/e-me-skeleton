@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using e_me.Business.DTOs;
 
-namespace e_me.Mvc.Application
+namespace e_me.Business.Services
 {
     public class ApplicationConfiguration
     {
@@ -11,7 +11,7 @@ namespace e_me.Mvc.Application
 
         private static volatile ApplicationConfiguration _instance;
 
-        private readonly List<UserDetail> _connectedUsers = new List<UserDetail>();
+        private readonly List<UserSessionInfo> _connectedUsers = new List<UserSessionInfo>();
 
 
         public static ApplicationConfiguration Instance
@@ -40,7 +40,7 @@ namespace e_me.Mvc.Application
 
         public string ApplicationKey { get; set; }
 
-        public List<UserDetail> ConnectedUsers
+        public List<UserSessionInfo> ConnectedUsers
         {
             get
             {
@@ -59,19 +59,19 @@ namespace e_me.Mvc.Application
             }
         }
 
-        public void AddToConnectedUsers(UserDetail userDetail)
+        public void AddToConnectedUsers(UserSessionInfo userSessionInfo)
         {
             lock (LockInstanceManager)
             {
-                _connectedUsers.Add(userDetail);
+                _connectedUsers.Add(userSessionInfo);
             }
         }
 
-        public void RemoveFromConnectedUsers(UserDetail userDetail)
+        public void RemoveFromConnectedUsers(UserSessionInfo userSessionInfo)
         {
             lock (LockInstanceManager)
             {
-                _connectedUsers.Remove(userDetail);
+                _connectedUsers.Remove(userSessionInfo);
             }
         }
 

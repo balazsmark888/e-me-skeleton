@@ -35,8 +35,6 @@ namespace e_me.Model.Models
 
         public bool ChangePasswordNextLogon { get; set; }
 
-        
-
         [MaxLength(200)]
         [NotMapped]
         public string OldPassword { get; set; }

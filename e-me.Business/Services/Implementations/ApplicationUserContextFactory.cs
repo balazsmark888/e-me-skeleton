@@ -1,8 +1,9 @@
 ﻿using System;
+using e_me.Business.Services.Interfaces;
 using e_me.Core.Application;
 using Microsoft.AspNetCore.Http;
 
-namespace e_me.Mvc.Application
+namespace e_me.Business.Services.Implementations
 {
     public class ApplicationUserContextFactory : IApplicationUserContextFactory
     {
@@ -39,7 +40,7 @@ namespace e_me.Mvc.Application
 
         private ApplicationUserContext CreateApplicationUserContext(string sessionId, HttpContext httpContext)
         {
-            return new ApplicationUserContext
+            return new()
             {
                 ApplicationKey = ApplicationConfiguration.Instance.ApplicationKey,
                 ConnectionString = ApplicationConfiguration.Instance.ConnectionString,

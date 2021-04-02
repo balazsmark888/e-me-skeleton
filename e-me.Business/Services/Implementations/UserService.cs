@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using e_me.Business.DTOs;
-using e_me.Business.Interfaces;
+using e_me.Business.Services.Interfaces;
 using e_me.Core;
 using e_me.Core.Helpers;
 using e_me.Model.Models;
@@ -11,7 +11,7 @@ using e_me.Model.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace e_me.Business
+namespace e_me.Business.Services.Implementations
 {
     public class UserService : IUserService
     {

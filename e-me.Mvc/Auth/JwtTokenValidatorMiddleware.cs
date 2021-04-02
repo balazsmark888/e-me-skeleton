@@ -3,23 +3,36 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using e_me.Mvc.Auth.Interfaces;
-using Microsoft.AspNetCore.Builder;
+using e_me.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace e_me.Mvc.Auth
 {
+    /// <summary>
+    /// Middleware for validating JWT tokens.
+    /// </summary>
     public class JwtTokenValidatorMiddleware
     {
-        private readonly JwtTokenValidatorOptions options;
-        private readonly RequestDelegate next;
+        private readonly JwtTokenValidatorOptions _options;
+        private readonly RequestDelegate _next;
 
+        /// <summary>
+        /// Constructor that initializes the options.
+        /// </summary>
+        /// <param name="options">Options for the validator.</param>
+        /// <param name="next">Next delegate in the pipeline.</param>
         public JwtTokenValidatorMiddleware(JwtTokenValidatorOptions options, RequestDelegate next)
         {
-            this.options = options;
-            this.next = next;
+            _options = options;
+            _next = next;
         }
 
+        /// <summary>
+        /// Validates the current Http context and stores the identity of the user.
+        /// </summary>
+        /// <param name="context">The Http context.</param>
+        /// <param name="authService">The authentication service.</param>
+        /// <returns></returns>
         public async Task Invoke(HttpContext context, IAuthService authService)
         {
             if (await Validate(context, authService))
@@ -35,7 +48,7 @@ namespace e_me.Mvc.Auth
                     var appIdentity = new ClaimsIdentity(claims);
                     context.User.AddIdentity(appIdentity);
                 }
-                await next(context);
+                await _next(context);
                 return;
             }
 
@@ -44,7 +57,7 @@ namespace e_me.Mvc.Auth
 
         private async Task<bool> Validate(HttpContext context, IAuthService authService)
         {
-            if (options.IsAdditionalUrl(context.Request.Path))
+            if (_options.IsAdditionalUrl(context.Request.Path))
             {
                 return IsAuthenticated(context) && await authService.IsValidCurrentTokenAsync();
             }
@@ -58,6 +71,9 @@ namespace e_me.Mvc.Auth
             return principal != null && principal.Identity.IsAuthenticated;
         }
     }
+    /// <summary>
+    /// Options class for the JWT token validator.
+    /// </summary>
     public class JwtTokenValidatorOptions
     {
         public JwtTokenValidatorOptions()
@@ -70,14 +86,6 @@ namespace e_me.Mvc.Auth
         public bool IsAdditionalUrl(string url)
         {
             return url.Length > 1 && AdditionalUrls.Any(u => url.ToLower().StartsWith(u.ToLower()));
-        }
-    }
-
-    public static class ApplicationBuilderExtension
-    {
-        public static void UseJwtTokenValidator(this IApplicationBuilder builder, JwtTokenValidatorOptions options)
-        {
-            builder.UseMiddleware<JwtTokenValidatorMiddleware>(options);
         }
     }
 }

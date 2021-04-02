@@ -14,6 +14,6 @@ namespace e_me.Business.DTOs
 
         public string FullName { get; set; }
 
-        public string PublicKey { get; set; }
+        public byte[] PublicKey { get; set; }
     }
 }

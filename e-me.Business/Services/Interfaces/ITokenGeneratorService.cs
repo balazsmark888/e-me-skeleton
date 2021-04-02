@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace e_me.Mvc.Auth.Interfaces
+namespace e_me.Business.Services.Interfaces
 {
-    public interface ITokenGenerator
+    public interface ITokenGeneratorService
     {
         string Generate(string userName, DateTime validTo, string role);
         string GeneratePasswordResetToken(string username, DateTime validTo);

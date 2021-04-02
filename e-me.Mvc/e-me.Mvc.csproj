@@ -29,4 +29,9 @@
     <ProjectReference Include="..\e-me.Model\e-me.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\" />
+    <Folder Include="Auth\Interfaces\" />
+  </ItemGroup>
+
 </Project>

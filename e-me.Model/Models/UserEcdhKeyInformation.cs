@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace e_me.Model.Models
 {
-    [Table("UserEcdhKeyInformationExtensionMethods", Schema = "dbo")]
     public class UserEcdhKeyInformation : BaseModel
     {
+        [Required]
+        public Guid UserId { get; set; }
+
         public byte[] AesKey { get; set; }
 
         public byte[] HmacKey { get; set; }
@@ -15,5 +18,8 @@ namespace e_me.Model.Models
         public byte[] PublicKey { get; set; }
 
         public byte[] ClientPublicKey { get; set; }
+
+        [ForeignKey("UserId")]
+        public User User { get; set; }
     }
 }

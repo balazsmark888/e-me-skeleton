@@ -1,5 +1,6 @@
 ﻿using e_me.Core.Application;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.DataEncryption;
 using Microsoft.Extensions.Configuration;
 
 namespace e_me.Model.DBContext
@@ -8,11 +9,13 @@ namespace e_me.Model.DBContext
     {
         private readonly IConfiguration _configuration;
         private readonly ApplicationUserContext _applicationUserContext;
+        private readonly IEncryptionProvider _encryptionProvider;
 
-        public ApplicationDbContextFactory(IConfiguration configuration, ApplicationUserContext applicationUserContext)
+        public ApplicationDbContextFactory(IConfiguration configuration, ApplicationUserContext applicationUserContext, IEncryptionProvider encryptionProvider)
         {
-            this._configuration = configuration;
-            this._applicationUserContext = applicationUserContext;
+            _configuration = configuration;
+            _applicationUserContext = applicationUserContext;
+            _encryptionProvider = encryptionProvider;
         }
 
         public ApplicationDbContext Create()
@@ -21,7 +24,7 @@ namespace e_me.Model.DBContext
             var connectionString = GetConnectionString();
             optionsBuilder.UseSqlServer(connectionString);
 
-            return new ApplicationDbContext(optionsBuilder.Options);
+            return new ApplicationDbContext(optionsBuilder.Options, _encryptionProvider);
         }
 
         private string GetConnectionString()

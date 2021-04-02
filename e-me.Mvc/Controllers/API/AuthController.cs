@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using e_me.Business.DTOs;
-using e_me.Business.Interfaces;
-using e_me.Mvc.Auth.Interfaces;
+using e_me.Business.Services;
+using e_me.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,8 +18,12 @@ namespace e_me.Mvc.Controllers.API
 
         private readonly IUserService _userService;
 
-        public AuthController(IAuthService authService,
-            IUserService userService)
+        /// <summary>
+        /// Constructor that initializes the controller's services using DI.
+        /// </summary>
+        /// <param name="authService">Authentication service</param>
+        /// <param name="userService">Service for user-related operations</param>
+        public AuthController(IAuthService authService, IUserService userService)
         {
             _authService = authService;
             _userService = userService;
@@ -35,10 +39,10 @@ namespace e_me.Mvc.Controllers.API
         {
             try
             {
-                var response = await _authService.AuthenticateAsync(authDto.LoginName, authDto.Password);
+                var response = await _authService.AuthenticateAsync(authDto);
                 if (response == null)
                 {
-                    return BadRequest(new { message = "LoginName or password is incorrect!" });
+                    return BadRequest(new { message = "Login name or password is incorrect!" });
                 }
 
                 return Ok(response);
@@ -49,6 +53,11 @@ namespace e_me.Mvc.Controllers.API
             }
         }
 
+        /// <summary>
+        /// Creates a new user.
+        /// </summary>
+        /// <param name="userRegistrationDto"></param>
+        /// <returns></returns>
         [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] UserRegistrationDto userRegistrationDto)
@@ -56,18 +65,17 @@ namespace e_me.Mvc.Controllers.API
             try
             {
                 var result = await _userService.CreateUserAsync(userRegistrationDto);
-                //var (fullName, email, token) = await _authService.GenerateResetPasswordAsync(result.Email);
-                //emailService.SendWelcomeEmail(Request.Headers["Origin"], email, fullName, token);
-                //return CreatedAtRoute("", new { id = result.UserId }, result);
-                var response = await _authService.AuthenticateAsync(result.LoginName, userRegistrationDto.Password);
-                return Ok(response);
+                return Ok(result);
             }
             catch (System.Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Validates whether the user is authenticated or not.
+        /// </summary>
+        /// <returns>OK status code</returns>
         [Authorize]
         [HttpGet("Validate")]
         public IActionResult Validate()
@@ -75,6 +83,10 @@ namespace e_me.Mvc.Controllers.API
             return Ok();
         }
 
+        /// <summary>
+        /// De-authenticates the user.
+        /// </summary>
+        /// <returns>OK status code</returns>
         [Authorize]
         [HttpPost("Logout")]
         public async Task<IActionResult> Logout()

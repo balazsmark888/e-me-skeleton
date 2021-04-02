@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using e_me.Mvc.Auth.Interfaces;
+using e_me.Business.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace e_me.Mvc.Auth
+namespace e_me.Business.Services.Implementations
 {
-    public class TokenGenerator : ITokenGenerator
+    public class TokenGeneratorService : ITokenGeneratorService
     {
         private readonly AuthSettings _authSettings;
 
-        public TokenGenerator(IOptions<AuthSettings> authSettings)
+        public TokenGeneratorService(IOptions<AuthSettings> authSettings)
         {
             _authSettings = authSettings.Value;
         }

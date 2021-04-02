@@ -2,9 +2,9 @@
 
 namespace e_me.Business.DTOs
 {
-    public class UserDetail
+    public class UserSessionInfo
     {
-        public UserDetail()
+        public UserSessionInfo()
         {
             Timestamp = DateTime.Now.ToString("o");
         }

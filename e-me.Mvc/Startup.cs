@@ -1,11 +1,9 @@
 using System;
-using e_me.Business;
-using e_me.Business.Interfaces;
-using e_me.Core.Application;
+using e_me.Business.Services.Implementations;
+using e_me.Business.Services.Interfaces;
 using e_me.Core.Logging;
 using e_me.Model;
 using e_me.Model.DBContext;
-using e_me.Mvc.Application;
 using e_me.Mvc.Auth;
 using e_me.Mvc.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +15,9 @@ using Microsoft.Extensions.Hosting;
 
 namespace e_me.Mvc
 {
+    /// <summary>
+    /// Startup class of the MVC project.
+    /// </summary>
     public class Startup
     {
         public IConfiguration Configuration { get; }
@@ -26,6 +27,10 @@ namespace e_me.Mvc
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Configures the services to be injected.
+        /// </summary>
+        /// <param name="services">The collection of services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -40,6 +45,9 @@ namespace e_me.Mvc
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<IEncryptionProviderFactory, EncryptionProviderFactory>();
+            services.AddTransient(sp => sp.GetRequiredService<IEncryptionProviderFactory>().Create());
 
             services.AddTransient<IApplicationUserContextFactory, ApplicationUserContextFactory>();
             services.AddTransient(sp => sp.GetRequiredService<IApplicationUserContextFactory>().Create());
@@ -73,6 +81,11 @@ namespace e_me.Mvc
             });
         }
 
+        /// <summary>
+        /// Configures the application pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
