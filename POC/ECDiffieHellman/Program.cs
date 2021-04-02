@@ -31,7 +31,7 @@ software like Aldus PageMaker including versions of Lorem Ipsum."
             var (encryptedMessage, iv, hash) = participant1.Encrypt(json);
             Console.WriteLine("Encrypted object:");
             Console.WriteLine(Encoding.UTF32.GetString(encryptedMessage));
-            encryptedMessage[0] = Byte.MaxValue;
+            //encryptedMessage[0] = Byte.MaxValue;
             var decryptedMessage = participant2.Decrypt(encryptedMessage, iv, hash);
             var decryptedPackage = JsonConvert.DeserializeObject<Package>(decryptedMessage);
             Console.WriteLine("Decrypted object:");

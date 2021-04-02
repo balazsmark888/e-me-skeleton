@@ -5,13 +5,21 @@
     <RootNamespace>e_me.Mvc</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Folder Include="SignalRHubs\" />
+    <Compile Remove="SignalRHubs\**" />
+    <Content Remove="SignalRHubs\**" />
+    <EmbeddedResource Remove="SignalRHubs\**" />
+    <None Remove="SignalRHubs\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.4" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.10.8" />
   </ItemGroup>
 
   <ItemGroup>

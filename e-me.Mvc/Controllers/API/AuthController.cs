@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace e_me.Mvc.Controllers.API
 {
+    /// <summary>
+    /// Controller to handle AUTH, registration and logout
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : Controller

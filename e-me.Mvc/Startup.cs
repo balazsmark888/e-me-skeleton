@@ -50,16 +50,40 @@ namespace e_me.Mvc
             services.AddTransient(sp => sp.GetRequiredService<IApplicationDbContextFactory>().Create());
 
             services.AddRepositories();
-			services.AddTransient<Configuration>();
+
+            services.AddTransient<Configuration>();
 
             services.AddTransient<IUserService, UserService>();
 
             services.AddJwtBearerAuthentication(Configuration);
+
+            services.AddSwaggerDocument(config =>
+            {
+                config.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "E-me API";
+                    document.Info.Description = ".NET Core Web API for my document handling project.";
+                    document.Info.Contact = new NSwag.OpenApiContact
+                    {
+                        Name = "Balazs Mark",
+                        Email = "balazsmark888@gmail.com",
+                    };
+                };
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseExceptionHandler("/Error");
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
+
             app.UseHsts();
             app.UseHttpsRedirection();
 
@@ -76,7 +100,7 @@ namespace e_me.Mvc
                     pattern: "api/{controller}/{id?}");
             });
 
-            app.UseWebSockets();
+            //app.UseWebSockets();
 
             //app.Use(async (httpContext, next) =>
             //{
@@ -90,6 +114,8 @@ namespace e_me.Mvc
             //    }
             //});
 
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
         }
     }
 }
