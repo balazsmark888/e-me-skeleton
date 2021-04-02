@@ -1,9 +1,6 @@
-﻿using System;
-using e_me.Core;
-using e_me.Model.Models;
+﻿using e_me.Model.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DataEncryption;
-using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
 
 namespace e_me.Model.DBContext
 {
@@ -41,6 +38,10 @@ namespace e_me.Model.DBContext
 
         public DbSet<UserEcdhKeyInformation> UserEcdhKeyInformationSet { get; set; }
 
+        public DbSet<DocumentTemplate> DocumentTemplates { get; set; }
+
+        public DbSet<UserDocument> UserDocuments { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,34 +49,9 @@ namespace e_me.Model.DBContext
 
             modelBuilder.RemovePluralizingTableNameConvention();
 
-            modelBuilder.Entity<User>(e =>
-            {
-                e.HasIndex(p => p.Email)
-                    .IsUnique();
-                e.HasIndex(p => p.LoginName)
-                    .IsUnique();
-            });
+            modelBuilder.AddUniqueIndexes();
 
-            modelBuilder.Entity<UserDetail>(e =>
-            {
-                e.HasIndex(p => p.PersonalNumericCode)
-                    .IsUnique();
-            });
-
-            modelBuilder.Entity<SecurityRole>().HasData(
-                new SecurityRole
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Administrator",
-                    SecurityType = (int)Enums.SecurityType.AppAdministrator
-                },
-                new SecurityRole
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Regular User",
-                    SecurityType = (int)Enums.SecurityType.RegularUser
-                }
-            );
+            modelBuilder.InsertDefaultValues();
         }
     }
 }

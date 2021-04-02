@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace e_me.Model.Models
 {
     [DataContract]
-    public class UserDetail : BaseModel
+    public class UserDetail : Model
     {
         [Required]
         public Guid UserId { get; set; }

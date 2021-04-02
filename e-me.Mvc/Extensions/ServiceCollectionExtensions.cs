@@ -5,7 +5,6 @@ using e_me.Business.Services;
 using e_me.Business.Services.Implementations;
 using e_me.Business.Services.Interfaces;
 using e_me.Model.Repositories;
-using e_me.Mvc.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -80,6 +79,9 @@ namespace e_me.Mvc.Extensions
             services.AddTransient<IUserAvatarRepository, UserAvatarRepository>();
             services.AddTransient<IUserDetailsRepository, UserDetailsRepository>();
             services.AddTransient<IDocumentTypeRepository, DocumentTypeRepository>();
+            services.AddTransient<IUserDocumentRepository, UserDocumentRepository>();
+            services.AddTransient<IDocumentTemplateRepository, DocumentTemplateRepository>();
+            services.AddTransient<IUserEcdhKeyInformationRepository, UserEcdhKeyInformationRepository>();
         }
     }
 }

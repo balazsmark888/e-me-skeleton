@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace e_me.Model.Models
 {
-    public class User : BaseModel
+    public class User : Model
     {
         [Required]
         [MaxLength(50)]

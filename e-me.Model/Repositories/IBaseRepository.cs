@@ -6,7 +6,7 @@ using e_me.Model.Models;
 
 namespace e_me.Model.Repositories
 {
-    public interface IBaseRepository<TEntity> : IDisposable where TEntity : BaseModel
+    public interface IBaseRepository<TEntity> : IDisposable where TEntity : Models.Model
     {
         void Add(TEntity entity);
 

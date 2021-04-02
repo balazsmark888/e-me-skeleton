@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace e_me.Model.Models
 {
-    public class UserEcdhKeyInformation : BaseModel
+    public class UserEcdhKeyInformation : Model
     {
         [Required]
         public Guid UserId { get; set; }

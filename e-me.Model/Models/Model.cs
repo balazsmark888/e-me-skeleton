@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace e_me.Model.Models
 {
-    public abstract class BaseModel
+    public abstract class Model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

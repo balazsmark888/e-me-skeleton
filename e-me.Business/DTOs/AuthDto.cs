@@ -11,6 +11,6 @@ namespace e_me.Business.DTOs
         public string Password { get; set; }
 
         [Required]
-        public byte[] PublicKey { get; set; }
+        public string PublicKey { get; set; }
     }
 }

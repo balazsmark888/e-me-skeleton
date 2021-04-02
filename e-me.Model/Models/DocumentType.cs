@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace e_me.Model.Models
 {
-    public class DocumentType : BaseModel
+    public class DocumentType : Model
     {
         [Required]
         [MaxLength(50)]

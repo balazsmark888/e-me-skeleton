@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace e_me.Model.Models
 {
-    public class UserSecurityRole : BaseModel
+    public class UserSecurityRole : Model
     {
         [Timestamp]
         [JsonIgnore]

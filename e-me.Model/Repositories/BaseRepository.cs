@@ -22,7 +22,7 @@ namespace e_me.Model.Repositories
         }
     }
 
-    public abstract class BaseRepository<TEntity> : BaseRepository, IBaseRepository<TEntity> where TEntity : BaseModel
+    public abstract class BaseRepository<TEntity> : BaseRepository, IBaseRepository<TEntity> where TEntity : Models.Model
     {
         protected BaseRepository(ApplicationDbContext context, ApplicationUserContext userContext)
             : base(context, userContext)

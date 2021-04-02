@@ -67,13 +67,16 @@ namespace e_me.Business.Services.Implementations
         {
             var loginName = authDto.LoginName;
             var password = authDto.Password;
-            var clientPublicKey = authDto.PublicKey;
+            var clientPublicKey = Convert.FromBase64String(authDto.PublicKey);
 
             var user = _userRepository.GetByUsernameAndPassword(loginName, password);
             if (user == null)
             {
                 return null;
             }
+
+            _jwtTokenRepository.DeleteByUserId(user.Id);
+            await _jwtTokenRepository.SaveAsync();
 
             var role = await _userRepository.GetUserRoleAsync(user.Id);
             var validTo = DateTime.UtcNow + _authSettings.TokenLifeTimeDuration;

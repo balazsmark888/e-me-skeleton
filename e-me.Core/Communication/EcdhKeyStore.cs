@@ -29,7 +29,7 @@ namespace e_me.Core.Communication
 
         public EcdhKeyStore(byte[] publicKey) : this()
         {
-            var ecdhKey = new ApplicationEcDiffieHellmanPublicKey(publicKey);
+            var ecdhKey = ECDiffieHellmanCngPublicKey.FromByteArray(publicKey,CngKeyBlobFormat.EccPublicBlob);
             SetOtherPartyPublicKey(ecdhKey);
         }
 
