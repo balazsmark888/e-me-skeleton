@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using e_me.Business.DTOs.SecurityRole;
 
-namespace e_me.Business.DTOs
+namespace e_me.Business.DTOs.User
 {
     public class UserProfileDto
     {

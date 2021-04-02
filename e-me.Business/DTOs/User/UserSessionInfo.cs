@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace e_me.Business.DTOs
+namespace e_me.Business.DTOs.User
 {
     public class UserSessionInfo
     {

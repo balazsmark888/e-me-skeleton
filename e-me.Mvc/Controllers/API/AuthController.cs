@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using e_me.Business.DTOs;
+using e_me.Business.DTOs.User;
 using e_me.Business.Services;
 using e_me.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;

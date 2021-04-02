@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using e_me.Business.DTOs;
+using e_me.Business.DTOs.SecurityRole;
+using e_me.Business.DTOs.User;
 using e_me.Business.Services.Interfaces;
 using e_me.Core;
 using e_me.Core.Helpers;

@@ -1,4 +1,4 @@
-﻿namespace e_me.Business.DTOs
+﻿namespace e_me.Business.DTOs.SecurityRole
 {
     public class SecurityRoleCreationDto
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using e_me.Business.DTOs;
+using e_me.Business.DTOs.User;
 
 namespace e_me.Business.Services
 {

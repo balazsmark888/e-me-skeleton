@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using e_me.Business.DTOs;
+using e_me.Business.DTOs.User;
 using e_me.Model.Models;
 
 namespace e_me.Business.Services.Interfaces
