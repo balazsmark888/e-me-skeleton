@@ -22,7 +22,7 @@ namespace e_me.Model.Repositories
         }
     }
 
-    public abstract class BaseRepository<TEntity> : BaseRepository, IBaseRepository<TEntity> where TEntity : Models.Model
+    public abstract class BaseRepository<TEntity> : BaseRepository, IBaseRepository<TEntity> where TEntity : Models.BaseModel
     {
         protected BaseRepository(ApplicationDbContext context, ApplicationUserContext userContext)
             : base(context, userContext)
@@ -36,20 +36,20 @@ namespace e_me.Model.Repositories
             includeProperties.Aggregate<Expression<Func<TEntity, object>>, IQueryable<TEntity>>(Context.Set<TEntity>(),
                 (current, includeProperty) => current.Include(includeProperty));
 
-        public virtual void Add(TEntity entity) =>
+        public virtual void Insert(TEntity entity) =>
             Context.Set<TEntity>().Add(entity);
 
-        public virtual async Task AddAsync(TEntity entity) =>
+        public virtual async Task InsertAsync(TEntity entity) =>
             await Context.Set<TEntity>().AddAsync(entity);
 
         public virtual void Update(TEntity entity) =>
             Context.Entry(entity).State = EntityState.Modified;
 
-        public void AddOrUpdate(TEntity entity)
+        public void InsertOrUpdate(TEntity entity)
         {
             if (entity.Id == default)
             {
-                Add(entity);
+                Insert(entity);
             }
             else
             {
@@ -57,11 +57,11 @@ namespace e_me.Model.Repositories
             }
         }
 
-        public async Task AddOrUpdateAsync(TEntity entity)
+        public async Task InsertOrUpdateAsync(TEntity entity)
         {
             if (entity.Id == default)
             {
-                await AddAsync(entity);
+                await InsertAsync(entity);
             }
             else
             {

@@ -15,5 +15,7 @@ namespace e_me.Business.DTOs.User
         public string FullName { get; set; }
 
         public byte[] PublicKey { get; set; }
+
+        public byte[] IV { get; set; }
     }
 }

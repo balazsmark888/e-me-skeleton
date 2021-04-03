@@ -1,24 +1,33 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using e_me.Core.Communication;
 using e_me.Model.Models;
 
 namespace e_me.Mvc.Profiles
 {
     /// <summary>
-    /// Auto-mapper profiles for encryption-related models.
+    /// Auto-mapper profile for encryption-related models.
     /// </summary>
     public class EncryptionProfile : Profile
     {
         /// <summary>
-        /// Default constructor.
+        /// Default constructor for defining maps.
         /// </summary>
         public EncryptionProfile()
         {
             CreateMap<EcdhKeyStore, UserEcdhKeyInformation>()
-                .ForMember(dest => dest.ClientPublicKey,
-                    src => src.MapFrom(s => s.OtherPartyPublicKey.ToByteArray()))
-                .ForMember(dest => dest.PublicKey,
-                    src => src.MapFrom(s => s.PublicKey.ToByteArray()));
+                .ForMember(d => d.ClientPublicKey,
+                    o => o.MapFrom(s => Convert.ToBase64String(s.OtherPartyPublicKey.ToByteArray())))
+                .ForMember(d => d.PublicKey,
+                    o => o.MapFrom(s => Convert.ToBase64String(s.PublicKey.ToByteArray())))
+                .ForMember(d => d.AesKey,
+                    o => o.MapFrom(s => Convert.ToBase64String(s.AesKey)))
+                .ForMember(d => d.DerivedHmacKey,
+                    o => o.MapFrom(s => Convert.ToBase64String(s.DerivedHmacKey)))
+                .ForMember(d => d.HmacKey,
+                    o => o.MapFrom(s => Convert.ToBase64String(s.HmacKey)))
+                .ForMember(d => d.IV,
+                    o => o.MapFrom(s => Convert.ToBase64String(s.IV)));
         }
     }
 }

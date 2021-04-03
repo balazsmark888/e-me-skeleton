@@ -4,20 +4,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace e_me.Model.Models
 {
-    public class UserEcdhKeyInformation : Model
+    public class UserEcdhKeyInformation : BaseModel
     {
         [Required]
         public Guid UserId { get; set; }
 
-        public byte[] AesKey { get; set; }
+        [Encrypted]
+        public string AesKey { get; set; }
 
-        public byte[] HmacKey { get; set; }
+        [Encrypted]
+        public string IV { get; set; }
 
-        public byte[] DerivedHmacKey { get; set; }
+        [Encrypted]
+        public string HmacKey { get; set; }
 
-        public byte[] PublicKey { get; set; }
+        [Encrypted]
+        public string DerivedHmacKey { get; set; }
 
-        public byte[] ClientPublicKey { get; set; }
+        [Encrypted]
+        public string PublicKey { get; set; }
+
+        [Encrypted]
+        public string ClientPublicKey { get; set; }
 
         [ForeignKey("UserId")]
         public User User { get; set; }

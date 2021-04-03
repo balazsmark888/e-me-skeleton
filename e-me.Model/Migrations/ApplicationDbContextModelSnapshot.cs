@@ -139,13 +139,13 @@ namespace e_me.Model.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("31e00c2b-132f-4d28-b4a9-89c166830f6c"),
+                            Id = new Guid("17dd0444-2039-4a84-9c8c-f9eca9657353"),
                             Name = "Administrator",
                             SecurityType = 0
                         },
                         new
                         {
-                            Id = new Guid("018f3d5d-302a-4908-a913-65f39ab43df4"),
+                            Id = new Guid("f815c54a-51e1-4f3d-9d85-b025eb64d7c5"),
                             Name = "Regular User",
                             SecurityType = 1
                         });
@@ -286,7 +286,8 @@ namespace e_me.Model.Migrations
                         .IsUnique()
                         .HasFilter("[PersonalNumericCode] IS NOT NULL");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("UserDetail");
                 });
@@ -322,20 +323,23 @@ namespace e_me.Model.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte[]>("AesKey")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("AesKey")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("ClientPublicKey")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("ClientPublicKey")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("DerivedHmacKey")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("DerivedHmacKey")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("HmacKey")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("HmacKey")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PublicKey")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("IV")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicKey")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

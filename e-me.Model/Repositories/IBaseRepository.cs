@@ -2,21 +2,20 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using e_me.Model.Models;
 
 namespace e_me.Model.Repositories
 {
-    public interface IBaseRepository<TEntity> : IDisposable where TEntity : Models.Model
+    public interface IBaseRepository<TEntity> : IDisposable where TEntity : Models.BaseModel
     {
-        void Add(TEntity entity);
+        void Insert(TEntity entity);
 
-        Task AddAsync(TEntity entity);
+        Task InsertAsync(TEntity entity);
 
         void Update(TEntity entity);
 
-        void AddOrUpdate(TEntity entity);
+        void InsertOrUpdate(TEntity entity);
 
-        Task AddOrUpdateAsync(TEntity entity);
+        Task InsertOrUpdateAsync(TEntity entity);
 
         void Delete(TEntity entity);
 

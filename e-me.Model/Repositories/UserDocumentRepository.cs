@@ -1,6 +1,10 @@
-﻿using e_me.Core.Application;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using e_me.Core.Application;
 using e_me.Model.DBContext;
 using e_me.Model.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace e_me.Model.Repositories
 {
@@ -10,9 +14,22 @@ namespace e_me.Model.Repositories
             : base(context, userContext)
         {
         }
+
+        public IQueryable<UserDocument> GetByUserId(Guid userId)
+        {
+            return All.Where(p => p.UserId == userId);
+        }
+
+        public async Task<UserDocument> GetByUserIdAndTemplateId(Guid userId, Guid templateId)
+        {
+            return await All.FirstOrDefaultAsync(p => p.UserId == userId && p.DocumentTemplateId == templateId);
+        }
     }
 
     public interface IUserDocumentRepository : IBaseRepository<UserDocument>
     {
+        IQueryable<UserDocument> GetByUserId(Guid userId);
+
+        Task<UserDocument> GetByUserIdAndTemplateId(Guid userId, Guid templateId);
     }
 }

@@ -77,7 +77,7 @@ namespace e_me.Mvc.Extensions
             services.AddTransient<IUserSecurityRoleRepository, UserSecurityRoleRepository>();
             services.AddTransient<IApplicationSettingRepository, ApplicationSettingRepository>();
             services.AddTransient<IUserAvatarRepository, UserAvatarRepository>();
-            services.AddTransient<IUserDetailsRepository, UserDetailsRepository>();
+            services.AddTransient<IUserDetailRepository, UserDetailRepository>();
             services.AddTransient<IDocumentTypeRepository, DocumentTypeRepository>();
             services.AddTransient<IUserDocumentRepository, UserDocumentRepository>();
             services.AddTransient<IDocumentTemplateRepository, DocumentTemplateRepository>();

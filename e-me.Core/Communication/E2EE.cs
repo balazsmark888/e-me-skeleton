@@ -7,11 +7,12 @@ namespace e_me.Core.Communication
 {
     public static class E2EE
     {
-        public static (byte[] message, byte[] iv, byte[] hash) Encrypt(string message, byte[] aesKey, byte[] hmacKey, byte[] derivedHmacKey)
+        public static (byte[] encryptedMessage, byte[] hash) Encrypt(string message, byte[] aesKey, byte[] iv, byte[] hmacKey, byte[] derivedHmacKey)
         {
             using var aes = new AesCryptoServiceProvider
             {
                 Key = aesKey,
+                IV = iv
             };
             using var memoryStream = new MemoryStream();
             using var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write);
@@ -19,8 +20,7 @@ namespace e_me.Core.Communication
             cryptoStream.Write(plaintextMessage, 0, plaintextMessage.Length);
             cryptoStream.Close();
             var encryptedMessage = memoryStream.ToArray();
-            var iv = aes.IV;
-            return (encryptedMessage, iv, GetDoubleHash(encryptedMessage, hmacKey, derivedHmacKey));
+            return (encryptedMessage, GetDoubleHash(encryptedMessage, hmacKey, derivedHmacKey));
         }
 
         public static string Decrypt(byte[] encryptedMessage, byte[] iv, byte[] hash, byte[] aesKey, byte[] hmacKey, byte[] derivedHmacKey)

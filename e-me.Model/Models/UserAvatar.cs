@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace e_me.Model.Models
 {
     [Serializable]
-    public class UserAvatar : Model
+    public class UserAvatar : BaseModel
     {
         public Guid UserId { get; set; }
 

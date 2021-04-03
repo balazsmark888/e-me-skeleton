@@ -167,11 +167,12 @@ namespace e_me.Model.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AesKey = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    HmacKey = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    DerivedHmacKey = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    PublicKey = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    ClientPublicKey = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+                    AesKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IV = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HmacKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DerivedHmacKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PublicKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClientPublicKey = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,12 +240,12 @@ namespace e_me.Model.Migrations
             migrationBuilder.InsertData(
                 table: "SecurityRole",
                 columns: new[] { "Id", "Name", "SecurityType" },
-                values: new object[] { new Guid("31e00c2b-132f-4d28-b4a9-89c166830f6c"), "Administrator", 0 });
+                values: new object[] { new Guid("17dd0444-2039-4a84-9c8c-f9eca9657353"), "Administrator", 0 });
 
             migrationBuilder.InsertData(
                 table: "SecurityRole",
                 columns: new[] { "Id", "Name", "SecurityType" },
-                values: new object[] { new Guid("018f3d5d-302a-4908-a913-65f39ab43df4"), "Regular User", 1 });
+                values: new object[] { new Guid("f815c54a-51e1-4f3d-9d85-b025eb64d7c5"), "Regular User", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DocumentTemplate_DocumentTypeId",
@@ -284,7 +285,8 @@ namespace e_me.Model.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserDetail_UserId",
                 table: "UserDetail",
-                column: "UserId");
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserDocument_DocumentTemplateId",

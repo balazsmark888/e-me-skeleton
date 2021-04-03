@@ -24,7 +24,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("SessionTimeOut");
 
-            set => _applicationSettingRepository.Add(value);
+            set => _applicationSettingRepository.Insert(value);
         }
 
         public int SessionTimeOutProperty
@@ -46,7 +46,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("MaxSignatureSize");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public int MaxSignatureSizeProperty
@@ -69,7 +69,7 @@ namespace e_me.Model
                 if (maxSignatureSize != null)
                 {
                     maxSignatureSize.Value = value.ToString(CultureInfo.InvariantCulture);
-                    _applicationSettingRepository.AddOrUpdate(maxSignatureSize);
+                    _applicationSettingRepository.InsertOrUpdate(maxSignatureSize);
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("AllowedSignatureTypes");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public string AllowedSignatureTypesProperty
@@ -91,7 +91,7 @@ namespace e_me.Model
                 if (allowedSignatureTypes != null)
                 {
                     allowedSignatureTypes.Value = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
-                    _applicationSettingRepository.AddOrUpdate(allowedSignatureTypes);
+                    _applicationSettingRepository.InsertOrUpdate(allowedSignatureTypes);
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("SmtpServer");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public string SmtpServerProperty
@@ -113,7 +113,7 @@ namespace e_me.Model
                 if (smtpServer != null)
                 {
                     smtpServer.Value = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
-                    _applicationSettingRepository.AddOrUpdate(smtpServer);
+                    _applicationSettingRepository.InsertOrUpdate(smtpServer);
                 }
             }
         }
@@ -122,7 +122,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("SmtpUser");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public string SmtpUserProperty
@@ -135,7 +135,7 @@ namespace e_me.Model
                 if (smtpUser != null)
                 {
                     smtpUser.Value = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
-                    _applicationSettingRepository.AddOrUpdate(smtpUser);
+                    _applicationSettingRepository.InsertOrUpdate(smtpUser);
                 }
             }
         }
@@ -144,7 +144,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("SmtpPassword");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public string SmtpPasswordProperty
@@ -157,7 +157,7 @@ namespace e_me.Model
                 if (smtpPassword != null)
                 {
                     smtpPassword.Value = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
-                    _applicationSettingRepository.AddOrUpdate(smtpPassword);
+                    _applicationSettingRepository.InsertOrUpdate(smtpPassword);
                 }
             }
         }
@@ -166,7 +166,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("EmailFromAddress");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public string EmailFromAddressProperty
@@ -179,7 +179,7 @@ namespace e_me.Model
                 if (emailFromAddress != null)
                 {
                     emailFromAddress.Value = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
-                    _applicationSettingRepository.AddOrUpdate(emailFromAddress);
+                    _applicationSettingRepository.InsertOrUpdate(emailFromAddress);
                 }
             }
         }
@@ -188,7 +188,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("SmtpPort");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public int SmtpPortProperty
@@ -210,7 +210,7 @@ namespace e_me.Model
                 if (SmtpPort != null)
                 {
                     smtpPort.Value = value.ToString(CultureInfo.InvariantCulture);
-                    _applicationSettingRepository.AddOrUpdate(smtpPort);
+                    _applicationSettingRepository.InsertOrUpdate(smtpPort);
                 }
             }
         }
@@ -219,7 +219,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("SmtpSsl");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public bool SmtpSslProperty
@@ -241,7 +241,7 @@ namespace e_me.Model
                 if (smtpSsl != null)
                 {
                     smtpSsl.Value = value.ToString();
-                    _applicationSettingRepository.AddOrUpdate(smtpSsl);
+                    _applicationSettingRepository.InsertOrUpdate(smtpSsl);
                 }
             }
         }
@@ -250,7 +250,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("EmailFromDisplayName");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public string EmailFromDisplayNameProperty
@@ -263,7 +263,7 @@ namespace e_me.Model
                 if (emailFromDisplayName != null)
                 {
                     emailFromDisplayName.Value = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
-                    _applicationSettingRepository.AddOrUpdate(emailFromDisplayName);
+                    _applicationSettingRepository.InsertOrUpdate(emailFromDisplayName);
                 }
             }
         }
@@ -272,7 +272,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("ApplicationLink");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public string ApplicationLinkProperty
@@ -285,7 +285,7 @@ namespace e_me.Model
                 if (applicationLink != null)
                 {
                     applicationLink.Value = string.IsNullOrWhiteSpace(value) ? string.Empty : value;
-                    _applicationSettingRepository.AddOrUpdate(applicationLink);
+                    _applicationSettingRepository.InsertOrUpdate(applicationLink);
                 }
             }
         }
@@ -294,7 +294,7 @@ namespace e_me.Model
         {
             get => _applicationSettingRepository.GetSettingByElement("TokenTimeOut");
 
-            set => _applicationSettingRepository.AddOrUpdate(value);
+            set => _applicationSettingRepository.InsertOrUpdate(value);
         }
 
         public int TokenTimeOutProperty
@@ -307,7 +307,7 @@ namespace e_me.Model
                 if (tokenTimeOut != null)
                 {
                     tokenTimeOut.Value = value.ToString(CultureInfo.InvariantCulture);
-                    _applicationSettingRepository.AddOrUpdate(tokenTimeOut);
+                    _applicationSettingRepository.InsertOrUpdate(tokenTimeOut);
                 }
             }
         }

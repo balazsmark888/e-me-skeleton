@@ -11,6 +11,8 @@ namespace e_me.Core.Communication
 
         public byte[] AesKey { get; private set; }
 
+        public byte[] IV { get; set; }
+
         public byte[] HmacKey { get; private set; }
 
         public byte[] DerivedHmacKey { get; private set; }
@@ -29,7 +31,7 @@ namespace e_me.Core.Communication
 
         public EcdhKeyStore(byte[] publicKey) : this()
         {
-            var ecdhKey = ECDiffieHellmanCngPublicKey.FromByteArray(publicKey,CngKeyBlobFormat.EccPublicBlob);
+            var ecdhKey = ECDiffieHellmanCngPublicKey.FromByteArray(publicKey, CngKeyBlobFormat.EccPublicBlob);
             SetOtherPartyPublicKey(ecdhKey);
         }
 
@@ -40,6 +42,13 @@ namespace e_me.Core.Communication
             HmacKey = AesKey;
             DiffieHellmanCng.HmacKey = AesKey;
             DerivedHmacKey = DiffieHellmanCng.DeriveKeyFromHmac(OtherPartyPublicKey, HashAlgorithmName.SHA256, HmacKey);
+            using var aesProvider = new AesCryptoServiceProvider
+            {
+                Key = AesKey
+            };
+            aesProvider.GenerateIV();
+            IV = aesProvider.IV;
+
         }
 
         public void Dispose()

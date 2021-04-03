@@ -90,7 +90,7 @@ namespace e_me.Business.Services.Implementations
             var userKeyInfo = _mapper.Map<UserEcdhKeyInformation>(keyStore);
             userKeyInfo.UserId = user.Id;
             _userEcdhKeyInformationRepository.DeleteByUserId(user.Id);
-            await _userEcdhKeyInformationRepository.AddAsync(userKeyInfo);
+            await _userEcdhKeyInformationRepository.InsertAsync(userKeyInfo);
             await _userEcdhKeyInformationRepository.SaveAsync();
 
             return new UserDto
@@ -99,7 +99,8 @@ namespace e_me.Business.Services.Implementations
                 FullName = user.FullName,
                 Token = token,
                 ValidTo = validTo,
-                PublicKey = keyStore.PublicKey.ToByteArray()
+                PublicKey = keyStore.PublicKey.ToByteArray(),
+                IV = keyStore.IV
             };
         }
 
@@ -176,7 +177,7 @@ namespace e_me.Business.Services.Implementations
             token.Cancelled = cancelled;
             token.ValidTo = validTo;
 
-            await _jwtTokenRepository.AddAsync(token);
+            await _jwtTokenRepository.InsertAsync(token);
             await _jwtTokenRepository.SaveAsync();
         }
 

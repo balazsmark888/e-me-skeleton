@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using e_me.Core.Application;
 using e_me.Model.DBContext;
 using e_me.Model.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace e_me.Model.Repositories
 {
@@ -17,10 +19,17 @@ namespace e_me.Model.Repositories
         {
             Context.Set<UserEcdhKeyInformation>().RemoveRange(Context.Set<UserEcdhKeyInformation>().Where(t => t.UserId.Equals(userId)));
         }
+
+        public async Task<UserEcdhKeyInformation> GetByUserIdAsync(Guid userId)
+        {
+            return await All.FirstOrDefaultAsync(p => p.UserId == userId);
+        }
     }
 
     public interface IUserEcdhKeyInformationRepository : IBaseRepository<UserEcdhKeyInformation>
     {
-        public void DeleteByUserId(Guid userId);
+        void DeleteByUserId(Guid userId);
+
+        Task<UserEcdhKeyInformation> GetByUserIdAsync(Guid userId);
     }
 }

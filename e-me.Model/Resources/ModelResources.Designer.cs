@@ -39,7 +39,7 @@ namespace e_me.Model.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("e_me.Model.Resources.ModelResources", typeof(ModelResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("e_me.BaseModel.Resources.ModelResources", typeof(ModelResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

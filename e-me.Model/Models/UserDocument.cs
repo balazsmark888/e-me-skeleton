@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace e_me.Model.Models
 {
-    public class UserDocument : Model
+    public class UserDocument : BaseModel
     {
         [Required]
         public Guid UserId { get; set; }

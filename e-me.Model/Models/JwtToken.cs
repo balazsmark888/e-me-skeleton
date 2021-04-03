@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace e_me.Model.Models
 {
     [Serializable]
-    public class JwtToken : Model
+    public class JwtToken : BaseModel
     {
         public Guid UserId { get; set; }
 

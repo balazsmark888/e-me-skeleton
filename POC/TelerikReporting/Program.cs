@@ -34,18 +34,18 @@ namespace TelerikReporting
             Test2();
         }
 
-        //public static void Test1()
-        //{
-        //    using var inputStream = File.OpenRead("Templates\\temp1.html");
-        //    var htmlProvider = new HtmlFormatProvider();
-        //    var document = htmlProvider.Import(inputStream);
-        //    var flowEditor = new RadFlowDocumentEditor(document);
-        //    flowEditor.ReplaceText("###NAME###", "Balazs Mark");
-        //    flowEditor.ReplaceText("###DOB###", DateTime.Now.ToString("D"));
-        //    using var outputStream = File.OpenWrite("test1.pdf");
-        //    var pdfProvider = new PdfFormatProvider();
-        //    pdfProvider.Export(document, outputStream);
-        //}
+        public static void Test1()
+        {
+            using var inputStream = File.OpenRead("Templates\\temp1.html");
+            var htmlProvider = new HtmlFormatProvider();
+            var document = htmlProvider.Import(inputStream);
+            var flowEditor = new RadFlowDocumentEditor(document);
+            flowEditor.ReplaceText("###NAME###", "Balazs Mark");
+            flowEditor.ReplaceText("###DOB###", DateTime.Now.ToString("D"));
+            using var outputStream = File.OpenWrite("test1.pdf");
+            var pdfProvider = new PdfFormatProvider();
+            pdfProvider.Export(document, outputStream);
+        }
 
         public static void Test2()
         {

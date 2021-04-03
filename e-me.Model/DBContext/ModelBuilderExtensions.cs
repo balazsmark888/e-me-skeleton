@@ -27,6 +27,8 @@ namespace e_me.Model.DBContext
             {
                 e.HasIndex(p => p.PersonalNumericCode)
                     .IsUnique();
+                e.HasIndex(p => p.UserId)
+                    .IsUnique();
             });
 
             modelBuilder.Entity<User>(e =>

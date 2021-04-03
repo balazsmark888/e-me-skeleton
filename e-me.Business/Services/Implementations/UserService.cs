@@ -90,7 +90,7 @@ namespace e_me.Business.Services.Implementations
                 throw new ApplicationException(Resources.msgPasswordMandatory);
             }
 
-            await _userRepository.AddOrUpdateAsync(oldUser);
+            await _userRepository.InsertOrUpdateAsync(oldUser);
             await _userRepository.SaveAsync();
             return true;
         }
@@ -107,7 +107,7 @@ namespace e_me.Business.Services.Implementations
             user.PasswordConfirmation = string.Empty;
             user.ChangePasswordNextLogon = true;
             _jwtTokenRepository.DeleteByUserId(id);
-            await _userRepository.AddOrUpdateAsync(user);
+            await _userRepository.InsertOrUpdateAsync(user);
             await _userRepository.SaveAsync();
             return user.Email;
         }
@@ -133,7 +133,7 @@ namespace e_me.Business.Services.Implementations
 
             user.Password = Cryptography.GetEncryptedPassword(newPassword);
 
-            await _userRepository.AddOrUpdateAsync(user);
+            await _userRepository.InsertOrUpdateAsync(user);
             await _userRepository.SaveAsync();
             return true;
         }
@@ -150,7 +150,7 @@ namespace e_me.Business.Services.Implementations
                 return false;
             }
             user.Password = Cryptography.GetEncryptedPassword(newPassword);
-            await _userRepository.AddOrUpdateAsync(user);
+            await _userRepository.InsertOrUpdateAsync(user);
             await _userRepository.SaveAsync();
             return true;
         }
@@ -183,7 +183,7 @@ namespace e_me.Business.Services.Implementations
                 throw new ApplicationException(Resources.msgPasswordMandatory);
             }
 
-            await _userRepository.AddOrUpdateAsync(oldUser);
+            await _userRepository.InsertOrUpdateAsync(oldUser);
             await _userRepository.SaveAsync();
             return true;
 
@@ -220,7 +220,7 @@ namespace e_me.Business.Services.Implementations
             var encryptedPassword = Cryptography.GetEncryptedPassword(password);
             user.Password = encryptedPassword;
 
-            await _userRepository.AddOrUpdateAsync(user);
+            await _userRepository.InsertOrUpdateAsync(user);
             await _userRepository.SaveAsync();
 
             return user;
@@ -248,7 +248,7 @@ namespace e_me.Business.Services.Implementations
                 user.CreationDate = oldUser.CreationDate;
             }
 
-            await _userRepository.AddOrUpdateAsync(user);
+            await _userRepository.InsertOrUpdateAsync(user);
             var userId = await _userRepository.SaveAsync();
             if (isNewUser)
             {
@@ -311,7 +311,7 @@ namespace e_me.Business.Services.Implementations
                 };
             }
 
-            await _userAvatarRepository.AddOrUpdateAsync(userAvatar);
+            await _userAvatarRepository.InsertOrUpdateAsync(userAvatar);
             await _userAvatarRepository.SaveAsync();
 
             return userAvatar.Avatar;
@@ -401,7 +401,7 @@ namespace e_me.Business.Services.Implementations
                         await _jwtTokenRepository.SaveAsync();
                     }
                 }
-                await _userSecurityRoleRepository.AddOrUpdateAsync(userRole);
+                await _userSecurityRoleRepository.InsertOrUpdateAsync(userRole);
                 await _userSecurityRoleRepository.SaveAsync();
             }
             return true;
@@ -453,7 +453,7 @@ namespace e_me.Business.Services.Implementations
                         userRole.SecurityRoleId = securityRole.Id;
                     }
                 }
-                await _userSecurityRoleRepository.AddOrUpdateAsync(userRole);
+                await _userSecurityRoleRepository.InsertOrUpdateAsync(userRole);
                 await _userSecurityRoleRepository.SaveAsync();
             }
         }

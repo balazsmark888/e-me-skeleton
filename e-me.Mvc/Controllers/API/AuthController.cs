@@ -29,12 +29,13 @@ namespace e_me.Mvc.Controllers.API
             _authService = authService;
             _userService = userService;
         }
+
         /// <summary>
         /// This POST method allows users to authenticate and obtain their JWT token to access protected endpoints.
         /// </summary>
         /// <param name="authDto">DTO containing login information</param>
         /// <returns>Auth information with JWT token</returns>
-        [HttpPost("Login")]
+        [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromForm] AuthDto authDto)
         {
@@ -59,7 +60,7 @@ namespace e_me.Mvc.Controllers.API
         /// </summary>
         /// <param name="userRegistrationDto"></param>
         /// <returns></returns>
-        [HttpPost("Register")]
+        [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] UserRegistrationDto userRegistrationDto)
         {
@@ -73,12 +74,13 @@ namespace e_me.Mvc.Controllers.API
                 return BadRequest(ex.Message);
             }
         }
+
         /// <summary>
         /// Validates whether the user is authenticated or not.
         /// </summary>
         /// <returns>OK status code</returns>
         [Authorize]
-        [HttpGet("Validate")]
+        [HttpGet("validate")]
         public IActionResult Validate()
         {
             return Ok();
@@ -89,7 +91,7 @@ namespace e_me.Mvc.Controllers.API
         /// </summary>
         /// <returns>OK status code</returns>
         [Authorize]
-        [HttpPost("Logout")]
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
             await _authService.DeAuthenticateAsync();

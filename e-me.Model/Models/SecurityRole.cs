@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace e_me.Model.Models
 {
-    public class SecurityRole : Model
+    public class SecurityRole : BaseModel
     {
         [Timestamp]
         [JsonIgnore]

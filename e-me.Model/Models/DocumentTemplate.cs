@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace e_me.Model.Models
 {
-    public class DocumentTemplate : Model
+    public class DocumentTemplate : BaseModel
     {
         [Required]
         public Guid DocumentTypeId { get; set; }

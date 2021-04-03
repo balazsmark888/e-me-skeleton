@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
 using Telerik.Windows.Documents.Fixed.Model;
 using Telerik.Windows.Documents.Fixed.Model.InteractiveForms;
 
@@ -45,6 +47,20 @@ namespace e_me.Core.Helpers
                         break;
                 }
             }
+        }
+
+        public static RadFixedDocument GetFixedDocumentFromBytes(byte[] bytes)
+        {
+            var pdfProvider = new PdfFormatProvider();
+            var document = pdfProvider.Import(bytes);
+            return document;
+        }
+
+        public static byte[] GetBytesFromFixedDocument(RadFixedDocument document)
+        {
+            var pdfProvider = new PdfFormatProvider();
+            var bytes = pdfProvider.Export(document);
+            return bytes;
         }
     }
 }

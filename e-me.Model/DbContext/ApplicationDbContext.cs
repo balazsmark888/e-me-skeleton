@@ -18,8 +18,6 @@ namespace e_me.Model.DBContext
             _encryptionProvider = encryptionProvider;
         }
 
-        public DbSet<UserEcdhKeyInformation> ClientEcdhKeyPairs { get; set; }
-
         public DbSet<User> Users { get; set; }
 
         public DbSet<JwtToken> JwtTokens { get; set; }
