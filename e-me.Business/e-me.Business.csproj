@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>e_me.Business</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\e-me.Model\e-me.Model.csproj" />
+    <ProjectReference Include="..\e-me.Shared\e-me.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using AutoMapper;
 using e_me.Business.DTOs;
 using e_me.Business.DTOs.User;
 using e_me.Business.Services.Interfaces;
-using e_me.Core.Communication;
+using e_me.Shared.Communication;
 using e_me.Model.Models;
 using e_me.Model.Repositories;
 using Microsoft.AspNetCore.Authentication;

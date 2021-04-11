@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
-using e_me.Core.Communication;
 using e_me.Model.Models;
+using e_me.Shared.Communication;
 
 namespace e_me.Mvc.Profiles
 {

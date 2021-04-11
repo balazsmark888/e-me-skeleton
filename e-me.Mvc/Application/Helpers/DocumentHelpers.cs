@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using e_me.Business.DTOs.Document;
-using e_me.Core.Communication;
+using e_me.Shared.Communication;
 using e_me.Core.Helpers;
 using e_me.Model.Models;
 

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>e_me.Mvc</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,6 +28,7 @@
     <ProjectReference Include="..\e-me.Business\e-me.Business.csproj" />
     <ProjectReference Include="..\e-me.Core\e-me.Core.csproj" />
     <ProjectReference Include="..\e-me.Model\e-me.Model.csproj" />
+    <ProjectReference Include="..\e-me.Shared\e-me.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
