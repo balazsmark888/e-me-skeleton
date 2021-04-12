@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using e_me.Business.DTOs.Document;
 using e_me.Model.Repositories;
+using e_me.Shared.DTOs.Document;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 

@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace e_me.Business.DTOs
+namespace e_me.Shared.DTOs
 {
+    [Serializable]
     public class AuthDto
     {
         [Required]

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using e_me.Business.DTOs;
-using e_me.Business.DTOs.User;
 using e_me.Model.Models;
+using e_me.Shared.DTOs;
+using e_me.Shared.DTOs.User;
 
 namespace e_me.Business.Services.Interfaces
 {

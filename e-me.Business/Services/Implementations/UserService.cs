@@ -2,14 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using e_me.Business.DTOs;
-using e_me.Business.DTOs.SecurityRole;
-using e_me.Business.DTOs.User;
 using e_me.Business.Services.Interfaces;
 using e_me.Core;
 using e_me.Core.Helpers;
 using e_me.Model.Models;
 using e_me.Model.Repositories;
+using e_me.Shared.DTOs.SecurityRole;
+using e_me.Shared.DTOs.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

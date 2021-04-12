@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace e_me.Business.DTOs.Document
+namespace e_me.Shared.DTOs.Document
 {
     public class DocumentTypeDto
     {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using e_me.Business.DTOs.Document;
 using e_me.Model.Models;
+using e_me.Shared.DTOs.Document;
 
 namespace e_me.Mvc.Profiles
 {

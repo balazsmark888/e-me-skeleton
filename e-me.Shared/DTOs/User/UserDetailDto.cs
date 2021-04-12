@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace e_me.Business.DTOs.User
+namespace e_me.Shared.DTOs.User
 {
     public class UserDetailDto
     {

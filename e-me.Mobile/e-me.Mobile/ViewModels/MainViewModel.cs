@@ -1,13 +1,12 @@
-﻿using System.Net.Http;
-using Microsoft.Extensions.Logging;
+﻿using e_me.Mobile.AppContext;
 
 namespace e_me.Mobile.ViewModels
 {
     public class MainViewModel : IMainViewModel
     {
-        public MainViewModel()
+        public MainViewModel(ApplicationContext applicationContext)
         {
-            Hello = "Hello from IoC";
+            Hello = "Say hello to my little app";
         }
 
         public string Hello { get; set; }

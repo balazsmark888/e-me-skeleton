@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace e_me.Core.Helpers
+namespace e_me.Shared
 {
     public static class Helpers
     {

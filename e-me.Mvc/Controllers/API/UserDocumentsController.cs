@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using e_me.Business.DTOs.Document;
 using e_me.Business.Services.Interfaces;
 using e_me.Model.Repositories;
 using e_me.Mvc.Application.Helpers;
+using e_me.Shared.DTOs.Document;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

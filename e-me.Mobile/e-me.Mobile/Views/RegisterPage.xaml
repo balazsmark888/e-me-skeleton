@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="e_me.Mobile.Views.RegisterPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:e_me.Mobile.ViewModels;assembly=e-me.Mobile">
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <Entry Placeholder="Full name" Text="{Binding FullName}" />
+            <Entry Placeholder="Email" Text="{Binding Email}" />
+            <Entry Placeholder="Login name" Text="{Binding LoginName}" />
+            <Entry
+                IsPassword="True"
+                Placeholder="Password"
+                Text="{Binding Password}" />
+            <Entry
+                IsPassword="True"
+                Placeholder="Confirm password"
+                Text="{Binding ConfirmPassword}" />
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>

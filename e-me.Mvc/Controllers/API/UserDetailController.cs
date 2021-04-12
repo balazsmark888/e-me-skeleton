@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using e_me.Business.DTOs.User;
 using e_me.Model.Models;
 using Microsoft.AspNetCore.Mvc;
 using e_me.Model.Repositories;
 using e_me.Mvc.Controllers.ValidationAttributes;
+using e_me.Shared.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
 
 namespace e_me.Mvc.Controllers.API

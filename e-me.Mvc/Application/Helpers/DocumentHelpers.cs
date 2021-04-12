@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using e_me.Business.DTOs.Document;
 using e_me.Shared.Communication;
 using e_me.Core.Helpers;
 using e_me.Model.Models;
+using e_me.Shared;
+using e_me.Shared.DTOs.Document;
 
 namespace e_me.Mvc.Application.Helpers
 {

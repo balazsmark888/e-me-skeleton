@@ -2,12 +2,12 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
-using e_me.Business.DTOs;
-using e_me.Business.DTOs.User;
 using e_me.Business.Services.Interfaces;
 using e_me.Shared.Communication;
 using e_me.Model.Models;
 using e_me.Model.Repositories;
+using e_me.Shared.DTOs;
+using e_me.Shared.DTOs.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
