@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using e_me.Core.Application;
 using e_me.Model.DBContext;
-using e_me.Model.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace e_me.Model.Repositories

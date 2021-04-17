@@ -101,6 +101,7 @@ namespace e_me.Mvc
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseAuthentication();
             app.UseJwtTokenValidator(new JwtTokenValidatorOptions());

@@ -1,15 +1,16 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace e_me.Shared.Communication
 {
-    public class EcdhKeyStore : IDisposable
+    public class EcdhKeyStore
     {
-        public ECDiffieHellmanPublicKey PublicKey { get; set; }
+        public byte[] PrivateKey { get; }
 
-        public ECDiffieHellmanPublicKey OtherPartyPublicKey { get; private set; }
+        public byte[] PublicKey { get; }
 
-        public byte[] AesKey { get; private set; }
+        public byte[] PeerPublicKey { get; private set; }
+
+        public byte[] SharedKey { get; private set; }
 
         public byte[] IV { get; set; }
 
@@ -17,43 +18,39 @@ namespace e_me.Shared.Communication
 
         public byte[] DerivedHmacKey { get; private set; }
 
-        public ECDiffieHellmanCng DiffieHellmanCng { get; }
+        private const int Iterations = 1000;
+        private const int KeySize = 32;
+        private const int SaltSize = 8;
+        private const int RawKeySize = 140;
 
         public EcdhKeyStore()
         {
-            DiffieHellmanCng = new ECDiffieHellmanCng
-            {
-                KeyDerivationFunction = ECDiffieHellmanKeyDerivationFunction.Hmac,
-                HashAlgorithm = CngAlgorithm.Sha256,
-            };
-            PublicKey = DiffieHellmanCng.PublicKey;
+            using var rngCsp = new RNGCryptoServiceProvider();
+            var salt = new byte[SaltSize];
+            var rawKey = new byte[RawKeySize];
+            rngCsp.GetBytes(salt);
+            rngCsp.GetBytes(rawKey);
+            PrivateKey = new Rfc2898DeriveBytes(rawKey, salt, Iterations, HashAlgorithmName.SHA512).GetBytes(KeySize);
+            PublicKey = Curve25519.GetPublicKey(PrivateKey);
         }
 
-        public EcdhKeyStore(byte[] publicKey) : this()
+        public EcdhKeyStore(byte[] peerPublicKey) : this()
         {
-            var ecdhKey = ECDiffieHellmanCngPublicKey.FromByteArray(publicKey, CngKeyBlobFormat.EccPublicBlob);
-            SetOtherPartyPublicKey(ecdhKey);
+            SetOtherPartyPublicKey(peerPublicKey);
         }
 
-        public void SetOtherPartyPublicKey(ECDiffieHellmanPublicKey publicKey)
+        public void SetOtherPartyPublicKey(byte[] peerPublicKey)
         {
-            OtherPartyPublicKey = publicKey;
-            AesKey = DiffieHellmanCng.DeriveKeyMaterial(publicKey);
-            HmacKey = AesKey;
-            DiffieHellmanCng.HmacKey = AesKey;
-            DerivedHmacKey = DiffieHellmanCng.DeriveKeyFromHmac(OtherPartyPublicKey, HashAlgorithmName.SHA256, HmacKey);
+            PeerPublicKey = peerPublicKey;
+            SharedKey = Curve25519.GetSharedSecret(PrivateKey, peerPublicKey);
+            HmacKey = SharedKey;
+            DerivedHmacKey = Curve25519.GetSharedSecret(HmacKey, HmacKey);
             using var aesProvider = new AesCryptoServiceProvider
             {
-                Key = AesKey
+                Key = SharedKey
             };
             aesProvider.GenerateIV();
             IV = aesProvider.IV;
-
-        }
-
-        public void Dispose()
-        {
-            DiffieHellmanCng.Dispose();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using e_me.Mobile.AppContext;
+using e_me.Mobile.Helpers;
 
 namespace e_me.Mobile.ViewModels
 {
@@ -6,7 +7,7 @@ namespace e_me.Mobile.ViewModels
     {
         public MainViewModel(ApplicationContext applicationContext)
         {
-            Hello = "Say hello to my little app";
+            Hello = AppSettingsManager.Settings[Constants.GreetingMessageProperty];
         }
 
         public string Hello { get; set; }

@@ -17,11 +17,11 @@ namespace e_me.Mvc.Profiles
         {
             CreateMap<EcdhKeyStore, UserEcdhKeyInformation>()
                 .ForMember(d => d.ClientPublicKey,
-                    o => o.MapFrom(s => Convert.ToBase64String(s.OtherPartyPublicKey.ToByteArray())))
+                    o => o.MapFrom(s => Convert.ToBase64String(s.PeerPublicKey)))
                 .ForMember(d => d.PublicKey,
-                    o => o.MapFrom(s => Convert.ToBase64String(s.PublicKey.ToByteArray())))
+                    o => o.MapFrom(s => Convert.ToBase64String(s.PublicKey)))
                 .ForMember(d => d.AesKey,
-                    o => o.MapFrom(s => Convert.ToBase64String(s.AesKey)))
+                    o => o.MapFrom(s => Convert.ToBase64String(s.SharedKey)))
                 .ForMember(d => d.DerivedHmacKey,
                     o => o.MapFrom(s => Convert.ToBase64String(s.DerivedHmacKey)))
                 .ForMember(d => d.HmacKey,

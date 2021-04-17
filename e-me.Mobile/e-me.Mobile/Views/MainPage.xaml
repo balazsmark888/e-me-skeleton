@@ -2,23 +2,26 @@
 <ContentPage
     x:Class="e_me.Mobile.Views.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="{StaticResource AppBackgroundColor}">
 
-    <StackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="{Binding Hello}"
-            VerticalOptions="CenterAndExpand" />
-        <Button
-            BackgroundColor="DarkOrange"
-            Clicked="LoginButton_Clicked"
-            HorizontalOptions="Center"
-            Text="Login" />
-        <Button
-            BackgroundColor="DarkSlateBlue"
-            Clicked="RegisterButton_Clicked"
-            HorizontalOptions="Center"
-            Text="Register" />
-    </StackLayout>
+    <Frame
+        BorderColor="{StaticResource FrameBorderColor}"
+        HorizontalOptions="Center"
+        VerticalOptions="CenterAndExpand"
+        WidthRequest="250">
+        <StackLayout>
+            <Label Text="{Binding Hello}" />
+            <Button
+                BackgroundColor="LightSeaGreen"
+                Clicked="LoginButton_OnClicked"
+                Text="Login" />
+            <Button
+                BackgroundColor="{StaticResource RegisterButtonColor}"
+                Clicked="RegisterButton_OnClicked"
+                Text="Register" />
+        </StackLayout>
+    </Frame>
+
 
 </ContentPage>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using e_me.Mobile.AppContext;
 using e_me.Mobile.Helpers;
@@ -23,14 +24,19 @@ namespace e_me.Mobile.Services.User
             _httpClient = httpClientFactory.CreateClient();
         }
 
-        public async Task<bool> RegisterAsync(UserRegistrationDto registrationDto)
+        public async Task<HttpResponseMessage> RegisterAsync(UserRegistrationDto registrationDto)
         {
             var dict = registrationDto.MapToDictionary();
             var content = new FormUrlEncodedContent(dict.Select(p => new KeyValuePair<string, string>(p.Key, p.Value)));
             var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.RegisterAddress}");
-
-            var response = await _httpClient.PostAsync(uri, content);
-            return response.IsSuccessStatusCode;
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+            var request = new HttpRequestMessage(HttpMethod.Post, uri)
+            {
+                Content = content
+            };
+            request.Headers.Add("accept", "application/json");
+            var response = await _httpClient.SendAsync(request);
+            return response;
         }
 
         public async Task<UserDto> LoginAsync(AuthDto authDto)
@@ -46,12 +52,12 @@ namespace e_me.Mobile.Services.User
             return userDto;
         }
 
-        public async Task<bool> LogoutAsync()
+        public async Task<HttpResponseMessage> LogoutAsync()
         {
             var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.LogoutAddress}");
             var response = await _httpClient.PostAsync(uri, new StringContent(string.Empty));
 
-            return response.IsSuccessStatusCode;
+            return response;
         }
     }
 }

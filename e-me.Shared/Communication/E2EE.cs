@@ -7,12 +7,12 @@ namespace e_me.Shared.Communication
 {
     public static class E2EE
     {
-        public static (byte[] encryptedMessage, byte[] hash) Encrypt(string message, byte[] aesKey, byte[] iv, byte[] hmacKey, byte[] derivedHmacKey)
+        public static (byte[] EncryptedMessage, byte[] Hash) Encrypt(string message, byte[] aesKey, byte[] iv, byte[] hmacKey, byte[] derivedHmacKey)
         {
             using var aes = new AesCryptoServiceProvider
             {
                 Key = aesKey,
-                IV = iv
+                IV = iv,
             };
             using var memoryStream = new MemoryStream();
             using var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write);

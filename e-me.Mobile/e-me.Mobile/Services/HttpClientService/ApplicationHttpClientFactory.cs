@@ -3,24 +3,27 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using e_me.Mobile.AppContext;
 using e_me.Mobile.Helpers;
-using Microsoft.Extensions.Configuration;
 
 namespace e_me.Mobile.Services.HttpClientService
 {
     public class ApplicationHttpClientFactory : IHttpClientFactory
     {
-        private readonly IConfiguration _configuration;
         private readonly ApplicationContext _applicationContext;
 
-        public ApplicationHttpClientFactory(IConfiguration configuration, ApplicationContext applicationContext)
+        public ApplicationHttpClientFactory(ApplicationContext applicationContext)
         {
-            _configuration = configuration;
             _applicationContext = applicationContext;
         }
 
         public HttpClient CreateClient(string name)
         {
-            var client = new HttpClient { BaseAddress = new Uri(_configuration["BackendUrl"]) };
+            var handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+            var client = new HttpClient(handler)
+            {
+                BaseAddress = new Uri(AppSettingsManager.Settings[Constants.BackendBaseAddressProperty])
+            };
+
             if (_applicationContext.ApplicationProperties.ContainsKey(Constants.AuthTokenProperty))
             {
                 //add auth header to client

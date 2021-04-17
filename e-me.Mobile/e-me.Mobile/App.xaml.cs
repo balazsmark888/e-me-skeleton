@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using e_me.Mobile.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

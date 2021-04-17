@@ -30,7 +30,7 @@
     "IIS": {
       "commandName": "IIS",
       "launchBrowser": true,
-      "launchUrl": "https://localhost/e-me.Mvc",
+      "launchUrl": "https://localhost/e-me.Mvc/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

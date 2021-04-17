@@ -16,13 +16,13 @@ namespace e_me.Mobile.Views
             BindingContext = viewModel;
         }
 
-        private void LoginButton_Clicked(object sender, EventArgs e)
+        private void LoginButton_OnClicked(object sender, EventArgs e)
         {
             //TODO: change this
             _navigationService.NavigateTo<MainPage>();
         }
 
-        private void RegisterButton_Clicked(object sender, EventArgs e)
+        private void RegisterButton_OnClicked(object sender, EventArgs e)
         {
             _navigationService.NavigateTo<RegisterPage>();
         }

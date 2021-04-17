@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using e_me.Core.Application;
+﻿using e_me.Core.Application;
 using e_me.Model.DBContext;
 using e_me.Model.Models;
 

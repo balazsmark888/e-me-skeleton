@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
 using Telerik.Windows.Documents.Fixed.Model;
 using Telerik.Windows.Documents.Fixed.Model.InteractiveForms;

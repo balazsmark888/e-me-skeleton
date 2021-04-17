@@ -3,9 +3,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using e_me.Business.Services.Interfaces;
-using e_me.Shared.Communication;
 using e_me.Model.Models;
 using e_me.Model.Repositories;
+using e_me.Shared.Communication;
 using e_me.Shared.DTOs;
 using e_me.Shared.DTOs.User;
 using Microsoft.AspNetCore.Authentication;
@@ -99,7 +99,7 @@ namespace e_me.Business.Services.Implementations
                 FullName = user.FullName,
                 Token = token,
                 ValidTo = validTo,
-                PublicKey = keyStore.PublicKey.ToByteArray(),
+                PublicKey = keyStore.PublicKey,
                 IV = keyStore.IV
             };
         }

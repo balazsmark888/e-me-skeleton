@@ -1,10 +1,11 @@
 ﻿using System;
-using System.IO;
+using System.Net.Http;
 using e_me.Mobile.AppContext;
+using e_me.Mobile.Services.HttpClientService;
 using e_me.Mobile.Services.Navigation;
+using e_me.Mobile.Services.User;
 using e_me.Mobile.ViewModels;
 using e_me.Mobile.Views;
-using e_me.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,15 +17,10 @@ namespace e_me.Mobile
     {
         public static App Init()
         {
-            var systemDir = FileSystem.CacheDirectory;
-            Utils.ExtractSaveResource("e_me.Mobile.appsettings.json", systemDir);
-            var fullConfig = Path.Combine(systemDir, "e_me.Mobile.appsettings.json");
-
             var host = new HostBuilder()
                 .ConfigureHostConfiguration(c =>
                 {
                     c.AddCommandLine(new[] { $"ContentRoot={FileSystem.AppDataDirectory}" });
-                    c.AddJsonFile(fullConfig);
                 })
                 .ConfigureServices(ConfigureServices)
                 .Build();
@@ -37,23 +33,21 @@ namespace e_me.Mobile
             if (ctx.HostingEnvironment.IsDevelopment())
             {
             }
-
-            services.AddHttpClient("E-meApi", client =>
-            {
-                client.BaseAddress = new Uri(ctx.Configuration["BackendUrl"]);
-
-            });
             services.AddSingleton<App>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<IApplicationContextFactory, ApplicationContextFactory>();
             services.AddTransient(sp => sp.GetRequiredService<IApplicationContextFactory>().CreateApplicationContext());
             services.AddTransient<INavigationService, NavigationService>();
+            services.AddTransient<IHttpClientFactory, ApplicationHttpClientFactory>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddTransient<IMainViewModel, MainViewModel>();
             services.AddTransient<MainPage>();
             services.AddTransient<IRegisterViewModel, RegisterViewModel>();
             services.AddTransient<RegisterPage>();
+            services.AddTransient<ILoginViewModel, LoginViewModel>();
+            services.AddTransient<LoginPage>();
         }
     }
-
-
 }

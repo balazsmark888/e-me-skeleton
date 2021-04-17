@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>e_me.Mvc</RootNamespace>
     <LangVersion>latest</LangVersion>
+    <UserSecretsId>e080430f-13e0-40b0-9180-952b7afe536b</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,8 +21,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.4" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.10.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.10.9" />
   </ItemGroup>
 
   <ItemGroup>

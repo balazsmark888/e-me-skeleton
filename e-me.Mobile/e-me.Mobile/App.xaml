@@ -1,8 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="e_me.Mobile.App">
+<Application
+    x:Class="e_me.Mobile.App"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input">
     <Application.Resources>
+        <Color x:Key="AppBackgroundColor">#FFC18B</Color>
+        <Color x:Key="NavigationBarColor">Orange</Color>
+        <Color x:Key="NavigationBarTextColor">Black</Color>
+        <Color x:Key="NormalTextColor">Black</Color>
+        <Color x:Key="RegisterButtonColor">Coral</Color>
+        <Color x:Key="LoginButtonColor">LightSeaGreen</Color>
+        <Color x:Key="FrameBorderColor">LightSlateGray</Color>
 
+        <input:BorderStyle
+            x:Key="BorderStyle1"
+            BorderColor="CadetBlue"
+            BorderThickness="1"
+            CornerRadius="8" />
     </Application.Resources>
 </Application>
