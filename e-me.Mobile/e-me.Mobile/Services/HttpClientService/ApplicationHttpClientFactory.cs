@@ -24,10 +24,10 @@ namespace e_me.Mobile.Services.HttpClientService
                 BaseAddress = new Uri(AppSettingsManager.Settings[Constants.BackendBaseAddressProperty])
             };
 
-            if (_applicationContext.ApplicationProperties.ContainsKey(Constants.AuthTokenProperty))
+            if (_applicationContext.ApplicationSecureStorage.ContainsKey(Constants.AuthTokenProperty))
             {
                 //add auth header to client
-                var token = _applicationContext.ApplicationProperties[Constants.AuthTokenProperty] as string;
+                var token = _applicationContext.ApplicationSecureStorage[Constants.AuthTokenProperty] as string;
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", token);
             }

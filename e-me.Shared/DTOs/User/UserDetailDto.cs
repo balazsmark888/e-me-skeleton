@@ -5,7 +5,6 @@ namespace e_me.Shared.DTOs.User
 {
     public class UserDetailDto
     {
-        [Required]
         public Guid UserId { get; set; }
 
         public string BirthDay { get; set; }

@@ -34,6 +34,12 @@ namespace e_me.Shared.Communication
             PublicKey = Curve25519.GetPublicKey(PrivateKey);
         }
 
+        public EcdhKeyStore(byte[] privateKey, byte[] publicKey)
+        {
+            PrivateKey = privateKey;
+            PublicKey = publicKey;
+        }
+
         public EcdhKeyStore(byte[] peerPublicKey) : this()
         {
             SetOtherPartyPublicKey(peerPublicKey);

@@ -20,7 +20,7 @@ namespace e_me.Mvc.Application.Helpers
         {
             var documentDto = mapper.Map<UserDocumentDto>(document);
             var (encryptedMessage, hash) = E2EE.Encrypt(document.File.ToBase64String(),
-                keyInformation.AesKey.FromBase64String(),
+                keyInformation.SharedKey.FromBase64String(),
                 keyInformation.IV.FromBase64String(), keyInformation.HmacKey.FromBase64String(),
                 keyInformation.DerivedHmacKey.FromBase64String());
             documentDto.File = encryptedMessage.ToBase64String();

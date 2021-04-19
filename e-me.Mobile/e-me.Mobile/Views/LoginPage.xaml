@@ -4,25 +4,49 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:input="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
-    BackgroundColor="{StaticResource AppBackgroundColor}">
+    xmlns:primitives="clr-namespace:Telerik.XamarinForms.Primitives;assembly=Telerik.XamarinForms.Primitives"
+    BackgroundColor="{StaticResource AppBackgroundColor}"
+    Shell.NavBarIsVisible="False">
 
-    <Frame
-        BorderColor="{StaticResource FrameBorderColor}"
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        WidthRequest="250">
-        <StackLayout>
-            <input:RadEntry Text="{Binding LoginName}" WatermarkText="Login name" />
-            <input:RadEntry
-                IsPassword="True"
-                Text="{Binding Password}"
-                WatermarkText="Password" />
-            <input:RadButton
-                x:Name="LoginButton"
-                BackgroundColor="{StaticResource LoginButtonColor}"
-                Clicked="LoginButton_OnClicked"
-                Text="Login" />
+    <AbsoluteLayout>
+        <Frame
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BorderColor="{StaticResource FrameBorderColor}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            WidthRequest="250">
+            <StackLayout>
+                <input:RadEntry Text="{Binding LoginName}" WatermarkText="Login name" />
+                <input:RadEntry
+                    IsPassword="True"
+                    Text="{Binding Password}"
+                    WatermarkText="Password" />
+                <input:RadButton
+                    x:Name="LoginButton"
+                    BackgroundColor="{StaticResource LoginButtonColor}"
+                    Clicked="LoginButton_OnClicked"
+                    Text="Login" />
+
+            </StackLayout>
+        </Frame>
+        <StackLayout
+            x:Name="BusyLayout"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            BackgroundColor="Gray"
+            IsVisible="False"
+            Opacity="0.5">
+            <primitives:RadBusyIndicator
+                x:Name="BusyIndicator"
+                AnimationContentColor="{StaticResource BusyIndicatorColor}"
+                AnimationContentHeightRequest="100"
+                AnimationContentWidthRequest="100"
+                HorizontalOptions="CenterAndExpand"
+                IsBusy="False"
+                VerticalOptions="CenterAndExpand" />
         </StackLayout>
-    </Frame>
+    </AbsoluteLayout>
+
 
 </ContentPage>

@@ -26,7 +26,7 @@ namespace e_me.Mvc.Controllers.API
         /// Gets every DocumentType.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("getall")]
         public IActionResult GetAll()
         {
             try

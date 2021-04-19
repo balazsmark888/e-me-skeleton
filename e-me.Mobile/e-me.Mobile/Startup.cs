@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using e_me.Mobile.AppContext;
+using e_me.Mobile.MenuItems;
+using e_me.Mobile.Services.Crypto;
+using e_me.Mobile.Services.DataStores;
 using e_me.Mobile.Services.HttpClientService;
 using e_me.Mobile.Services.Navigation;
 using e_me.Mobile.Services.User;
@@ -41,13 +44,28 @@ namespace e_me.Mobile
             services.AddTransient<INavigationService, NavigationService>();
             services.AddTransient<IHttpClientFactory, ApplicationHttpClientFactory>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICryptoService, ApplicationCryptoService>();
+            services.AddTransient<DocumentTypeDataStore>();
 
-            services.AddTransient<IMainViewModel, MainViewModel>();
+            services.AddTransient<MainViewModel>();
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<RegisterViewModel>();
+            services.AddTransient<DocumentTypesViewModel>();
+
             services.AddTransient<MainPage>();
-            services.AddTransient<IRegisterViewModel, RegisterViewModel>();
             services.AddTransient<RegisterPage>();
-            services.AddTransient<ILoginViewModel, LoginViewModel>();
             services.AddTransient<LoginPage>();
+            services.AddTransient<DocumentsPage>();
+            services.AddTransient<DocumentTypesPage>();
+
+            services.AddTransient<DocumentsFlyoutItem>();
+            services.AddTransient<DocumentTypesFlyoutItem>();
+            services.AddTransient<MainFlyoutItem>();
+            services.AddTransient<LoginFlyoutItem>();
+            services.AddTransient<RegisterFlyoutItem>();
+
+            services.AddSingleton<AppShell>();
+
         }
     }
 }

@@ -22,5 +22,45 @@ namespace e_me.Shared
         {
             return Convert.FromBase64String(text);
         }
+
+        public static void CopyAllProperties<TParent, TChild>(TParent parent, TChild child)
+            where TParent : class
+            where TChild : class
+        {
+            var parentProperties = parent.GetType().GetProperties();
+            var childProperties = child.GetType().GetProperties();
+
+            foreach (var parentProperty in parentProperties)
+            {
+                foreach (var childProperty in childProperties)
+                {
+                    if (parentProperty.Name == childProperty.Name && parentProperty.PropertyType == childProperty.PropertyType)
+                    {
+                        childProperty.SetValue(child, parentProperty.GetValue(parent));
+                        break;
+                    }
+                }
+            }
+        }
+
+        public static void CopyNotNullProperties<TParent, TChild>(TParent parent, TChild child)
+            where TParent : class
+            where TChild : class
+        {
+            var parentProperties = parent.GetType().GetProperties();
+            var childProperties = child.GetType().GetProperties();
+
+            foreach (var parentProperty in parentProperties)
+            {
+                foreach (var childProperty in childProperties)
+                {
+                    if (parentProperty.Name == childProperty.Name && parentProperty.PropertyType == childProperty.PropertyType && parentProperty.GetValue(parent) != default)
+                    {
+                        childProperty.SetValue(child, parentProperty.GetValue(parent));
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

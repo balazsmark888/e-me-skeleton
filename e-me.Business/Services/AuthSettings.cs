@@ -13,7 +13,7 @@ namespace e_me.Business.Services
         public string Issuer => "E-me.Web";
 
         /// <summary>
-        /// Secret key for token generation.
+        /// Secret key for token generation and data encryption.
         /// </summary>
         public string SecretKey { get; set; }
 

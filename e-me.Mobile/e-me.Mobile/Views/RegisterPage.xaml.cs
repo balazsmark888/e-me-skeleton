@@ -18,9 +18,14 @@ namespace e_me.Mobile.Views
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly INavigationService _navigationService;
-        private readonly IRegisterViewModel _registerViewModel;
+        private readonly RegisterViewModel _registerViewModel;
 
-        public RegisterPage(IRegisterViewModel registerViewModel, IUserService userService, IMapper mapper, INavigationService navigationService)
+        public RegisterPage()
+        {
+            
+        }
+
+        public RegisterPage(RegisterViewModel registerViewModel, IUserService userService, IMapper mapper, INavigationService navigationService)
         {
             _userService = userService;
             _mapper = mapper;
@@ -32,28 +37,44 @@ namespace e_me.Mobile.Views
 
         private async void RegisterButton_OnClicked(object sender, EventArgs e)
         {
-            var dto = _mapper.Map<UserRegistrationDto>((RegisterViewModel)_registerViewModel);
-            var response = await _userService.RegisterAsync(dto);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                _navigationService.NavigateTo<LoginPage>();
-            }
-            else
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseContent);
-                if (dict.ContainsKey("errors"))
+                BusyLayout.IsVisible = true;
+                BusyIndicator.IsBusy = true;
+                var dto = _mapper.Map<UserRegistrationDto>((RegisterViewModel)_registerViewModel);
+                var response = await _userService.RegisterAsync(dto);
+                if (response.IsSuccessStatusCode)
                 {
-                    if (dict["errors"] is Dictionary<string, string[]> errors)
-                    {
-                        await DisplayAlert("Error", $"{errors.First().Value.First()}", "OK");
-                    }
+                    _navigationService.NavigateTo<LoginPage>();
                 }
                 else
                 {
-                    await DisplayAlert("Error", "One or more errors occurred.", "OK");
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseContent);
+                    if (dict.ContainsKey("errors"))
+                    {
+                        if (dict["errors"] is Dictionary<string, string[]> errors)
+                        {
+                            await DisplayAlert("Error", $"{errors.First().Value.First()}", "OK");
+                        }
+                    }
                 }
             }
+            catch (Exception)
+            {
+                await DisplayAlert("Error", "One or more errors occurred.", "OK");
+            }
+            finally
+            {
+                BusyLayout.IsVisible = false;
+                BusyIndicator.IsBusy = false;
+            }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            _navigationService.NavigateTo<MainPage>();
+            return true;
         }
     }
 }

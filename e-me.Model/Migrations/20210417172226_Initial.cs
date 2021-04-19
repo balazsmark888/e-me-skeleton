@@ -167,11 +167,11 @@ namespace e_me.Model.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AesKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SharedKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IV = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HmacKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DerivedHmacKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PublicKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ServerPublicKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClientPublicKey = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -238,14 +238,19 @@ namespace e_me.Model.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "SecurityRole",
-                columns: new[] { "Id", "Name", "SecurityType" },
-                values: new object[] { new Guid("17dd0444-2039-4a84-9c8c-f9eca9657353"), "Administrator", 0 });
+                table: "DocumentType",
+                columns: new[] { "Id", "DisplayName", "Name" },
+                values: new object[] { new Guid("3bcc3886-a363-43bf-95e2-afef945631b9"), "Test Document Type", "TestDocumentType" });
 
             migrationBuilder.InsertData(
                 table: "SecurityRole",
                 columns: new[] { "Id", "Name", "SecurityType" },
-                values: new object[] { new Guid("f815c54a-51e1-4f3d-9d85-b025eb64d7c5"), "Regular User", 1 });
+                values: new object[] { new Guid("dcf0d4de-5213-45d2-b2d6-b7063889b7b8"), "Administrator", 0 });
+
+            migrationBuilder.InsertData(
+                table: "SecurityRole",
+                columns: new[] { "Id", "Name", "SecurityType" },
+                values: new object[] { new Guid("59f292c0-a0ec-476c-95ba-492f8a9b8974"), "Regular User", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DocumentTemplate_DocumentTypeId",

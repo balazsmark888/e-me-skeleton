@@ -16,7 +16,7 @@ namespace e_me.Model.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("e_me.Model.Models.ApplicationSetting", b =>
@@ -84,6 +84,14 @@ namespace e_me.Model.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DocumentType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3bcc3886-a363-43bf-95e2-afef945631b9"),
+                            DisplayName = "Test Document Type",
+                            Name = "TestDocumentType"
+                        });
                 });
 
             modelBuilder.Entity("e_me.Model.Models.JwtToken", b =>
@@ -139,13 +147,13 @@ namespace e_me.Model.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("17dd0444-2039-4a84-9c8c-f9eca9657353"),
+                            Id = new Guid("dcf0d4de-5213-45d2-b2d6-b7063889b7b8"),
                             Name = "Administrator",
                             SecurityType = 0
                         },
                         new
                         {
-                            Id = new Guid("f815c54a-51e1-4f3d-9d85-b025eb64d7c5"),
+                            Id = new Guid("59f292c0-a0ec-476c-95ba-492f8a9b8974"),
                             Name = "Regular User",
                             SecurityType = 1
                         });
@@ -323,9 +331,6 @@ namespace e_me.Model.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AesKey")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ClientPublicKey")
                         .HasColumnType("nvarchar(max)");
 
@@ -338,7 +343,10 @@ namespace e_me.Model.Migrations
                     b.Property<string>("IV")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PublicKey")
+                    b.Property<string>("ServerPublicKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SharedKey")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")

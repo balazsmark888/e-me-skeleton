@@ -5,13 +5,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:input="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input">
     <Application.Resources>
-        <Color x:Key="AppBackgroundColor">#FFC18B</Color>
+        <Color x:Key="AppBackgroundColor">White</Color>
         <Color x:Key="NavigationBarColor">Orange</Color>
-        <Color x:Key="NavigationBarTextColor">Black</Color>
         <Color x:Key="NormalTextColor">Black</Color>
-        <Color x:Key="RegisterButtonColor">Coral</Color>
-        <Color x:Key="LoginButtonColor">LightSeaGreen</Color>
+        <Color x:Key="RegisterButtonColor">OrangeRed</Color>
+        <Color x:Key="LoginButtonColor">DarkOrange</Color>
         <Color x:Key="FrameBorderColor">LightSlateGray</Color>
+        <Color x:Key="BusyIndicatorColor">LightSalmon</Color>
+        <Color x:Key="Primary">LightSalmon</Color>
+
 
         <input:BorderStyle
             x:Key="BorderStyle1"

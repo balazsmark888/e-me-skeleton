@@ -1,11 +1,21 @@
-﻿using e_me.Business.Services.Interfaces;
+﻿using System.Security.Cryptography;
+using System.Text;
+using e_me.Business.Services.Interfaces;
 using Microsoft.EntityFrameworkCore.DataEncryption;
 using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
+using Microsoft.Extensions.Options;
 
 namespace e_me.Business.Services.Implementations
 {
     public class EncryptionProviderFactory : IEncryptionProviderFactory
     {
+        private readonly AuthSettings _authSettings;
+
+        public EncryptionProviderFactory(IOptions<AuthSettings> authSettings)
+        {
+            _authSettings = authSettings.Value;
+        }
+
         public IEncryptionProvider Create()
         {
             return CreateAesProvider();
@@ -13,8 +23,9 @@ namespace e_me.Business.Services.Implementations
 
         private AesProvider CreateAesProvider()
         {
-            var keyInfo = AesProvider.GenerateKey(AesKeySize.AES256Bits);
-            return new AesProvider(keyInfo.Key);
+            var key = Encoding.ASCII.GetBytes(_authSettings.SecretKey);
+            var provider = new AesProvider(key, CipherMode.CBC, PaddingMode.Zeros);
+            return provider;
         }
     }
 }

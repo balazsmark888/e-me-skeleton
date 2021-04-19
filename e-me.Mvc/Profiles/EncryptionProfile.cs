@@ -18,9 +18,9 @@ namespace e_me.Mvc.Profiles
             CreateMap<EcdhKeyStore, UserEcdhKeyInformation>()
                 .ForMember(d => d.ClientPublicKey,
                     o => o.MapFrom(s => Convert.ToBase64String(s.PeerPublicKey)))
-                .ForMember(d => d.PublicKey,
+                .ForMember(d => d.ServerPublicKey,
                     o => o.MapFrom(s => Convert.ToBase64String(s.PublicKey)))
-                .ForMember(d => d.AesKey,
+                .ForMember(d => d.SharedKey,
                     o => o.MapFrom(s => Convert.ToBase64String(s.SharedKey)))
                 .ForMember(d => d.DerivedHmacKey,
                     o => o.MapFrom(s => Convert.ToBase64String(s.DerivedHmacKey)))

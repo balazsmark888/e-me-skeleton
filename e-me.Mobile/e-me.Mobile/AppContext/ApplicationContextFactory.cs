@@ -16,7 +16,7 @@ namespace e_me.Mobile.AppContext
         {
             return new ApplicationContext
             {
-                ApplicationProperties = Xamarin.Forms.Application.Current.Properties,
+                ApplicationSecureStorage = Xamarin.Forms.Application.Current.Properties,
                 BackendBaseAddress = _configuration[Constants.BackendBaseAddressProperty]
             };
         }

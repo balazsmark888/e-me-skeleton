@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="e_me.Mobile.Views.DocumentTypesPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls"
+    BackgroundColor="{StaticResource AppBackgroundColor}"
+    Shell.NavBarIsVisible="True">
+    <ContentPage.Content>
+        <RefreshView>
+            <dataControls:RadListView x:Name="DocumentTypesListView" />
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

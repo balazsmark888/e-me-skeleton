@@ -16,7 +16,7 @@ namespace e_me.Model.Repositories
 
         public async Task<UserDetail> GetByUserIdAsync(Guid userId)
         {
-            return await All.FirstOrDefaultAsync(p => p.UserId == userId);
+            return await All.FirstOrDefaultAsync(p => p.UserId == userId) ?? await CreateAsync(userId);
         }
 
         public async Task<UserDetail> CreateAsync(Guid userid)

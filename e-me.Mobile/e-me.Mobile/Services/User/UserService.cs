@@ -44,11 +44,20 @@ namespace e_me.Mobile.Services.User
             var dict = authDto.MapToDictionary();
             var content = new FormUrlEncodedContent(dict.Select(p => new KeyValuePair<string, string>(p.Key, p.Value)));
             var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.LoginAddress}");
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+            var request = new HttpRequestMessage(HttpMethod.Post, uri)
+            {
+                Content = content
+            };
+            request.Headers.Add("accept", "application/json");
+            var responseMessage = await _httpClient.SendAsync(request);
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                var response = await responseMessage.Content.ReadAsStringAsync();
+                throw new ApplicationException(response);
+            }
 
-            var response = await _httpClient.PostAsync(uri, content);
-            if (!response.IsSuccessStatusCode) return null;
-
-            var userDto = JsonConvert.DeserializeObject<UserDto>(await response.Content.ReadAsStringAsync());
+            var userDto = JsonConvert.DeserializeObject<UserDto>(await responseMessage.Content.ReadAsStringAsync());
             return userDto;
         }
 
@@ -58,6 +67,19 @@ namespace e_me.Mobile.Services.User
             var response = await _httpClient.PostAsync(uri, new StringContent(string.Empty));
 
             return response;
+        }
+
+        public bool IsAuthenticated()
+        {
+            if (_applicationContext.ApplicationSecureStorage.ContainsKey(Constants.AuthTokenProperty))
+            {
+                var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.ValidateAddress}");
+                var request = new HttpRequestMessage(HttpMethod.Get, uri);
+                var response = _httpClient.SendAsync(request).Result;
+                return response.IsSuccessStatusCode;
+            }
+
+            return false;
         }
     }
 }

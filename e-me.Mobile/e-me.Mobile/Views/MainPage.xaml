@@ -3,7 +3,8 @@
     x:Class="e_me.Mobile.Views.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    BackgroundColor="{StaticResource AppBackgroundColor}">
+    BackgroundColor="{StaticResource AppBackgroundColor}"
+    Shell.NavBarIsVisible="False">
 
     <Frame
         BorderColor="{StaticResource FrameBorderColor}"
@@ -13,7 +14,7 @@
         <StackLayout>
             <Label Text="{Binding Hello}" />
             <Button
-                BackgroundColor="LightSeaGreen"
+                BackgroundColor="{StaticResource LoginButtonColor}"
                 Clicked="LoginButton_OnClicked"
                 Text="Login" />
             <Button

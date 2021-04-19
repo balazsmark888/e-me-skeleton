@@ -3,7 +3,7 @@ using e_me.Mobile.Helpers;
 
 namespace e_me.Mobile.ViewModels
 {
-    public class MainViewModel : IMainViewModel
+    public class MainViewModel
     {
         public MainViewModel(ApplicationContext applicationContext)
         {
@@ -11,10 +11,5 @@ namespace e_me.Mobile.ViewModels
         }
 
         public string Hello { get; set; }
-    }
-
-    public interface IMainViewModel
-    {
-
     }
 }

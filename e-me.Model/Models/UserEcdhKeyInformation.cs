@@ -10,7 +10,7 @@ namespace e_me.Model.Models
         public Guid UserId { get; set; }
 
         [Encrypted]
-        public string AesKey { get; set; }
+        public string SharedKey { get; set; }
 
         [Encrypted]
         public string IV { get; set; }
@@ -22,7 +22,7 @@ namespace e_me.Model.Models
         public string DerivedHmacKey { get; set; }
 
         [Encrypted]
-        public string PublicKey { get; set; }
+        public string ServerPublicKey { get; set; }
 
         [Encrypted]
         public string ClientPublicKey { get; set; }

@@ -56,6 +56,13 @@ namespace e_me.Model.DBContext
                     SecurityType = (int)Enums.SecurityType.RegularUser
                 }
             );
+            modelBuilder.Entity<DocumentType>().HasData(
+                new DocumentType
+                {
+                    Id = Guid.NewGuid(),
+                    DisplayName = "Test Document Type",
+                    Name = "TestDocumentType"
+                });
         }
     }
 }

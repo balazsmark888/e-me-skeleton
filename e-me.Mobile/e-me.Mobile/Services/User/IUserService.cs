@@ -12,5 +12,7 @@ namespace e_me.Mobile.Services.User
         Task<UserDto> LoginAsync(AuthDto authDto);
 
         Task<HttpResponseMessage> LogoutAsync();
+
+        bool IsAuthenticated();
     }
 }

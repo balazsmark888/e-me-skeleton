@@ -1,6 +1,6 @@
 ﻿namespace e_me.Mobile.ViewModels
 {
-    public class RegisterViewModel : IRegisterViewModel
+    public class RegisterViewModel
     {
         public string FullName { get; set; }
 
@@ -11,10 +11,5 @@
         public string Password { get; set; }
 
         public string ConfirmPassword { get; set; }
-    }
-
-    public interface IRegisterViewModel
-    {
-
     }
 }
