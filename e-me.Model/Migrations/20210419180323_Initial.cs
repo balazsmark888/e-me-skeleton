@@ -240,17 +240,17 @@ namespace e_me.Model.Migrations
             migrationBuilder.InsertData(
                 table: "DocumentType",
                 columns: new[] { "Id", "DisplayName", "Name" },
-                values: new object[] { new Guid("3bcc3886-a363-43bf-95e2-afef945631b9"), "Test Document Type", "TestDocumentType" });
+                values: new object[] { new Guid("eb3dea44-5676-407f-8678-6d5191c626fc"), "Test Document Type", "TestDocumentType" });
 
             migrationBuilder.InsertData(
                 table: "SecurityRole",
                 columns: new[] { "Id", "Name", "SecurityType" },
-                values: new object[] { new Guid("dcf0d4de-5213-45d2-b2d6-b7063889b7b8"), "Administrator", 0 });
+                values: new object[] { new Guid("dd6243f1-2e78-4d06-a1b9-c17b8e7c7105"), "Administrator", 0 });
 
             migrationBuilder.InsertData(
                 table: "SecurityRole",
                 columns: new[] { "Id", "Name", "SecurityType" },
-                values: new object[] { new Guid("59f292c0-a0ec-476c-95ba-492f8a9b8974"), "Regular User", 1 });
+                values: new object[] { new Guid("2581b6fa-5b0f-4a30-86d9-9334471e2bf5"), "Regular User", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DocumentTemplate_DocumentTypeId",

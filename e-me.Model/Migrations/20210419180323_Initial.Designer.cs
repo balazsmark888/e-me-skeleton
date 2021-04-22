@@ -10,7 +10,7 @@ using e_me.Model.DBContext;
 namespace e_me.Model.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210417172226_Initial")]
+    [Migration("20210419180323_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,7 +90,7 @@ namespace e_me.Model.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3bcc3886-a363-43bf-95e2-afef945631b9"),
+                            Id = new Guid("eb3dea44-5676-407f-8678-6d5191c626fc"),
                             DisplayName = "Test Document Type",
                             Name = "TestDocumentType"
                         });
@@ -149,13 +149,13 @@ namespace e_me.Model.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dcf0d4de-5213-45d2-b2d6-b7063889b7b8"),
+                            Id = new Guid("dd6243f1-2e78-4d06-a1b9-c17b8e7c7105"),
                             Name = "Administrator",
                             SecurityType = 0
                         },
                         new
                         {
-                            Id = new Guid("59f292c0-a0ec-476c-95ba-492f8a9b8974"),
+                            Id = new Guid("2581b6fa-5b0f-4a30-86d9-9334471e2bf5"),
                             Name = "Regular User",
                             SecurityType = 1
                         });

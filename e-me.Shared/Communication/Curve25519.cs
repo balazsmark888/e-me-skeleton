@@ -5,10 +5,8 @@ namespace e_me.Shared.Communication
 {
     public class Curve25519
     {
-        /* key size */
         public const int KeySize = 32;
 
-        /* group order (a prime near 2^252+2^124) */
         private static readonly byte[] Order =
         {
             237, 211, 245, 92,
@@ -21,11 +19,6 @@ namespace e_me.Shared.Communication
             0, 0, 0, 16
         };
 
-        /********* KEY AGREEMENT *********/
-        /// <summary>
-        /// Private key clamping (inline, for performance)
-        /// </summary>
-        /// <param name="key">[out] 32 random bytes</param>
         public static void ClampPrivateKeyInline(byte[] key)
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
@@ -36,10 +29,6 @@ namespace e_me.Shared.Communication
             key[0] &= 0xF8;
         }
 
-        /// <summary>
-        /// Private key clamping
-        /// </summary>
-        /// <param name="rawKey">[out] 32 random bytes</param>
         public static byte[] ClampPrivateKey(byte[] rawKey)
         {
             if (rawKey == null) throw new ArgumentNullException(nameof(rawKey));
@@ -56,10 +45,6 @@ namespace e_me.Shared.Communication
             return res;
         }
 
-        /// <summary>
-        /// Creates a random private key
-        /// </summary>
-        /// <returns>32 random bytes that are clamped to a suitable private key</returns>
         public static byte[] CreateRandomPrivateKey()
         {
             var privateKey = new byte[32];
@@ -69,13 +54,6 @@ namespace e_me.Shared.Communication
             return privateKey;
         }
 
-        /// <summary>
-        /// Key-pair generation (inline, for performance)
-        /// </summary>
-        /// <param name="publicKey">[out] public key</param>
-        /// <param name="signingKey">[out] signing key (ignored if NULL)</param>
-        /// <param name="privateKey">[out] private key</param>
-        /// <remarks>WARNING: if signingKey is not NULL, this function has data-dependent timing</remarks>
         public static void KeyGenInline(byte[] publicKey, byte[] signingKey, byte[] privateKey)
         {
             if (publicKey == null) throw new ArgumentNullException(nameof(publicKey));
@@ -96,10 +74,6 @@ namespace e_me.Shared.Communication
             Core(publicKey, signingKey, privateKey, null);
         }
 
-        /// <summary>
-        /// Generates the public key out of the clamped private key
-        /// </summary>
-        /// <param name="privateKey">private key (must use ClampPrivateKey first!)</param>
         public static byte[] GetPublicKey(byte[] privateKey)
         {
             var publicKey = new byte[32];
@@ -108,10 +82,6 @@ namespace e_me.Shared.Communication
             return publicKey;
         }
 
-        /// <summary>
-        /// Generates signing key out of the clamped private key
-        /// </summary>
-        /// <param name="privateKey">private key (must use ClampPrivateKey first!)</param>
         public static byte[] GetSigningKey(byte[] privateKey)
         {
             var signingKey = new byte[32];
@@ -121,12 +91,6 @@ namespace e_me.Shared.Communication
             return signingKey;
         }
 
-        /// <summary>
-        /// Key agreement
-        /// </summary>
-        /// <param name="privateKey">[in] your private key for key agreement</param>
-        /// <param name="peerPublicKey">[in] peer's public key</param>
-        /// <returns>shared secret (needs hashing before use)</returns>
         public static byte[] GetSharedSecret(byte[] privateKey, byte[] peerPublicKey)
         {
             var sharedSecret = new byte[32];
@@ -134,11 +98,6 @@ namespace e_me.Shared.Communication
             Core(sharedSecret, null, privateKey, peerPublicKey);
             return sharedSecret;
         }
-
-        /////////////////////////////////////////////////////////////////////////// 
-
-        /* sahn0:
-         * Using this class instead of long[10] to avoid bounds checks. */
 
         private sealed class Long10
         {
@@ -165,16 +124,10 @@ namespace e_me.Shared.Communication
             public long N0, N1, N2, N3, N4, N5, N6, N7, N8, N9;
         }
 
-        /********************* radix 2^8 math *********************/
-
         private static void Copy32(byte[] source, byte[] destination)
         {
             Array.Copy(source, 0, destination, 0, 32);
         }
-
-        /* p[m..n+m-1] = q[m..n+m-1] + z * x */
-        /* n is the size of x */
-        /* n+m is the size of p and q */
 
         private static int MultiplyArraySmall(byte[] p, byte[] q, int m, byte[] x, int n, int z)
         {
@@ -187,10 +140,6 @@ namespace e_me.Shared.Communication
             }
             return v;
         }
-
-        /* p += x * y * z  where z is a small integer
-         * x is size 32, y is size t, p is size 32+t
-         * y is allowed to overlap with p+32 if you don't care about the upper half  */
 
         private static void MultiplyArray32(byte[] p, byte[] x, byte[] y, int t, int z)
         {
@@ -208,11 +157,6 @@ namespace e_me.Shared.Communication
             p[i + n] = (byte)(w + (p[i + n] & 0xFF));
         }
 
-        /* divide r (size n) by d (size t), returning quotient q and remainder r
-         * quotient is size n-t+1, remainder is size t
-         * requires t > 0 && d[t-1] != 0
-         * requires that r[-1] and d[-1] are valid memory locations
-         * q may overlap with r+t */
         private static void DivMod(byte[] q, byte[] r, int n, byte[] d, int t)
         {
             var rn = 0;
@@ -230,7 +174,7 @@ namespace e_me.Shared.Communication
                 }
                 z /= dt;
                 rn += MultiplyArraySmall(r, r, n - t + 1, d, t, -z);
-                q[n - t + 1] = (byte)((z + rn) & 0xFF); /* rn is 0 or -1 (underflow) */
+                q[n - t + 1] = (byte)((z + rn) & 0xFF);
                 MultiplyArraySmall(r, r, n - t + 1, d, t, -rn);
                 rn = (r[n] & 0xFF);
                 r[n] = 0;
@@ -247,14 +191,6 @@ namespace e_me.Shared.Communication
             return 0;
         }
 
-        /// <summary>
-        /// Returns x if a contains the gcd, y if b.
-        /// </summary>
-        /// <param name="x">x and y must have 64 bytes space for temporary use.</param>
-        /// <param name="y">x and y must have 64 bytes space for temporary use.</param>
-        /// <param name="a">requires that a[-1] and b[-1] are valid memory locations</param>
-        /// <param name="b">requires that a[-1] and b[-1] are valid memory locations</param>
-        /// <returns>Also, the returned buffer contains the inverse of a mod b as 32-byte signed.</returns>
         private static byte[] Egcd32(byte[] x, byte[] y, byte[] a, byte[] b)
         {
             var bn = 32;
@@ -284,12 +220,8 @@ namespace e_me.Shared.Communication
             }
         }
 
-        /********************* radix 2^25.5 GF(2^255-19) math *********************/
-
         private const int P25 = 33554431; /* (1 << 25) - 1 */
         private const int P26 = 67108863; /* (1 << 26) - 1 */
-
-        /* Convert to internal format from little-endian byte format */
 
         private static void Unpack(Long10 x, byte[] m)
         {
@@ -315,9 +247,6 @@ namespace e_me.Shared.Communication
                    (m[30] & 0xFF) << 10 | (m[31] & 0xFF) << 18;
         }
 
-        /// <summary>
-        /// Check if reduced-form input >= 2^255-19
-        /// </summary>
         private static bool IsOverflow(Long10 x)
         {
             return (
@@ -326,12 +255,6 @@ namespace e_me.Shared.Communication
                 ((x.N2 & x.N4 & x.N6 & x.N8) == P26)
                 ) || (x.N9 > P25);
         }
-
-        /* Convert from internal format to little-endian byte format.  The 
-         * number must be in a reduced form which is output by the following ops:
-         *     unpack, mul, sqr
-         *     set --  if input in range 0 .. P25
-         * If you're unsure if the number is reduced, first multiply it by 1.  */
 
         private static void Pack(Long10 x, byte[] m)
         {
@@ -380,9 +303,6 @@ namespace e_me.Shared.Communication
             m[31] = (byte)(t >> 24);
         }
 
-        /// <summary>
-        /// Copy a number
-        /// </summary>
         private static void Copy(Long10 numOut, Long10 numIn)
         {
             numOut.N0 = numIn.N0;
@@ -397,9 +317,6 @@ namespace e_me.Shared.Communication
             numOut.N9 = numIn.N9;
         }
 
-        /// <summary>
-        /// Set a number to value, which must be in range -185861411 .. 185861411
-        /// </summary>
         private static void Set(Long10 numOut, int numIn)
         {
             numOut.N0 = numIn;
@@ -414,9 +331,6 @@ namespace e_me.Shared.Communication
             numOut.N9 = 0;
         }
 
-        /* Add/subtract two numbers.  The inputs must be in reduced form, and the 
-         * output isn't, so to do another addition or subtraction on the output, 
-         * first multiply it by one to reduce it. */
         private static void Add(Long10 xy, Long10 x, Long10 y)
         {
             xy.N0 = x.N0 + y.N0;
@@ -445,11 +359,6 @@ namespace e_me.Shared.Communication
             xy.N9 = x.N9 - y.N9;
         }
 
-        /// <summary>
-        /// Multiply a number by a small integer in range -185861411 .. 185861411.
-        /// The output is in reduced form, the input x need not be.  x and xy may point
-        /// to the same buffer.
-        /// </summary>
         private static void MulSmall(Long10 xy, Long10 x, long y)
         {
             var temp = (x.N8 * y);
@@ -477,15 +386,8 @@ namespace e_me.Shared.Communication
             xy.N9 += (temp >> 26);
         }
 
-        /// <summary>
-        /// Multiply two numbers. The output is in reduced form, the inputs need not be.
-        /// </summary>
         private static void Multiply(Long10 xy, Long10 x, Long10 y)
         {
-            /* sahn0:
-             * Using local variables to avoid class access.
-             * This seem to improve performance a bit...
-             */
             long
                 x0 = x.N0,
                 x1 = x.N1,
@@ -564,9 +466,6 @@ namespace e_me.Shared.Communication
             xy.N9 += (t >> 26);
         }
 
-        /// <summary>
-        /// Square a number.  Optimization of  Multiply(x2, x, x)
-        /// </summary>
         private static void Square(Long10 xsqr, Long10 x)
         {
             long
@@ -621,11 +520,6 @@ namespace e_me.Shared.Communication
             xsqr.N9 += (t >> 26);
         }
 
-        /// <summary>
-        /// Calculates a reciprocal.  The output is in reduced form, the inputs need not 
-        /// be.  Simply calculates  y = x^(p-2)  so it's not too fast. */
-        /// When sqrtassist is true, it instead calculates y = x^((p-5)/8)
-        /// </summary>
         private static void Reciprocal(Long10 y, Long10 x, bool sqrtAssist)
         {
             Long10
@@ -635,7 +529,6 @@ namespace e_me.Shared.Communication
                 t3 = new(),
                 t4 = new();
             int i;
-            /* the chain for x^(2^255-21) is straight from djb's implementation */
             Square(t1, x); /*  2 == 2 * 1	*/
             Square(t2, t1); /*  4 == 2 * 2	*/
             Square(t0, t2); /*  8 == 2 * 4	*/
@@ -709,34 +602,16 @@ namespace e_me.Shared.Communication
             }
         }
 
-        /// <summary>
-        /// Checks if x is "negative", requires reduced input
-        /// </summary>
-        /// <param name="x">must be reduced input</param>
         private static int IsNegative(Long10 x)
         {
             return (int)(((IsOverflow(x) | (x.N9 < 0)) ? 1 : 0) ^ (x.N0 & 1));
         }
-
-        /********************* Elliptic curve *********************/
-
-        /* y^2 = x^3 + 486662 x^2 + x  over GF(2^255-19) */
-
-        /* t1 = ax + az
-         * t2 = ax - az  */
 
         private static void MontyPrepare(Long10 t1, Long10 t2, Long10 ax, Long10 az)
         {
             Add(t1, ax, az);
             Sub(t2, ax, az);
         }
-
-        /* A = P + Q   where
-         *  X(A) = ax/az
-         *  X(P) = (t1+t2)/(t1-t2)
-         *  X(Q) = (t3+t4)/(t3-t4)
-         *  X(P-Q) = dx
-         * clobbers t1 and t2, preserves t3 and t4  */
 
         private static void MontyAdd(Long10 t1, Long10 t2, Long10 t3, Long10 t4, Long10 ax, Long10 az, Long10 dx)
         {
@@ -749,11 +624,6 @@ namespace e_me.Shared.Communication
             Multiply(az, t1, dx);
         }
 
-        /* B = 2 * Q   where
-         *  X(B) = bx/bz
-         *  X(Q) = (t3+t4)/(t3-t4)
-         * clobbers t1 and t2, preserves t3 and t4  */
-
         private static void MontyDouble(Long10 t1, Long10 t2, Long10 t3, Long10 t4, Long10 bx, Long10 bz)
         {
             Square(t1, t3);
@@ -765,12 +635,6 @@ namespace e_me.Shared.Communication
             Multiply(bz, t1, t2);
         }
 
-        /// <summary>
-        /// Y^2 = X^3 + 486662 X^2 + X
-        /// </summary>
-        /// <param name="y2">output</param>
-        /// <param name="x">X</param>
-        /// <param name="temp">temporary</param>
         private static void CurveEquationInline(Long10 y2, Long10 x, Long10 temp)
         {
             Square(temp, x);
@@ -780,9 +644,6 @@ namespace e_me.Shared.Communication
             Multiply(y2, temp, x);
         }
 
-        /// <summary>
-        /// P = kG   and  s = sign(P)/k
-        /// </summary>
         private static void Core(byte[] publicKey, byte[] signingKey, byte[] privateKey, byte[] peerPublicKey)
         {
             if (publicKey == null) throw new ArgumentNullException(nameof(publicKey));
@@ -809,17 +670,14 @@ namespace e_me.Shared.Communication
                 x = { new(), new() },
                 z = { new(), new() };
 
-            /* unpack the base */
             if (peerPublicKey != null)
                 Unpack(dx, peerPublicKey);
             else
                 Set(dx, 9);
 
-            /* 0G = point-at-infinity */
             Set(x[0], 1);
             Set(z[0], 0);
 
-            /* 1G = G */
             Copy(x[1], dx);
             Set(z[1], 1);
 
@@ -827,7 +685,6 @@ namespace e_me.Shared.Communication
             {
                 for (var j = 8; j-- != 0; )
                 {
-                    /* swap arguments depending on bit */
                     var bit1 = (privateKey[i] & 0xFF) >> j & 1;
                     var bit0 = ~(privateKey[i] & 0xFF) >> j & 1;
                     var ax = x[bit0];
@@ -835,8 +692,6 @@ namespace e_me.Shared.Communication
                     var bx = x[bit1];
                     var bz = z[bit1];
 
-                    /* a' = a + b	*/
-                    /* b' = 2 b	*/
                     MontyPrepare(t1, t2, ax, az);
                     MontyPrepare(t3, t4, bx, bz);
                     MontyAdd(t1, t2, t3, t4, ax, az, dx);
@@ -848,29 +703,23 @@ namespace e_me.Shared.Communication
             Multiply(dx, x[0], t1);
             Pack(dx, publicKey);
 
-            /* calculate s such that s abs(P) = G  .. assumes G is std base point */
             if (signingKey == null) return;
-            CurveEquationInline(t1, dx, t2); /* t1 = Py^2  */
-            Reciprocal(t3, z[1], false); /* where Q=P+G ... */
-            Multiply(t2, x[1], t3); /* t2 = Qx  */
-            Add(t2, t2, dx); /* t2 = Qx + Px  */
-            t2.N0 += 9 + 486662; /* t2 = Qx + Px + Gx + 486662  */
-            dx.N0 -= 9; /* dx = Px - Gx  */
-            Square(t3, dx); /* t3 = (Px - Gx)^2  */
-            Multiply(dx, t2, t3); /* dx = t2 (Px - Gx)^2  */
-            Sub(dx, dx, t1); /* dx = t2 (Px - Gx)^2 - Py^2  */
-            dx.N0 -= 39420360; /* dx = t2 (Px - Gx)^2 - Py^2 - Gy^2  */
-            Multiply(t1, dx, BaseR2Y); /* t1 = -Py  */
-            if (IsNegative(t1) != 0) /* sign is 1, so just copy  */
+            CurveEquationInline(t1, dx, t2); 
+            Reciprocal(t3, z[1], false); 
+            Multiply(t2, x[1], t3); 
+            Add(t2, t2, dx); 
+            t2.N0 += 9 + 486662;
+            dx.N0 -= 9;
+            Square(t3, dx); 
+            Multiply(dx, t2, t3); 
+            Sub(dx, dx, t1); 
+            dx.N0 -= 39420360; 
+            Multiply(t1, dx, BaseR2Y);
+            if (IsNegative(t1) != 0) 
                 Copy32(privateKey, signingKey);
-            else /* sign is -1, so negate  */
+            else 
                 MultiplyArraySmall(signingKey, OrderTimes8, 0, privateKey, 32, -1);
 
-            /* reduce s mod q
-                 * (is this needed?  do it just in case, it's fast anyway) */
-            //divmod((dstptr) t1, s, 32, order25519, 32);
-
-            /* take reciprocal of s mod q */
             var temp1 = new byte[32];
             var temp2 = new byte[64];
             var temp3 = new byte[64];
@@ -880,9 +729,6 @@ namespace e_me.Shared.Communication
                 MultiplyArraySmall(signingKey, signingKey, 0, Order, 32, 1);
         }
 
-        /// <summary>
-        /// Smallest multiple of the order that's >= 2^255
-        /// </summary>
         private static readonly byte[] OrderTimes8 =
         {
             104, 159, 174, 231,
@@ -895,9 +741,6 @@ namespace e_me.Shared.Communication
             0, 0, 0, 128
         };
 
-        /// <summary>
-        /// Constant 1/(2Gy)
-        /// </summary>
         private static readonly Long10 BaseR2Y = new(
             5744, 8160848, 4790893, 13779497, 35730846,
             12541209, 49101323, 30047407, 40071253, 6226132

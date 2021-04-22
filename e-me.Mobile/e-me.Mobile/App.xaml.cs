@@ -12,7 +12,7 @@ namespace e_me.Mobile
         public App()
         {
             InitializeComponent();
-            MainPage = ServiceProvider.GetService<AppShell>();
+            MainPage = ServiceProvider.GetService<MainPage>();
         }
 
         protected override void OnStart()

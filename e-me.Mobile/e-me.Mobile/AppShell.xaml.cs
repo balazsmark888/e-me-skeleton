@@ -1,7 +1,6 @@
 ﻿using System;
 using e_me.Mobile.MenuItems;
 using e_me.Mobile.Services.Navigation;
-using e_me.Mobile.Views;
 using Xamarin.Forms;
 
 namespace e_me.Mobile
@@ -10,25 +9,24 @@ namespace e_me.Mobile
     {
         private readonly INavigationService _navigationService;
 
+        public TabBar MainTabBar { get; }
+
         public AppShell(INavigationService navigationService,
-            DocumentsFlyoutItem documentsFlyoutItem,
-            MainFlyoutItem mainFlyoutItem,
-            LoginFlyoutItem loginFlyoutItem,
-            RegisterFlyoutItem registerFlyoutItem,
-            DocumentTypesFlyoutItem documentTypesFlyoutItem)
+            DocumentsTab documentsTab,
+            DocumentTypesTab documentTypesTab)
         {
             _navigationService = navigationService;
             InitializeComponent();
-            Items.Add(mainFlyoutItem);
-            Items.Add(loginFlyoutItem);
-            Items.Add(registerFlyoutItem);
-            Items.Add(documentsFlyoutItem);
-            Items.Add(documentTypesFlyoutItem);
-        }
-
-        private void OnMenuItemClicked(object sender, EventArgs e)
-        {
-            _navigationService.NavigateTo<MainPage>();
+            MainTabBar = new TabBar
+            {
+                Items =
+                {
+                    documentsTab,
+                    documentTypesTab
+                }
+            };
+            Items.Add(MainTabBar);
+            SetTabBarIsVisible(this, false);
         }
 
         private void LogoutClicked(object sender, EventArgs e)

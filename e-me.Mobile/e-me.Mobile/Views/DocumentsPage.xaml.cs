@@ -10,5 +10,10 @@ namespace e_me.Mobile.Views
         {
             InitializeComponent();
         }
+
+        protected override void OnAppearing()
+        {
+            Shell.SetTabBarIsVisible(this, true);
+        }
     }
 }

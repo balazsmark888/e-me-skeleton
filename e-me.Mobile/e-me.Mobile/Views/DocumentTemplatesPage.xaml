@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="e_me.Mobile.Views.DocumentTemplatesPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:dataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls"
+    xmlns:listView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;assembly=Telerik.XamarinForms.DataControls"
+    xmlns:document="clr-namespace:e_me.Shared.DTOs.Document;assembly=e-me.Shared"
+    BackgroundColor="{StaticResource AppBackgroundColor}">
+    <ContentPage.Content>
+        <RefreshView>
+            <dataControls:RadListView x:Name="DocumentTemplatesListView"
+                                      SelectionMode="Single"
+                                      SelectionChanged="DocumentTemplatesListView_OnSelectionChanged">
+                <dataControls:RadListView.BindingContext>
+                    <document:DocumentTemplateListItemDto />
+                </dataControls:RadListView.BindingContext>
+                <dataControls:RadListView.ItemTemplate>
+                    <DataTemplate>
+                        <listView:ListViewTemplateCell>
+                            <listView:ListViewTemplateCell.View>
+                                <Grid>
+                                </Grid>
+                            </listView:ListViewTemplateCell.View>
+                        </listView:ListViewTemplateCell>
+                    </DataTemplate>
+                </dataControls:RadListView.ItemTemplate>
+            </dataControls:RadListView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

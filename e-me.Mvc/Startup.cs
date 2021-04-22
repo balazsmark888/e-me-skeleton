@@ -62,6 +62,7 @@ namespace e_me.Mvc
             services.AddTransient<Configuration>();
 
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IDocumentService, DocumentService>();
 
             services.AddJwtBearerAuthentication(Configuration);
 

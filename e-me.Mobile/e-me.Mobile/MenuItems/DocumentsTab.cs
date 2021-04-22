@@ -3,9 +3,9 @@ using Xamarin.Forms;
 
 namespace e_me.Mobile.MenuItems
 {
-    public class DocumentsFlyoutItem : FlyoutItem
+    public class DocumentsTab : Tab
     {
-        public DocumentsFlyoutItem(DocumentsPage documentsPage)
+        public DocumentsTab(DocumentsPage documentsPage)
         {
             Items.Clear();
             Items.Add(new ShellContent
@@ -13,7 +13,7 @@ namespace e_me.Mobile.MenuItems
                 Content = documentsPage,
                 Title = "Documents"
             });
-            Title = "Documents";
+            Title = "My Documents";
         }
     }
 }

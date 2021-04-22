@@ -2,16 +2,11 @@
 {
     public class EcdhKeyInformation
     {
-        public byte[] SharedKey { get; set; }
-
-        public byte[] IV { get; set; }
-
-        public byte[] HmacKey { get; set; }
-
-        public byte[] DerivedHmacKey { get; set; }
-
-        public byte[] ServerPublicKey { get; set; }
-
-        public byte[] ClientPublicKey { get; set; }
+        public string SharedKey { get; set; }
+        public string IV { get; set; }
+        public string HmacKey { get; set; }
+        public string DerivedHmacKey { get; set; }
+        public string ServerPublicKey { get; set; }
+        public string ClientPublicKey { get; set; }
     }
 }

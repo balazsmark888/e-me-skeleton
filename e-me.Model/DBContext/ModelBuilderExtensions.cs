@@ -62,6 +62,12 @@ namespace e_me.Model.DBContext
                     Id = Guid.NewGuid(),
                     DisplayName = "Test Document Type",
                     Name = "TestDocumentType"
+                },
+                new DocumentType
+                {
+                    Id = Guid.NewGuid(),
+                    DisplayName = "Self Declaration",
+                    Name = "SelfDeclaration"
                 });
         }
     }

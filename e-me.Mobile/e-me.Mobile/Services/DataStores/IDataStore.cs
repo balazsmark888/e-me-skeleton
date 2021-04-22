@@ -13,7 +13,9 @@ namespace e_me.Mobile.Services.DataStores
 
         Task<T> GetItemAsync(string id);
 
-        Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false);
+        Task<IEnumerable<T>> GetItemsAsync();
+
+        IEnumerable<T> GetItems();
 
         IEnumerable<T> GetLocalItems();
     }

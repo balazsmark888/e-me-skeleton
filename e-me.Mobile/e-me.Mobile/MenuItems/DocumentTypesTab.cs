@@ -3,14 +3,14 @@ using Xamarin.Forms;
 
 namespace e_me.Mobile.MenuItems
 {
-    public class DocumentTypesFlyoutItem : FlyoutItem
+    public class DocumentTypesTab : Tab
     {
-        public DocumentTypesFlyoutItem(DocumentTypesPage documentTypesPage)
+        public DocumentTypesTab(DocumentTemplatesPage documentTemplatesPage)
         {
             Items.Clear();
             Items.Add(new ShellContent
             {
-                Content = documentTypesPage,
+                Content = documentTemplatesPage,
                 Title = "Document Types"
             });
             Title = "Document Types";

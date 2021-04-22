@@ -1,6 +1,7 @@
 ﻿using e_me.Mobile.AppContext;
 using e_me.Mobile.Helpers;
 using e_me.Mobile.Models;
+using e_me.Shared;
 using e_me.Shared.Communication;
 using e_me.Shared.DTOs.User;
 
@@ -25,14 +26,19 @@ namespace e_me.Mobile.Services.Crypto
 
             var model = new EcdhKeyInformation
             {
-                ClientPublicKey = clientPublicKey,
-                DerivedHmacKey = keyStore.DerivedHmacKey,
-                HmacKey = keyStore.HmacKey,
-                IV = userDto.IV,
-                ServerPublicKey = userDto.PublicKey,
-                SharedKey = keyStore.SharedKey
+                ClientPublicKey = clientPublicKey.ToBase64String(),
+                DerivedHmacKey = keyStore.DerivedHmacKey.ToBase64String(),
+                HmacKey = keyStore.HmacKey.ToBase64String(),
+                IV = userDto.IV.ToBase64String(),
+                ServerPublicKey = userDto.PublicKey.ToBase64String(),
+                SharedKey = keyStore.SharedKey.ToBase64String()
             };
             _applicationContext.ApplicationSecureStorage[Constants.EcdhKeyInformationModelProperty] = model;
+        }
+
+        public EcdhKeyInformation GetKeyInformation()
+        {
+            return _applicationContext.ApplicationSecureStorage[Constants.EcdhKeyInformationModelProperty] as EcdhKeyInformation;
         }
 
         public byte[] CreatePublicKey()
@@ -42,12 +48,5 @@ namespace e_me.Mobile.Services.Crypto
             _applicationContext.ApplicationSecureStorage[Constants.ClientPublicKeyProperty] = keyStore.PublicKey;
             return keyStore.PublicKey;
         }
-    }
-
-    public interface ICryptoService
-    {
-        void SaveKeyInformation(UserDto userDto);
-
-        byte[] CreatePublicKey();
     }
 }

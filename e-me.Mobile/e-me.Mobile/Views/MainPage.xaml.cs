@@ -34,5 +34,10 @@ namespace e_me.Mobile.Views
         {
             _navigationService.NavigateTo<RegisterPage>();
         }
+
+        protected override void OnAppearing()
+        {
+            Shell.SetTabBarIsVisible(this, false);
+        }
     }
 }

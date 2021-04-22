@@ -76,5 +76,10 @@ namespace e_me.Mobile.Views
             _navigationService.NavigateTo<MainPage>();
             return true;
         }
+
+        protected override void OnAppearing()
+        {
+            Shell.SetTabBarIsVisible(this, false);
+        }
     }
 }

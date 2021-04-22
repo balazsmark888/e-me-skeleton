@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using e_me.Business.Services.Interfaces;
 using e_me.Model.Repositories;
-using e_me.Mvc.Application.Helpers;
 using e_me.Shared.DTOs.Document;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +22,18 @@ namespace e_me.Mvc.Controllers.API
         private readonly IUserEcdhKeyInformationRepository _ecdhKeyInformationRepository;
         private readonly IUserDetailRepository _userDetailRepository;
         private readonly IDocumentTemplateRepository _documentTemplateRepository;
+        private readonly IDocumentService _documentService;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
 
         /// <inheritdoc />
-        public UserDocumentsController(IUserDocumentRepository userDocumentRepository, IMapper mapper, IAuthService authService, IUserEcdhKeyInformationRepository ecdhKeyInformationRepository, IUserDetailRepository userDetailRepository, IDocumentTemplateRepository documentTemplateRepository)
+        public UserDocumentsController(IUserDocumentRepository userDocumentRepository,
+            IMapper mapper,
+            IAuthService authService,
+            IUserEcdhKeyInformationRepository ecdhKeyInformationRepository,
+            IUserDetailRepository userDetailRepository,
+            IDocumentTemplateRepository documentTemplateRepository,
+            IDocumentService documentService)
         {
             _userDocumentRepository = userDocumentRepository;
             _mapper = mapper;
@@ -35,6 +41,7 @@ namespace e_me.Mvc.Controllers.API
             _ecdhKeyInformationRepository = ecdhKeyInformationRepository;
             _userDetailRepository = userDetailRepository;
             _documentTemplateRepository = documentTemplateRepository;
+            _documentService = documentService;
         }
 
         /// <summary>
@@ -56,7 +63,7 @@ namespace e_me.Mvc.Controllers.API
                 }
 
                 var keyInformation = await _ecdhKeyInformationRepository.GetByUserIdAsync(user.Id);
-                var documentDto = DocumentHelpers.GetDtoFromDocument(document, keyInformation, _mapper);
+                var documentDto = _documentService.GetDtoFromDocument(document, keyInformation);
                 return Ok(documentDto);
             }
             catch (Exception e)
@@ -92,7 +99,7 @@ namespace e_me.Mvc.Controllers.API
         /// <returns>The newly created document</returns>
         /// <exception cref="ApplicationException"></exception>
         [HttpGet("requestFromTemplate")]
-        public async Task<IActionResult> RequestFromTemplate([FromRoute] Guid templateId)
+        public async Task<IActionResult> RequestFromTemplate([FromForm] Guid templateId)
         {
             try
             {
@@ -101,13 +108,13 @@ namespace e_me.Mvc.Controllers.API
                 if (alreadyHasDocument) throw new ApplicationException("You already own this type of document.");
                 var template = await _documentTemplateRepository.GetByIdAsync(templateId);
                 var userDetail = await _userDetailRepository.GetByUserIdAsync(user.Id);
-                var newDocument = DocumentHelpers.GetDocumentFromTemplate(template, userDetail);
+                var newDocument = _documentService.GetDocumentFromTemplate(template, userDetail);
 
                 await _userDocumentRepository.InsertOrUpdateAsync(newDocument);
                 await _userDocumentRepository.SaveAsync();
                 var dbDocument = await _userDocumentRepository.GetByUserIdAndTemplateId(user.Id, template.Id);
                 var keyInformation = await _ecdhKeyInformationRepository.GetByUserIdAsync(user.Id);
-                var documentDto = DocumentHelpers.GetDtoFromDocument(dbDocument, keyInformation, _mapper);
+                var documentDto = _documentService.GetDtoFromDocument(dbDocument, keyInformation);
                 return Ok(documentDto);
             }
             catch (Exception e)

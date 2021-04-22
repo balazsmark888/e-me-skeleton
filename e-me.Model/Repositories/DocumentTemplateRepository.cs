@@ -1,6 +1,9 @@
-﻿using e_me.Core.Application;
+﻿using System;
+using System.Threading.Tasks;
+using e_me.Core.Application;
 using e_me.Model.DBContext;
 using e_me.Model.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace e_me.Model.Repositories
 {
@@ -10,9 +13,14 @@ namespace e_me.Model.Repositories
             : base(context, userContext)
         {
         }
+        public async Task<DocumentTemplate> GetByTypeAsync(Guid typeId)
+        {
+            return await All.FirstOrDefaultAsync(p => p.DocumentTypeId.Equals(typeId));
+        }
     }
 
     public interface IDocumentTemplateRepository : IBaseRepository<DocumentTemplate>
     {
+        Task<DocumentTemplate> GetByTypeAsync(Guid typeId);
     }
 }

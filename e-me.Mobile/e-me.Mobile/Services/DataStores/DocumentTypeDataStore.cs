@@ -5,19 +5,24 @@ using System.Threading.Tasks;
 using e_me.Mobile.AppContext;
 using e_me.Mobile.Helpers;
 using e_me.Mobile.Models;
+using e_me.Mobile.Services.Document;
 using Newtonsoft.Json;
 
 namespace e_me.Mobile.Services.DataStores
 {
     public class DocumentTypeDataStore : IDataStore<DocumentType>
     {
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly ApplicationContext _applicationContext;
-        private readonly HttpClient _httpClient;
+        private readonly IDocumentService _documentService;
 
-        public DocumentTypeDataStore(IHttpClientFactory httpClientFactory, ApplicationContext applicationContext)
+        public DocumentTypeDataStore(IHttpClientFactory httpClientFactory,
+            ApplicationContext applicationContext,
+            IDocumentService documentService)
         {
+            _httpClientFactory = httpClientFactory;
             _applicationContext = applicationContext;
-            _httpClient = httpClientFactory.CreateClient();
+            _documentService = documentService;
         }
 
         public Task<bool> AddItemAsync(DocumentType item)
@@ -40,20 +45,14 @@ namespace e_me.Mobile.Services.DataStores
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<DocumentType>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<DocumentType>> GetItemsAsync()
         {
-            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.DocumentTypeGetAddress}");
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
-            request.Headers.Add("accept", "application/json");
-            var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = JsonConvert.DeserializeObject<IList<DocumentType>>(await response.Content.ReadAsStringAsync());
-                _applicationContext.ApplicationSecureStorage[Constants.DocumentTypesProperty] = result;
-                return result;
-            }
+            return await _documentService.GetAllDocumentTypesAsync();
+        }
 
-            throw new ApplicationException();
+        public IEnumerable<DocumentType> GetItems()
+        {
+            return _documentService.GetAllDocumentTypes();
         }
 
         public IEnumerable<DocumentType> GetLocalItems()

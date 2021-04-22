@@ -3,17 +3,17 @@ using Xamarin.Forms;
 
 namespace e_me.Mobile.MenuItems
 {
-    public class LoginFlyoutItem : FlyoutItem
+    public class RegisterTab : Tab
     {
-        public LoginFlyoutItem( LoginPage loginPage)
+        public RegisterTab(RegisterPage registerPage)
         {
             Items.Clear();
             Items.Add(new ShellContent
             {
-                Content = loginPage,
-                Title = "Login"
+                Content = registerPage,
+                Title = "Register"
             });
-            Title = "Login";
+            Title = "Register";
         }
     }
 }

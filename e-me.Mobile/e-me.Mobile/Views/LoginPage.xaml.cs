@@ -25,7 +25,7 @@ namespace e_me.Mobile.Views
 
         public LoginPage()
         {
-            
+
         }
 
         public LoginPage(IUserService userService, IMapper mapper, INavigationService navigationService,
@@ -54,7 +54,7 @@ namespace e_me.Mobile.Views
                 if (userDto == null) throw new ApplicationException();
                 _cryptoService.SaveKeyInformation(userDto);
                 _applicationContext.ApplicationSecureStorage[Constants.AuthTokenProperty] = userDto.Token;
-                _navigationService.NavigateTo<DocumentsPage>();
+                _navigationService.NavigateTo<AppShell>();
             }
             catch (Exception)
             {
@@ -65,6 +65,11 @@ namespace e_me.Mobile.Views
                 BusyLayout.IsVisible = false;
                 BusyIndicator.IsBusy = false;
             }
+        }
+
+        protected override void OnAppearing()
+        {
+            Shell.SetNavBarIsVisible(this, false);
         }
 
         protected override bool OnBackButtonPressed()

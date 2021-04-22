@@ -4,6 +4,7 @@ using e_me.Mobile.AppContext;
 using e_me.Mobile.MenuItems;
 using e_me.Mobile.Services.Crypto;
 using e_me.Mobile.Services.DataStores;
+using e_me.Mobile.Services.Document;
 using e_me.Mobile.Services.HttpClientService;
 using e_me.Mobile.Services.Navigation;
 using e_me.Mobile.Services.User;
@@ -36,7 +37,6 @@ namespace e_me.Mobile
             if (ctx.HostingEnvironment.IsDevelopment())
             {
             }
-            services.AddSingleton<App>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<IApplicationContextFactory, ApplicationContextFactory>();
@@ -45,27 +45,31 @@ namespace e_me.Mobile
             services.AddTransient<IHttpClientFactory, ApplicationHttpClientFactory>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICryptoService, ApplicationCryptoService>();
+            services.AddTransient<IDocumentService, DocumentService>();
+
             services.AddTransient<DocumentTypeDataStore>();
+            services.AddTransient<DocumentTemplateListItemDataStore>();
 
             services.AddTransient<MainViewModel>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<RegisterViewModel>();
-            services.AddTransient<DocumentTypesViewModel>();
+            services.AddTransient<DocumentTemplatesViewModel>();
 
             services.AddTransient<MainPage>();
             services.AddTransient<RegisterPage>();
             services.AddTransient<LoginPage>();
             services.AddTransient<DocumentsPage>();
-            services.AddTransient<DocumentTypesPage>();
+            services.AddTransient<DocumentTemplatesPage>();
+            services.AddTransient<UserDetailPage>();
 
-            services.AddTransient<DocumentsFlyoutItem>();
-            services.AddTransient<DocumentTypesFlyoutItem>();
-            services.AddTransient<MainFlyoutItem>();
-            services.AddTransient<LoginFlyoutItem>();
-            services.AddTransient<RegisterFlyoutItem>();
+            services.AddTransient<DocumentsTab>();
+            services.AddTransient<DocumentTypesTab>();
+            services.AddTransient<MainTab>();
+            services.AddTransient<LoginTab>();
+            services.AddTransient<RegisterTab>();
 
             services.AddSingleton<AppShell>();
-
+            services.AddSingleton<App>();
         }
     }
 }

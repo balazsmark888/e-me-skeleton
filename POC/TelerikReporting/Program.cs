@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Telerik.Documents.ImageUtils;
 using Telerik.Windows.Documents.Extensibility;
 using Telerik.Windows.Documents.Fixed.Model;
@@ -55,6 +56,8 @@ namespace TelerikReporting
             FillFormFieldsOfDocument(document);
             using var outputStream = File.OpenWrite("test2.pdf");
             FixedExtensibilityManager.JpegImageConverter = new JpegImageConverter();
+            var bytes = pdfProvider.Export(document);
+            Console.WriteLine(Convert.ToBase64String(bytes));
             pdfProvider.Export(document, outputStream);
         }
 
@@ -67,18 +70,14 @@ namespace TelerikReporting
                     case FormFieldType.TextBox:
                         {
                             var textField = (TextBoxField)field;
-                            if (!string.IsNullOrWhiteSpace(textField.Value))
+                            if (!string.IsNullOrWhiteSpace(textField.Name))
                             {
-                                if (ClientDictionary.ContainsKey(textField.Value))
+                                if (ClientDictionary.ContainsKey(textField.Name))
                                 {
-                                    textField.Value = ClientDictionary[textField.Value];
-                                }
-                                else
-                                {
-                                    
+                                    textField.Value = ClientDictionary[textField.Name];
+                                    field.IsReadOnly = true;
                                 }
                             }
-                            field.IsReadOnly = true;
                             break;
                         }
                 }

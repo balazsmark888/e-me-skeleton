@@ -3,9 +3,9 @@ using Xamarin.Forms;
 
 namespace e_me.Mobile.MenuItems
 {
-    public class MainFlyoutItem : FlyoutItem
+    public class MainTab : Tab
     {
-        public MainFlyoutItem(MainPage mainPage)
+        public MainTab(MainPage mainPage)
         {
             Items.Clear();
             Items.Add(new ShellContent

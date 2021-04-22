@@ -7,11 +7,11 @@ namespace e_me.Shared.Communication
 {
     public static class E2EE
     {
-        public static (byte[] EncryptedMessage, byte[] Hash) Encrypt(string message, byte[] aesKey, byte[] iv, byte[] hmacKey, byte[] derivedHmacKey)
+        public static (byte[] EncryptedMessage, byte[] Hash) Encrypt(string message, byte[] sharedKey, byte[] iv, byte[] hmacKey, byte[] derivedHmacKey)
         {
             using var aes = new AesCryptoServiceProvider
             {
-                Key = aesKey,
+                Key = sharedKey,
                 IV = iv,
             };
             using var memoryStream = new MemoryStream();
@@ -23,12 +23,12 @@ namespace e_me.Shared.Communication
             return (encryptedMessage, GetDoubleHash(encryptedMessage, hmacKey, derivedHmacKey));
         }
 
-        public static string Decrypt(byte[] encryptedMessage, byte[] iv, byte[] hash, byte[] aesKey, byte[] hmacKey, byte[] derivedHmacKey)
+        public static string Decrypt(byte[] encryptedMessage, byte[] iv, byte[] hash, byte[] sharedKey, byte[] hmacKey, byte[] derivedHmacKey)
         {
             if (!IsValidHash(encryptedMessage, hash, hmacKey, derivedHmacKey)) throw new CryptographicException("Hash is invalid!");
             using var aes = new AesCryptoServiceProvider
             {
-                Key = aesKey,
+                Key = sharedKey,
                 IV = iv
             };
             using var memoryStream = new MemoryStream();
