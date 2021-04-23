@@ -104,18 +104,38 @@ namespace e_me.Mvc.Controllers.API
             try
             {
                 var user = await _authService.GetAuthenticatedUserAsync();
-                var alreadyHasDocument = _userDocumentRepository.All.Any(p => p.UserId == user.Id && p.DocumentTemplateId == templateId);
-                if (alreadyHasDocument) throw new ApplicationException("You already own this type of document.");
-                var template = await _documentTemplateRepository.GetByIdAsync(templateId);
-                var userDetail = await _userDetailRepository.GetByUserIdAsync(user.Id);
-                var newDocument = _documentService.GetDocumentFromTemplate(template, userDetail);
+                var existingDocument = await _userDocumentRepository.GetByUserIdAndTemplateId(user.Id, templateId);
+                if (existingDocument == null)
+                {
+                    var template = await _documentTemplateRepository.GetByIdAsync(templateId);
+                    var userDetail = await _userDetailRepository.GetByUserIdAsync(user.Id);
+                    var newDocument = _documentService.GetDocumentFromTemplate(template, userDetail);
 
-                await _userDocumentRepository.InsertOrUpdateAsync(newDocument);
-                await _userDocumentRepository.SaveAsync();
-                var dbDocument = await _userDocumentRepository.GetByUserIdAndTemplateId(user.Id, template.Id);
+                    await _userDocumentRepository.InsertOrUpdateAsync(newDocument);
+                    await _userDocumentRepository.SaveAsync();
+                }
+                var dbDocument = await _userDocumentRepository.GetByUserIdAndTemplateId(user.Id, templateId);
                 var keyInformation = await _ecdhKeyInformationRepository.GetByUserIdAsync(user.Id);
                 var documentDto = _documentService.GetDtoFromDocument(dbDocument, keyInformation);
                 return Ok(documentDto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the specified UserDocument.
+        /// </summary>
+        /// <param name="userDocumentId">The ID of the UserDocument.</param>
+        /// <returns></returns>
+        public IActionResult Delete([FromRoute] Guid userDocumentId)
+        {
+            try
+            {
+                _userDocumentRepository.DeleteById(userDocumentId);
+                return Ok();
             }
             catch (Exception e)
             {

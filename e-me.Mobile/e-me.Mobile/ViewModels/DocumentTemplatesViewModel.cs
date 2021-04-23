@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using e_me.Mobile.Services.DataStores;
 using e_me.Mobile.Services.Document;
 using e_me.Shared.DTOs.Document;

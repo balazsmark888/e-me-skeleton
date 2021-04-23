@@ -40,6 +40,8 @@ namespace e_me.Model.DBContext
 
         public DbSet<UserDocument> UserDocuments { get; set; }
 
+        public DbSet<OneTimeAccessToken> OneTimeAccessTokens { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -5,7 +5,24 @@
              x:Class="e_me.Mobile.Views.DocumentPage">
     <ContentPage.Content>
         <StackLayout>
-            <pdfViewer:RadPdfViewer x:Name="PdfViewer" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <pdfViewer:RadPdfViewerToolbar PdfViewer="{Binding Source={x:Reference PdfViewer}}"
+                                                      IsScrollable="True">
+                    <pdfViewer:SearchToolbarItem />
+                    <pdfViewer:ZoomInToolbarItem />
+                    <pdfViewer:ZoomOutToolbarItem />
+                    <pdfViewer:NavigateToNextPageToolbarItem/>
+                    <pdfViewer:NavigateToPreviousPageToolbarItem/>
+                    <pdfViewer:NavigateToPageToolbarItem/>
+                    <pdfViewer:FitToWidthToolbarItem/>
+                    <pdfViewer:ToggleLayoutModeToolbarItem/>
+                </pdfViewer:RadPdfViewerToolbar>
+                <pdfViewer:RadPdfViewer x:Name="PdfViewer" Grid.Row="1"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

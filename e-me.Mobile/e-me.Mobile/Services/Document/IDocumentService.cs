@@ -13,8 +13,14 @@ namespace e_me.Mobile.Services.Document
 
         Task<IEnumerable<DocumentTemplateListItemDto>> GetAllDocumentTemplateListItemsAsync();
         IEnumerable<DocumentTemplateListItemDto> GetAllDocumentTemplateListItems();
+        IEnumerable<DocumentTemplateListItemDto> GetAvailableDocumentTemplateListItems();
 
         Task<UserDocumentDto> RequestDocumentFromTemplateAsync(Guid templateId);
         UserDocumentDto RequestDocumentFromTemplate(Guid templateId);
+
+        Task<IEnumerable<UserDocumentListItemDto>> GetAllUserDocumentListItemsAsync();
+        IEnumerable<UserDocumentListItemDto> GetAllUserDocumentListItems();
+
+        UserDocumentDto GetDocument(Guid documentId);
     }
 }

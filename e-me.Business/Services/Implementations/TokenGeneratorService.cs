@@ -58,6 +58,23 @@ namespace e_me.Business.Services.Implementations
             return tokenHandler.WriteToken(token);
         }
 
+        public string GenerateOneTimeAccessToken(Guid userDocumentId, DateTime validTo)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = _authSettings.Issuer,
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Expiration, validTo.ToLongDateString())
+                }),
+                Expires = validTo,
+                SigningCredentials = CreateSigningCredentials()
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
         private SigningCredentials CreateSigningCredentials()
         {
             var key = Encoding.ASCII.GetBytes(_authSettings.SecretKey);

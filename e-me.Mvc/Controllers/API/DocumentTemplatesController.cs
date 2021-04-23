@@ -20,16 +20,19 @@ namespace e_me.Mvc.Controllers.API
         private readonly IMapper _mapper;
         private readonly IDocumentTemplateRepository _documentTemplateRepository;
         private readonly IDocumentService _documentService;
+        private readonly IAuthService _authService;
 
         public DocumentTemplatesController(IDocumentTypeRepository documentTypeRepository,
             IMapper mapper,
             IDocumentTemplateRepository documentTemplateRepository,
-            IDocumentService documentService)
+            IDocumentService documentService,
+            IAuthService authService)
         {
             _documentTypeRepository = documentTypeRepository;
             _mapper = mapper;
             _documentTemplateRepository = documentTemplateRepository;
             _documentService = documentService;
+            _authService = authService;
         }
 
         /// <summary>
@@ -80,6 +83,21 @@ namespace e_me.Mvc.Controllers.API
             try
             {
                 var list = (await _documentTemplateRepository.AllIncluding(p => p.DocumentType).ToListAsync()).Select(p => _mapper.Map<DocumentTemplateListItemDto>(p));
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAvailableList()
+        {
+            try
+            {
+                var user = await _authService.GetAuthenticatedUserAsync();
+                var list = (await _documentTemplateRepository.GetAvailableAsync(user.Id)).Select(p => _mapper.Map<DocumentTemplateListItemDto>(p));
                 return Ok(list);
             }
             catch (Exception e)

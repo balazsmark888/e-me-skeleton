@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using e_me.Mobile.AppContext;
-using e_me.Mobile.Helpers;
 using e_me.Mobile.Models;
 using e_me.Mobile.Services.Document;
-using Newtonsoft.Json;
 
 namespace e_me.Mobile.Services.DataStores
 {
@@ -35,12 +33,17 @@ namespace e_me.Mobile.Services.DataStores
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteItemAsync(string id)
+        public Task<bool> DeleteItemAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<DocumentType> GetItemAsync(string id)
+        public Task<DocumentType> GetItemAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DocumentType GetItem(Guid id)
         {
             throw new NotImplementedException();
         }

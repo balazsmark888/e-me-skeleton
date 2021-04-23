@@ -6,21 +6,21 @@ using e_me.Shared.DTOs.Document;
 
 namespace e_me.Mobile.Services.DataStores
 {
-    public class DocumentTemplateListItemDataStore : IDataStore<DocumentTemplateListItemDto>
+    public class DocumentDataStore : IDataStore<UserDocumentDto>
     {
         private readonly IDocumentService _documentService;
 
-        public DocumentTemplateListItemDataStore(IDocumentService documentService)
+        public DocumentDataStore(IDocumentService documentService)
         {
             _documentService = documentService;
         }
 
-        public Task<bool> AddItemAsync(DocumentTemplateListItemDto item)
+        public Task<bool> AddItemAsync(UserDocumentDto item)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateItemAsync(DocumentTemplateListItemDto item)
+        public Task<bool> UpdateItemAsync(UserDocumentDto item)
         {
             throw new NotImplementedException();
         }
@@ -30,32 +30,27 @@ namespace e_me.Mobile.Services.DataStores
             throw new NotImplementedException();
         }
 
-        public Task<DocumentTemplateListItemDto> GetItemAsync(Guid id)
+        public Task<UserDocumentDto> GetItemAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public DocumentTemplateListItemDto GetItem(Guid id)
+        public UserDocumentDto GetItem(Guid id)
+        {
+            return _documentService.GetDocument(id);
+        }
+
+        public Task<IEnumerable<UserDocumentDto>> GetItemsAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<DocumentTemplateListItemDto>> GetItemsAsync()
+        public IEnumerable<UserDocumentDto> GetItems()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<DocumentTemplateListItemDto> GetItems()
-        {
-            return _documentService.GetAllDocumentTemplateListItems();
-        }
-
-        public IEnumerable<DocumentTemplateListItemDto> GetAvailableItems()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<DocumentTemplateListItemDto> GetLocalItems()
+        public IEnumerable<UserDocumentDto> GetLocalItems()
         {
             throw new NotImplementedException();
         }

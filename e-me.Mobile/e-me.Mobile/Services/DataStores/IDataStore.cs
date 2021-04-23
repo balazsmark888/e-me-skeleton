@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace e_me.Mobile.Services.DataStores
@@ -9,9 +10,10 @@ namespace e_me.Mobile.Services.DataStores
 
         Task<bool> UpdateItemAsync(T item);
 
-        Task<bool> DeleteItemAsync(string id);
+        Task<bool> DeleteItemAsync(Guid id);
 
-        Task<T> GetItemAsync(string id);
+        Task<T> GetItemAsync(Guid id);
+        T GetItem(Guid id);
 
         Task<IEnumerable<T>> GetItemsAsync();
 

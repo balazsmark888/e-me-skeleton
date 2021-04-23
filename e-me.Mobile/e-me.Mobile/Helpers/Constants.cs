@@ -21,8 +21,13 @@
         public const string LoginAddress = "/api/auth/login";
         public const string LogoutAddress = "/api/auth/logout";
         public const string ValidateAddress = "/api/auth/validate";
+
         public const string DocumentTypeGetAddress = "/api/documenttypes/getall";
         public const string DocumentTemplateListItemGetAddress = "/api/documenttemplates/list";
+        public const string DocumentTemplateAvailableListItemGetAddress = "/api/documenttemplates/available";
+
+        public const string UserDocumentListItemGetAddress = "/api/userdocuments/list";
+        public const string UserDocumentGetAddress = "/api/userdocuments/";
         public const string UserDocumentRequestFromTemplateAddress = "/api/userdocuments/requestfromtemplate";
 
         #endregion

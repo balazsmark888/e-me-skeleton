@@ -24,6 +24,12 @@ namespace e_me.Model.Repositories
         {
             return await All.FirstOrDefaultAsync(p => p.UserId == userId && p.DocumentTemplateId == templateId);
         }
+
+        public async Task<bool> IsValidUserDocumentId(Guid userDocumentId)
+        {
+            var document = await GetByIdAsync(userDocumentId);
+            return document != null;
+        }
     }
 
     public interface IUserDocumentRepository : IBaseRepository<UserDocument>
@@ -31,5 +37,7 @@ namespace e_me.Model.Repositories
         IQueryable<UserDocument> GetByUserId(Guid userId);
 
         Task<UserDocument> GetByUserIdAndTemplateId(Guid userId, Guid templateId);
+
+        Task<bool> IsValidUserDocumentId(Guid userDocumentId);
     }
 }

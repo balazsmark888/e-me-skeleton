@@ -70,7 +70,18 @@ namespace e_me.Mobile.Services.Document
             var result = JsonConvert.DeserializeObject<IList<DocumentTemplateListItemDto>>(response.Content.ReadAsStringAsync().Result);
             _applicationContext.ApplicationSecureStorage[Constants.DocumentTypesProperty] = result;
             return result;
+        }
 
+        public IEnumerable<DocumentTemplateListItemDto> GetAvailableDocumentTemplateListItems()
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.DocumentTemplateListItemGetAddress}");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var response = httpClient.SendAsync(request).Result;
+            if (!response.IsSuccessStatusCode) throw new ApplicationException();
+            var result = JsonConvert.DeserializeObject<IList<DocumentTemplateListItemDto>>(response.Content.ReadAsStringAsync().Result);
+            _applicationContext.ApplicationSecureStorage[Constants.DocumentTypesProperty] = result;
+            return result;
         }
 
         public async Task<UserDocumentDto> RequestDocumentFromTemplateAsync(Guid templateId)
@@ -93,12 +104,50 @@ namespace e_me.Mobile.Services.Document
         {
             var httpClient = _httpClientFactory.CreateClient();
             var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.UserDocumentRequestFromTemplateAddress}");
-            var content = new FormUrlEncodedContent(new[]{new KeyValuePair<string, string>("templateId",templateId.ToString())});
+            var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("templateId", templateId.ToString()) });
             content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
             var request = new HttpRequestMessage(HttpMethod.Get, uri)
             {
                 Content = content
             };
+            var response = httpClient.SendAsync(request).Result;
+            if (!response.IsSuccessStatusCode) throw new ApplicationException();
+            var result = JsonConvert.DeserializeObject<UserDocumentDto>(response.Content.ReadAsStringAsync().Result);
+            var keyInfo = _cryptoService.GetKeyInformation();
+            if (result != null)
+            {
+                result.File = E2EE.Decrypt(result.File.FromBase64String(), keyInfo.IV.FromBase64String(), result.Hash.FromBase64String(), keyInfo.SharedKey.FromBase64String(), keyInfo.HmacKey.FromBase64String(), keyInfo.DerivedHmacKey.FromBase64String());
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<UserDocumentListItemDto>> GetAllUserDocumentListItemsAsync()
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.UserDocumentListItemGetAddress}");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var response = await httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode) throw new ApplicationException();
+            var result = JsonConvert.DeserializeObject<IList<UserDocumentListItemDto>>(await response.Content.ReadAsStringAsync());
+            return result;
+        }
+
+        public IEnumerable<UserDocumentListItemDto> GetAllUserDocumentListItems()
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.UserDocumentListItemGetAddress}");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var response = httpClient.SendAsync(request).Result;
+            if (!response.IsSuccessStatusCode) throw new ApplicationException();
+            var result = JsonConvert.DeserializeObject<IList<UserDocumentListItemDto>>(response.Content.ReadAsStringAsync().Result);
+            return result;
+        }
+
+        public UserDocumentDto GetDocument(Guid documentId)
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.UserDocumentListItemGetAddress}/{documentId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
             var response = httpClient.SendAsync(request).Result;
             if (!response.IsSuccessStatusCode) throw new ApplicationException();
             var result = JsonConvert.DeserializeObject<UserDocumentDto>(response.Content.ReadAsStringAsync().Result);
