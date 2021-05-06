@@ -13,7 +13,8 @@ namespace e_me.Mobile
 
         public AppShell(INavigationService navigationService,
             DocumentsTab documentsTab,
-            DocumentTypesTab documentTypesTab)
+            DocumentTypesTab documentTypesTab,
+            UserDetailsTab userDetailsTab)
         {
             _navigationService = navigationService;
             InitializeComponent();
@@ -22,7 +23,8 @@ namespace e_me.Mobile
                 Items =
                 {
                     documentsTab,
-                    documentTypesTab
+                    documentTypesTab,
+                    userDetailsTab
                 }
             };
             Items.Add(MainTabBar);

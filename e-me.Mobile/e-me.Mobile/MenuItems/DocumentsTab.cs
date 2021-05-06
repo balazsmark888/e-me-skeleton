@@ -11,7 +11,7 @@ namespace e_me.Mobile.MenuItems
             Items.Add(new ShellContent
             {
                 Content = documentsPage,
-                Title = "Documents"
+                Title = "My Documents"
             });
             Title = "My Documents";
         }

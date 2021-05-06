@@ -82,6 +82,7 @@ namespace e_me.Mvc.Extensions
             services.AddTransient<IUserDocumentRepository, UserDocumentRepository>();
             services.AddTransient<IDocumentTemplateRepository, DocumentTemplateRepository>();
             services.AddTransient<IUserEcdhKeyInformationRepository, UserEcdhKeyInformationRepository>();
+            services.AddTransient<IOneTimeAccessTokenRepository, OneTimeAccessTokenRepository>();
         }
     }
 }

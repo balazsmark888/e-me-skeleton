@@ -11,9 +11,9 @@ namespace e_me.Mobile.MenuItems
             Items.Add(new ShellContent
             {
                 Content = documentTemplatesPage,
-                Title = "Require document"
+                Title = "Request document"
             });
-            Title = "Require document";
+            Title = "Request document";
         }
     }
 }

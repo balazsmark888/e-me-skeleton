@@ -66,7 +66,8 @@ namespace e_me.Business.Services.Implementations
                 Issuer = _authSettings.Issuer,
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Expiration, validTo.ToLongDateString())
+                    new Claim(ClaimTypes.Expiration, validTo.ToString()),
+                    new Claim("documentId",userDocumentId.ToString())
                 }),
                 Expires = validTo,
                 SigningCredentials = CreateSigningCredentials()

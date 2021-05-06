@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Telerik.Documents.ImageUtils;
+using Telerik.Windows.Documents.Extensibility;
 using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
 using Telerik.Windows.Documents.Fixed.Model;
 using Telerik.Windows.Documents.Fixed.Model.InteractiveForms;
@@ -24,10 +27,12 @@ namespace e_me.Core.Helpers
                                 if (data.ContainsKey(textField.Name))
                                 {
                                     textField.Value = data[textField.Name];
+                                    textField.IsReadOnly = true;
                                 }
-                                else if (textField.Name.Equals("DOCUMENT.DATE"))
+                                else if (textField.Name.Equals("DOCUMENT_DATE"))
                                 {
                                     textField.Value = DateTime.Now.ToString("dd/MM/yyyy");
+                                    textField.IsReadOnly = true;
                                 }
                             }
                             break;
@@ -57,6 +62,7 @@ namespace e_me.Core.Helpers
 
         public static byte[] GetBytesFromFixedDocument(RadFixedDocument document)
         {
+            FixedExtensibilityManager.JpegImageConverter = new JpegImageConverter();
             var pdfProvider = new PdfFormatProvider();
             var bytes = pdfProvider.Export(document);
             return bytes;

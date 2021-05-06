@@ -23,6 +23,7 @@ namespace e_me.Business.Services.Implementations
         private readonly IMapper _mapper;
         private readonly ISecurityRoleRepository _securityRoleRepository;
         private readonly IJwtTokenRepository _jwtTokenRepository;
+        private readonly IUserDetailRepository _userDetailRepository;
 
         public UserService(IUserRepository userRepository,
                      IUserSecurityRoleRepository userSecurityRoleRepository,
@@ -30,7 +31,8 @@ namespace e_me.Business.Services.Implementations
                      ILogger<UserService> logger,
                      IMapper mapper,
                      ISecurityRoleRepository securityRoleRepository,
-                     IJwtTokenRepository jwtTokenRepository)
+                     IJwtTokenRepository jwtTokenRepository,
+                     IUserDetailRepository userDetailRepository)
         {
             _userRepository = userRepository;
             _userSecurityRoleRepository = userSecurityRoleRepository;
@@ -39,6 +41,7 @@ namespace e_me.Business.Services.Implementations
             _mapper = mapper;
             _securityRoleRepository = securityRoleRepository;
             _jwtTokenRepository = jwtTokenRepository;
+            _userDetailRepository = userDetailRepository;
         }
 
         public IQueryable<User> All => _userRepository.All;
@@ -426,6 +429,16 @@ namespace e_me.Business.Services.Implementations
             userToBeAdded.SecurityRoleId = defaultSecurityRole.Id;
 
             var user = await CreateAsync(userToBeAdded, userRegistrationDto.Password);
+
+            var userDetail = new UserDetail
+            {
+                Email = userRegistrationDto.Email,
+                FullName = userRegistrationDto.FullName,
+                UserId = user.Id,
+                Id = Guid.NewGuid(),
+            };
+            await _userDetailRepository.InsertAsync(userDetail);
+            await _userDetailRepository.SaveAsync();
             await SetUserRole(user.Id, defaultSecurityRole);
             var mappedUser = await GetUserDtoAsync(user.Id);
             return mappedUser;

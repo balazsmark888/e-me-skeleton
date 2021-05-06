@@ -4,11 +4,43 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:dataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls"
+    xmlns:document="clr-namespace:e_me.Shared.DTOs.Document;assembly=e-me.Shared"
+    xmlns:listView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;assembly=Telerik.XamarinForms.DataControls"
+    xmlns:input="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
     BackgroundColor="{StaticResource AppBackgroundColor}"
+    Title="Your prepared documents"
     Shell.NavBarIsVisible="True">
     <ContentPage.Content>
-        <RefreshView>
-            <dataControls:RadListView x:Name="DocumentsListView" />
-        </RefreshView>
+        <AbsoluteLayout>
+            <RefreshView>
+                <dataControls:RadListView x:Name="DocumentsListView"
+                                          SelectionMode="Single"
+                                          SelectionChanged="DocumentsListView_OnSelectionChanged">
+                    <dataControls:RadListView.BindingContext>
+                        <document:DocumentTemplateListItemDto />
+                    </dataControls:RadListView.BindingContext>
+                    <dataControls:RadListView.ItemTemplate>
+                        <DataTemplate>
+                            <listView:ListViewTemplateCell>
+                                <listView:ListViewTemplateCell.View>
+                                    <Grid>
+                                    </Grid>
+                                </listView:ListViewTemplateCell.View>
+                            </listView:ListViewTemplateCell>
+                        </DataTemplate>
+                    </dataControls:RadListView.ItemTemplate>
+                </dataControls:RadListView>
+            </RefreshView>
+            <input:RadButton
+                         BackgroundColor="CornflowerBlue"
+                         TextColor="White"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"  
+                         AbsoluteLayout.LayoutBounds=".95,.95,130,50" 
+                         CornerRadius="50"
+                         Text="Scan QR Code"
+                         FontSize="12"
+                         Clicked="ScanDocument"
+            />
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

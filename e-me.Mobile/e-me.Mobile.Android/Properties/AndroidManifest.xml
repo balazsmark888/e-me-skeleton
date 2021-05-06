@@ -3,4 +3,7 @@
 	<uses-sdk android:minSdkVersion="29" android:targetSdkVersion="30" />
 	<application android:label="e_me.Mobile.Android" android:theme="@style/MainTheme"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-permission android:name="android.permission.FLASHLIGHT" />
+  <uses-permission android:name="android.permission.CAMERA" />
 </manifest>

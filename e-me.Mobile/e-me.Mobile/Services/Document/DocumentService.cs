@@ -75,7 +75,19 @@ namespace e_me.Mobile.Services.Document
         public IEnumerable<DocumentTemplateListItemDto> GetAvailableDocumentTemplateListItems()
         {
             var httpClient = _httpClientFactory.CreateClient();
-            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.DocumentTemplateListItemGetAddress}");
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.DocumentTemplateAvailableListItemGetAddress}");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var response = httpClient.SendAsync(request).Result;
+            if (!response.IsSuccessStatusCode) throw new ApplicationException();
+            var result = JsonConvert.DeserializeObject<IList<DocumentTemplateListItemDto>>(response.Content.ReadAsStringAsync().Result);
+            _applicationContext.ApplicationSecureStorage[Constants.DocumentTypesProperty] = result;
+            return result;
+        }
+
+        public IEnumerable<DocumentTemplateListItemDto> GetOwnedDocumentTemplateListItems()
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.DocumentTemplateOwnedListItemGetAddress}");
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
             var response = httpClient.SendAsync(request).Result;
             if (!response.IsSuccessStatusCode) throw new ApplicationException();
@@ -95,7 +107,12 @@ namespace e_me.Mobile.Services.Document
             var keyInfo = _cryptoService.GetKeyInformation();
             if (result != null)
             {
-                result.File = E2EE.Decrypt(result.File.FromBase64String(), keyInfo.IV.FromBase64String(), result.Hash.FromBase64String(), keyInfo.SharedKey.FromBase64String(), keyInfo.HmacKey.FromBase64String(), keyInfo.DerivedHmacKey.FromBase64String());
+                result.File = E2EE.Decrypt(result.File.FromBase64String(),
+                    keyInfo.IV.FromBase64String(),
+                    result.Hash.FromBase64String(),
+                    keyInfo.SharedKey.FromBase64String(),
+                    keyInfo.HmacKey.FromBase64String(),
+                    keyInfo.DerivedHmacKey.FromBase64String());
             }
             return result;
         }
@@ -116,7 +133,12 @@ namespace e_me.Mobile.Services.Document
             var keyInfo = _cryptoService.GetKeyInformation();
             if (result != null)
             {
-                result.File = E2EE.Decrypt(result.File.FromBase64String(), keyInfo.IV.FromBase64String(), result.Hash.FromBase64String(), keyInfo.SharedKey.FromBase64String(), keyInfo.HmacKey.FromBase64String(), keyInfo.DerivedHmacKey.FromBase64String());
+                result.File = E2EE.Decrypt(result.File.FromBase64String(),
+                    keyInfo.IV.FromBase64String(),
+                    result.Hash.FromBase64String(),
+                    keyInfo.SharedKey.FromBase64String(),
+                    keyInfo.HmacKey.FromBase64String(),
+                    keyInfo.DerivedHmacKey.FromBase64String());
             }
             return result;
         }
@@ -143,19 +165,84 @@ namespace e_me.Mobile.Services.Document
             return result;
         }
 
-        public UserDocumentDto GetDocument(Guid documentId)
+        public UserDocumentDto GetDocument(Guid templateId)
         {
             var httpClient = _httpClientFactory.CreateClient();
-            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.UserDocumentListItemGetAddress}/{documentId}");
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.UserDocumentGetAddress}?id={templateId}");
+            var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("templateId", templateId.ToString()) });
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri)
+            {
+                Content = content
+            };
             var response = httpClient.SendAsync(request).Result;
             if (!response.IsSuccessStatusCode) throw new ApplicationException();
             var result = JsonConvert.DeserializeObject<UserDocumentDto>(response.Content.ReadAsStringAsync().Result);
             var keyInfo = _cryptoService.GetKeyInformation();
             if (result != null)
             {
-                result.File = E2EE.Decrypt(result.File.FromBase64String(), keyInfo.IV.FromBase64String(), result.Hash.FromBase64String(), keyInfo.SharedKey.FromBase64String(), keyInfo.HmacKey.FromBase64String(), keyInfo.DerivedHmacKey.FromBase64String());
+                result.File = E2EE.Decrypt(result.File.FromBase64String(),
+                    keyInfo.IV.FromBase64String(),
+                    result.Hash.FromBase64String(),
+                    keyInfo.SharedKey.FromBase64String(),
+                    keyInfo.HmacKey.FromBase64String(),
+                    keyInfo.DerivedHmacKey.FromBase64String());
             }
+            return result;
+        }
+
+        public UserDocumentDto GetDocumentFromCode(string token)
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.UserDocumentFromCodeGetAddress}");
+            var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("token", token) });
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri)
+            {
+                Content = content
+            };
+            var response = httpClient.SendAsync(request).Result;
+            if (!response.IsSuccessStatusCode) throw new ApplicationException();
+            var result = JsonConvert.DeserializeObject<UserDocumentDto>(response.Content.ReadAsStringAsync().Result);
+            var keyInfo = _cryptoService.GetKeyInformation();
+            if (result != null)
+            {
+                result.File = E2EE.Decrypt(result.File.FromBase64String(),
+                    keyInfo.IV.FromBase64String(),
+                    result.Hash.FromBase64String(),
+                    keyInfo.SharedKey.FromBase64String(),
+                    keyInfo.HmacKey.FromBase64String(),
+                    keyInfo.DerivedHmacKey.FromBase64String());
+            }
+            return result;
+        }
+
+        public void DeleteDocument(Guid templateId)
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.UserDocumentDeleteAddress}");
+            var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("templateId", templateId.ToString()) });
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+            var request = new HttpRequestMessage(HttpMethod.Post, uri)
+            {
+                Content = content
+            };
+            var _ = httpClient.SendAsync(request).Result;
+        }
+
+        public string GetAccessToken(Guid templateId)
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var uri = new Uri($"{_applicationContext.BackendBaseAddress}{Constants.AccessTokenGetAddress}");
+            var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("templateId", templateId.ToString()) });
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri)
+            {
+                Content = content
+            };
+            var response = httpClient.SendAsync(request).Result;
+            if (!response.IsSuccessStatusCode) throw new ApplicationException();
+            var result = response.Content.ReadAsStringAsync().Result;
             return result;
         }
     }

@@ -91,6 +91,10 @@ namespace e_me.Mvc.Controllers.API
             }
         }
 
+        /// <summary>
+        /// Gets the available document templates.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("available")]
         public async Task<IActionResult> GetAvailableList()
         {
@@ -98,6 +102,25 @@ namespace e_me.Mvc.Controllers.API
             {
                 var user = await _authService.GetAuthenticatedUserAsync();
                 var list = (await _documentTemplateRepository.GetAvailableAsync(user.Id)).Select(p => _mapper.Map<DocumentTemplateListItemDto>(p));
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gets the owned document templates.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("owned")]
+        public async Task<IActionResult> GetOwnedList()
+        {
+            try
+            {
+                var user = await _authService.GetAuthenticatedUserAsync();
+                var list = (await _documentTemplateRepository.GetOwnedAsync(user.Id)).Select(p => _mapper.Map<DocumentTemplateListItemDto>(p));
                 return Ok(list);
             }
             catch (Exception e)

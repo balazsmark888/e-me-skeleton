@@ -25,7 +25,14 @@ namespace e_me.Model.Repositories
         public async Task<IQueryable<DocumentTemplate>> GetAvailableAsync(Guid userId)
         {
             var existingTemplates = await _userDocumentRepository.GetByUserId(userId).Select(p => p.DocumentTemplateId).ToListAsync();
-            var available = All.Where(p => !existingTemplates.Contains(p.DocumentTypeId));
+            var available = AllIncluding(p => p.DocumentType).Where(p => !existingTemplates.Contains(p.Id));
+            return available;
+        }
+
+        public async Task<IQueryable<DocumentTemplate>> GetOwnedAsync(Guid userId)
+        {
+            var existingTemplates = await _userDocumentRepository.GetByUserId(userId).Select(p => p.DocumentTemplateId).ToListAsync();
+            var available = AllIncluding(p => p.DocumentType).Where(p => existingTemplates.Contains(p.Id));
             return available;
         }
     }
@@ -35,5 +42,7 @@ namespace e_me.Model.Repositories
         Task<DocumentTemplate> GetByTypeAsync(Guid typeId);
 
         Task<IQueryable<DocumentTemplate>> GetAvailableAsync(Guid userId);
+
+        Task<IQueryable<DocumentTemplate>> GetOwnedAsync(Guid userId);
     }
 }

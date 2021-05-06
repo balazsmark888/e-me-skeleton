@@ -3,15 +3,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace e_me.Shared.DTOs.User
 {
+    [Serializable]
     public class UserDetailDto
     {
+        public string FullName { get; set; }
+
+        public string Email { get; set; }
+
+        public DateTime? BirthDate { get; set; }
+
         public Guid UserId { get; set; }
 
-        public string BirthDay { get; set; }
+        public string BirthDay => BirthDate?.ToString("dd");
 
-        public string BirthMonth { get; set; }
+        public string BirthMonth => BirthDate?.ToString("MM");
 
-        public string BirthYear { get; set; }
+        public string BirthYear => BirthDate?.ToString("yyyy");
 
         public string BirthCity { get; set; }
 

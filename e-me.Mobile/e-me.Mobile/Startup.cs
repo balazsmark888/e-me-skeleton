@@ -49,24 +49,29 @@ namespace e_me.Mobile
 
             services.AddTransient<DocumentTypeDataStore>();
             services.AddTransient<DocumentTemplateListItemDataStore>();
+            services.AddTransient<DocumentDataStore>();
+            services.AddTransient<UserDetailDataStore>();
 
             services.AddTransient<MainViewModel>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<RegisterViewModel>();
             services.AddTransient<DocumentTemplatesViewModel>();
+            services.AddTransient<DocumentsViewModel>();
+            services.AddTransient<UserDetailViewModel>();
 
-            services.AddTransient<MainPage>();
-            services.AddTransient<RegisterPage>();
-            services.AddTransient<LoginPage>();
             services.AddTransient<DocumentsPage>();
             services.AddTransient<DocumentTemplatesPage>();
             services.AddTransient<UserDetailPage>();
+            services.AddTransient<DocumentPage>();
+            services.AddTransient<RegisterPage>();
+            services.AddTransient<LoginPage>();
+            services.AddTransient<MainPage>();
+            services.AddTransient<ShareDocumentPage>();
+            services.AddTransient<ScannerPage>();
 
             services.AddTransient<DocumentsTab>();
             services.AddTransient<DocumentTypesTab>();
-            services.AddTransient<MainTab>();
-            services.AddTransient<LoginTab>();
-            services.AddTransient<RegisterTab>();
+            services.AddTransient<UserDetailsTab>();
 
             services.AddSingleton<AppShell>();
             services.AddSingleton<App>();

@@ -47,16 +47,16 @@ namespace e_me.Mvc.Controllers.API
         /// <summary>
         /// Gets the UserDocument with the specified Id.
         /// </summary>
-        /// <param name="id">Id of the document</param>
+        /// <param name="templateId">Id of the document</param>
         /// <returns></returns>
         /// <exception cref="ApplicationException"></exception>
-        [HttpGet("id")]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        [HttpGet("document")]
+        public async Task<IActionResult> Get([FromForm] Guid templateId)
         {
             try
             {
-                var document = await _userDocumentRepository.GetByIdAsync(id);
                 var user = await _authService.GetAuthenticatedUserAsync();
+                var document = await _userDocumentRepository.GetByUserIdAndTemplateId(user.Id, templateId);
                 if (user.Id != document.UserId)
                 {
                     throw new ApplicationException("You are not permitted to view this document.");
@@ -111,7 +111,7 @@ namespace e_me.Mvc.Controllers.API
                     var userDetail = await _userDetailRepository.GetByUserIdAsync(user.Id);
                     var newDocument = _documentService.GetDocumentFromTemplate(template, userDetail);
 
-                    await _userDocumentRepository.InsertOrUpdateAsync(newDocument);
+                    await _userDocumentRepository.InsertAsync(newDocument);
                     await _userDocumentRepository.SaveAsync();
                 }
                 var dbDocument = await _userDocumentRepository.GetByUserIdAndTemplateId(user.Id, templateId);
@@ -126,15 +126,43 @@ namespace e_me.Mvc.Controllers.API
         }
 
         /// <summary>
-        /// Deletes the specified UserDocument.
+        /// Gets the document specified in the one-time access token.
         /// </summary>
-        /// <param name="userDocumentId">The ID of the UserDocument.</param>
+        /// <param name="token">The access token.</param>
         /// <returns></returns>
-        public IActionResult Delete([FromRoute] Guid userDocumentId)
+        [HttpGet("requestFromCode")]
+        public async Task<IActionResult> RequestFromCode([FromForm] string token)
         {
             try
             {
-                _userDocumentRepository.DeleteById(userDocumentId);
+                var user = await _authService.GetAuthenticatedUserAsync();
+                var dbDocument = await _documentService.GetDocumentByCodeAsync(token);
+                if (dbDocument == null) return BadRequest("Expired token!");
+                var keyInformation = await _ecdhKeyInformationRepository.GetByUserIdAsync(user.Id);
+                var documentDto = _documentService.GetDtoFromDocument(dbDocument, keyInformation);
+                return Ok(documentDto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the UserDocument of the specified template.
+        /// </summary>
+        /// <param name="templateId">The ID of the DocumentTemplate</param>
+        /// <returns></returns>
+        [HttpPost("delete")]
+        public async Task<IActionResult> Delete([FromForm] Guid templateId)
+        {
+            try
+            {
+                var user = await _authService.GetAuthenticatedUserAsync();
+                var document = await _userDocumentRepository.GetByUserIdAndTemplateId(user.Id, templateId);
+                if (document == null) return Ok();
+                _userDocumentRepository.Delete(document);
+                await _userDocumentRepository.SaveAsync();
                 return Ok();
             }
             catch (Exception e)

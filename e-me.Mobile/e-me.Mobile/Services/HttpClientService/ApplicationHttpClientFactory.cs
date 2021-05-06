@@ -31,7 +31,6 @@ namespace e_me.Mobile.Services.HttpClientService
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", token);
             }
-            client.Timeout = TimeSpan.FromSeconds(15);
             return client;
         }
     }

@@ -56,7 +56,14 @@ namespace e_me.Shared
                 {
                     if (parentProperty.Name == childProperty.Name && parentProperty.PropertyType == childProperty.PropertyType && parentProperty.GetValue(parent) != default)
                     {
-                        childProperty.SetValue(child, parentProperty.GetValue(parent));
+                        try
+                        {
+                            childProperty.SetValue(child, parentProperty.GetValue(parent));
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
                         break;
                     }
                 }

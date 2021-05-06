@@ -6,6 +6,7 @@
     xmlns:dataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls"
     xmlns:listView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;assembly=Telerik.XamarinForms.DataControls"
     xmlns:document="clr-namespace:e_me.Shared.DTOs.Document;assembly=e-me.Shared"
+    Title="Select a document to be filled out"
     BackgroundColor="{StaticResource AppBackgroundColor}">
     <ContentPage.Content>
         <RefreshView>

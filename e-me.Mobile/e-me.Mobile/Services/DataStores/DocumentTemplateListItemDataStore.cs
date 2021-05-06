@@ -52,7 +52,12 @@ namespace e_me.Mobile.Services.DataStores
 
         public IEnumerable<DocumentTemplateListItemDto> GetAvailableItems()
         {
-            throw new NotImplementedException();
+            return _documentService.GetAvailableDocumentTemplateListItems();
+        }
+
+        public IEnumerable<DocumentTemplateListItemDto> GetOwnedItems()
+        {
+            return _documentService.GetOwnedDocumentTemplateListItems();
         }
 
         public IEnumerable<DocumentTemplateListItemDto> GetLocalItems()

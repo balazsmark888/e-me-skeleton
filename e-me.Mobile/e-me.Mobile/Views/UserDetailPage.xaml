@@ -1,8 +1,72 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:input="clr-namespace:Telerik.XamarinForms.Input;assembly=Telerik.XamarinForms.Input"
+             BackgroundColor="{StaticResource AppBackgroundColor}"
+             Shell.NavBarIsVisible="True"
+             Title="Personal Info"
              x:Class="e_me.Mobile.Views.UserDetailPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="PersonalInfoStyle" TargetType="Element">
+                <Setter Property="Label.Margin" Value="0,15,0,0"/>
+            </Style>
+            <Style BasedOn="{StaticResource PersonalInfoStyle}" TargetType="Label" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        
+        <StackLayout>
+            <ScrollView WidthRequest="270" HorizontalOptions="Center" VerticalOptions="Center" Padding="20" VerticalScrollBarVisibility="Never">
+                <StackLayout Orientation="Vertical" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="Full Name"/>
+                    <input:RadEntry  Text="{Binding FullName}" WatermarkText="Full Name" TextChanged="OnFormChanged"/>
+                    <Label Text="Email"/>
+                    <input:RadEntry  Text="{Binding Email}" WatermarkText="Email" TextChanged="OnFormChanged"/>
+                    <Label Text="Birthdate"/>
+                    <input:RadDatePicker Date="{Binding BirthDate}" SpinnerFormat="dd/MMMM/yyyy" SelectionChanged="OnDateSelected"/>
+                    <Label Text="Personal numeric code"/>
+                    <input:RadEntry  Text="{Binding PersonalNumericCode}" WatermarkText="Personal Numeric Code" TextChanged="OnFormChanged"/>
+                    <Label Text="Birth Country"/>
+                    <input:RadEntry Text="{Binding BirthCountry}" WatermarkText="Birth country" TextChanged="OnFormChanged"/>
+                    <Label Text="Birth County"/>
+                    <input:RadEntry Text="{Binding BirthCounty}" WatermarkText="Birth county" TextChanged="OnFormChanged"/>
+                    <Label Text="Birth City"/>
+                    <input:RadEntry Text="{Binding BirthCity}" WatermarkText="Birth city" TextChanged="OnFormChanged"/>
+                    <Label Text="Phone Number"/>
+                    <input:RadEntry  Text="{Binding PhoneNumber}" WatermarkText="Phone Number" TextChanged="OnFormChanged"/>
+                    <Label Text="Home Country"/>
+                    <input:RadEntry Text="{Binding HomeCountry}" WatermarkText="Home country" TextChanged="OnFormChanged"/>
+                    <Label Text="Home County"/>
+                    <input:RadEntry Text="{Binding HomeCounty}" WatermarkText="Home county" TextChanged="OnFormChanged"/>
+                    <Label Text="Home City"/>
+                    <input:RadEntry Text="{Binding HomeCity}" WatermarkText="Home city" TextChanged="OnFormChanged"/>
+                    <Label Text="Home Street"/>
+                    <input:RadEntry Text="{Binding HomeStreet}" WatermarkText="Home street" TextChanged="OnFormChanged"/>
+                    <Label Text="Street Number"/>
+                    <input:RadEntry Text="{Binding HomeStreetNumber}" WatermarkText="Home street number" TextChanged="OnFormChanged"/>
+                    <Label Text="Entrance"/>
+                    <input:RadEntry Text="{Binding HomeEntrance}" WatermarkText="Home entrance" TextChanged="OnFormChanged"/>
+                    <Label Text="Apartment"/>
+                    <input:RadEntry Text="{Binding HomeApartmentNumber}" WatermarkText="Home apartment" TextChanged="OnFormChanged"/>
+                    <Label Text="Block"/>
+                    <input:RadEntry Text="{Binding HomeBlockNumber}" WatermarkText="Home block" TextChanged="OnFormChanged"/>
+                    <Label Text="Postal Code"/>
+                    <input:RadEntry Text="{Binding HomePostalCode}" WatermarkText="Home postal code" TextChanged="OnFormChanged"/>
+
+                </StackLayout>
+            </ScrollView>
+            <Frame WidthRequest="250" VerticalOptions="Center" HorizontalOptions="Center" HasShadow="False">
+                <StackLayout>
+                    <input:RadButton
+                        x:Name="SaveButton"
+                        BackgroundColor="CornflowerBlue"
+                        TextColor="White"
+                        Clicked="SaveButton_OnClicked"
+                        IsEnabled="False"
+                        Text="Save" />
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+
     </ContentPage.Content>
 </ContentPage>

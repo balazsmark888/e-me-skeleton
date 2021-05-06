@@ -10,7 +10,8 @@ namespace e_me.Mobile.ViewModels
         private readonly DocumentTemplateListItemDataStore _dataStore;
         private readonly IDocumentService _documentService;
 
-        public ObservableCollection<DocumentTemplateListItemDto> DocumentTypes => new ObservableCollection<DocumentTemplateListItemDto>(_dataStore.GetItems());
+        public ObservableCollection<DocumentTemplateListItemDto> AvailableDocumentTypes =>
+            new ObservableCollection<DocumentTemplateListItemDto>(_dataStore.GetAvailableItems());
 
         public DocumentTemplatesViewModel(DocumentTemplateListItemDataStore dataStore,
             IDocumentService documentService)
@@ -21,8 +22,7 @@ namespace e_me.Mobile.ViewModels
 
         public UserDocumentDto OnItemSelected(DocumentTemplateListItemDto item)
         {
-            if (item == null) return null;
-            return _documentService.RequestDocumentFromTemplate(item.DocumentTemplateId);
+            return item == null ? null : _documentService.RequestDocumentFromTemplate(item.DocumentTemplateId);
         }
     }
 }

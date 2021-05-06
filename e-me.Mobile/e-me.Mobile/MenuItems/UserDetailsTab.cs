@@ -11,9 +11,9 @@ namespace e_me.Mobile.MenuItems
             Items.Add(new ShellContent
             {
                 Content = userDetailPage,
-                Title = "Personal data"
+                Title = "Personal info"
             });
-            Title = "Personal data";
+            Title = "Personal info";
         }
     }
 }

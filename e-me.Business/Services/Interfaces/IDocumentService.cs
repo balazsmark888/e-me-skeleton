@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using e_me.Model.Models;
 using e_me.Shared.DTOs.Document;
@@ -10,5 +11,7 @@ namespace e_me.Business.Services.Interfaces
         Task<DocumentTemplate> CreateNewDocumentTemplate(DocumentTemplateDto documentTemplateDto);
         UserDocumentDto GetDtoFromDocument(UserDocument document, UserEcdhKeyInformation keyInformation);
         UserDocument GetDocumentFromTemplate(DocumentTemplate documentTemplate, UserDetail userDetail);
+        Task<OneTimeAccessToken> RequestAccessTokenAsync(Guid userDocumentId);
+        Task<UserDocument> GetDocumentByCodeAsync(string token);
     }
 }

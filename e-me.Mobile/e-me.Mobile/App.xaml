@@ -9,10 +9,10 @@
         <Color x:Key="NavigationBarColor">Orange</Color>
         <Color x:Key="NormalTextColor">Black</Color>
         <Color x:Key="RegisterButtonColor">OrangeRed</Color>
-        <Color x:Key="LoginButtonColor">DarkOrange</Color>
+        <Color x:Key="LoginButtonColor">CornflowerBlue</Color>
         <Color x:Key="FrameBorderColor">LightSlateGray</Color>
         <Color x:Key="BusyIndicatorColor">LightSalmon</Color>
-        <Color x:Key="Primary">LightSalmon</Color>
+        <Color x:Key="Primary">LightSlateGray</Color>
 
 
         <input:BorderStyle

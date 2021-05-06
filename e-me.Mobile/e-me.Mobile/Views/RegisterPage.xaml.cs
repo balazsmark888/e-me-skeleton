@@ -41,7 +41,7 @@ namespace e_me.Mobile.Views
             {
                 BusyLayout.IsVisible = true;
                 BusyIndicator.IsBusy = true;
-                var dto = _mapper.Map<UserRegistrationDto>((RegisterViewModel)_registerViewModel);
+                var dto = _mapper.Map<UserRegistrationDto>(_registerViewModel);
                 var response = await _userService.RegisterAsync(dto);
                 if (response.IsSuccessStatusCode)
                 {

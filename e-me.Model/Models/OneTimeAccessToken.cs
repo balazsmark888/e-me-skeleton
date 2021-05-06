@@ -9,7 +9,6 @@ namespace e_me.Model.Models
         public Guid UserDocumentId { get; set; }
 
         [Required]
-        [MaxLength(250)]
         public string Token { get; set; }
 
         public DateTime ValidTo { get; set; }

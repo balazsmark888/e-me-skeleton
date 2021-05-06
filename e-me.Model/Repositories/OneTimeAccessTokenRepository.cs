@@ -14,26 +14,6 @@ namespace e_me.Model.Repositories
         {
         }
 
-        public async Task<OneTimeAccessToken> RequestAccessTokenAsync(Guid userDocumentId)
-        {
-            var existingToken = await FindByUserDocumentIdAsync(userDocumentId);
-            if (existingToken != null)
-            {
-                return null;
-            }
-
-            var newToken = new OneTimeAccessToken
-            {
-                Id = Guid.NewGuid(),
-                IsValid = true,
-                UserDocumentId = userDocumentId,
-                ValidTo = DateTime.Now.AddHours(1)
-            };
-            await InsertAsync(newToken);
-            await SaveAsync();
-            return newToken;
-        }
-
         public async Task<OneTimeAccessToken> FindByUserDocumentIdAsync(Guid userDocumentId)
         {
             return await All.FirstOrDefaultAsync(p => p.UserDocumentId == userDocumentId);
@@ -42,7 +22,6 @@ namespace e_me.Model.Repositories
 
     public interface IOneTimeAccessTokenRepository : IBaseRepository<OneTimeAccessToken>
     {
-        Task<OneTimeAccessToken> RequestAccessTokenAsync(Guid userDocumentId);
         Task<OneTimeAccessToken> FindByUserDocumentIdAsync(Guid userDocumentId);
     }
 }

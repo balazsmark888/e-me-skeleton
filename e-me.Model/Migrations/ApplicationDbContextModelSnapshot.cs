@@ -88,13 +88,13 @@ namespace e_me.Model.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b6d9fe5a-951d-4f4e-98a4-8b276635cfa1"),
+                            Id = new Guid("06d71d65-8b2d-432b-ac89-9bf834e295ba"),
                             DisplayName = "Test Document Type",
                             Name = "TestDocumentType"
                         },
                         new
                         {
-                            Id = new Guid("4c4f0bc1-5ea1-41d7-a8ed-f5bbeb000f66"),
+                            Id = new Guid("1db502c5-a92b-48b1-bccb-77f4f3060c48"),
                             DisplayName = "Self Declaration",
                             Name = "SelfDeclaration"
                         });
@@ -138,8 +138,7 @@ namespace e_me.Model.Migrations
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserDocumentId")
                         .HasColumnType("uniqueidentifier");
@@ -181,13 +180,13 @@ namespace e_me.Model.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9328ab25-1e89-4eba-81fc-f7a49dc6d750"),
+                            Id = new Guid("e22e3dae-4433-4ad5-9f72-c3c065cba2f9"),
                             Name = "Administrator",
                             SecurityType = 0
                         },
                         new
                         {
-                            Id = new Guid("393e688c-fbba-404b-b93b-749a6f6f7f25"),
+                            Id = new Guid("7f094e06-b818-47ab-99c2-4dcc8895453c"),
                             Name = "Regular User",
                             SecurityType = 1
                         });
@@ -284,6 +283,12 @@ namespace e_me.Model.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BirthYear")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HomeApartmentNumber")

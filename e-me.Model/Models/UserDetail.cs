@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace e_me.Model.Models
@@ -10,6 +11,14 @@ namespace e_me.Model.Models
     {
         [Required]
         public Guid UserId { get; set; }
+
+        [Encrypted]
+        [DataMember(Name = "CLIENT_FULLNAME")]
+        public string FullName { get; set; }
+
+        [Encrypted]
+        [DataMember(Name = "CLIENT_EMAIL")]
+        public string Email { get; set; }
 
         [Encrypted]
         [DataMember(Name = "CLIENT_BIRTHDAY")]
@@ -78,6 +87,22 @@ namespace e_me.Model.Models
         [Encrypted]
         [DataMember(Name = "CLIENT_PERSONALNUMERICCODE")]
         public string PersonalNumericCode { get; set; }
+
+        [NotMapped]
+        [DataMember(Name = "CLIENT_FULLADDRESS")]
+        public string FullAddress => $"{HomeStreet} {HomeStreetNumber}, {HomeBlockNumber}/{HomeEntrance}/{HomeApartmentNumber}, {HomeCity},{HomeCounty},{HomeCountry}";
+
+        [NotMapped]
+        [DataMember(Name = "CLIENT_BIRTHPLACE")]
+        public string BirthPlace => $"{BirthCity},{BirthCounty},{BirthCountry}";
+
+        [NotMapped]
+        [DataMember(Name = "CLIENT_FIRSTNAME")]
+        public string FirstName => FullName?.Split(' ').FirstOrDefault();
+
+        [NotMapped]
+        [DataMember(Name = "CLIENT_LASTNAME")]
+        public string LastName => FullName?.Split(' ').LastOrDefault();
 
         [ForeignKey("UserId")]
         public User User { get; set; }

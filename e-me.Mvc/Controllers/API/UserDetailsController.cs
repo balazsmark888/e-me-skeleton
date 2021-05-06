@@ -33,13 +33,14 @@ namespace e_me.Mvc.Controllers.API
         /// </summary>
         /// <param name="userId">UserIdd of the UserDetail.</param>
         /// <returns></returns>
-        [HttpGet("{userId}")]
+        [HttpGet("getbyuser")]
         [ValidateUserId]
-        public async Task<IActionResult> Get([FromRoute] Guid userId)
+        public async Task<IActionResult> Get()
         {
             try
             {
-                var userDetail = await _userDetailRepository.GetByUserIdAsync(userId);
+                var user = await _authService.GetAuthenticatedUserAsync();
+                var userDetail = await _userDetailRepository.GetByUserIdAsync(user.Id);
                 return Ok(_mapper.Map<UserDetailDto>(userDetail));
             }
             catch (Exception e)
@@ -51,7 +52,6 @@ namespace e_me.Mvc.Controllers.API
         /// <summary>
         /// Updates the UserDetail for the specified UserId in the database.
         /// </summary>
-        /// <param name="userId">The Id of the User.</param>
         /// <param name="userDetailDto">Object containing information about the UserDetail.</param>
         /// <returns></returns>
         [HttpPut("update")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using e_me.Mobile.Views;
+using GoogleVisionBarCodeScanner;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
