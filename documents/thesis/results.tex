@@ -9,14 +9,95 @@
 \section{Metrics}
 In this section I will evaluate some of the algorithms used in the application, test coverage, code analysis. 4 pages
 
-\section{Decisions}
-Here I describe decisions I made about what technologies to use and how can they be replaced with other ones. 3-4 pages
+\begin{itemize}
+	\item chart about the duration of the encryption (time versus file size)
+	\item service-level test coverage
+	\item code metrics
+	\begin{itemize}
+		\item maintainability
+		\item cyclomatic complexity
+		\item average depth of inheritance
+		\item average class coupling
+	\end{itemize}
+	\item system requirements
+	\begin{itemize}
+		\item server
+		\item mobile
+	\end{itemize}
+\end{itemize}
 
-\section{Obstacles and diffiulties}
+\section{Decisions}
+Here I describe decisions I made about what technologies to use, what I considered using and how they can be replaced with other ones. 3-4 pages
+
+\begin{itemize}
+	\item backend
+	\begin{itemize}
+		\item Java
+		\item Python
+	\end{itemize}
+	\item frontend
+	\begin{itemize}
+		\item Kotlin
+		\item Java
+		\item React Native
+	\end{itemize}
+	\item why I chose C\# and .NET instead of native languages
+	\item Data storage
+	\begin{itemize}
+		\item MySQL
+		\item MongoDB
+		\item Oracle
+		\item Firebase
+	\end{itemize}
+	\item Auth technologies
+	\begin{itemize}
+		\item Cookie-based auth
+		\item Multi-factor auth
+		\item Biometric auth
+	\end{itemize}
+
+\end{itemize}
+
+\section{Obstacles and difficulties}
 In this section I contemplate about different parts of the applications that were problematic to develop. 3 pages
+
+\begin{itemize}
+	\item HTTPS on Android
+	\begin{itemize}
+		\item difficulties connecting to the server on HTTPS
+		\item certificate issues
+	\end{itemize}
+	\item Windows CNG not being implemented in Mono
+	\begin{itemize}
+		\item switching to the open-source ECDH implementation
+	\end{itemize}
+	\item accessing resources within the Android secure storage (icons, config files etc.)
+\end{itemize}
 
 \section{Possibilities}
 Here I describe possible features, future upgrades for the app. 1-2 pages
+
+\begin{itemize}
+	\item Adding biometric authentication
+	\begin{itemize}
+		\item fingerprint
+		\item face recognition
+	\end{itemize}
+	\item ML based form categorization
+	\begin{itemize}
+		\item categorize unknown fields based on user inputs
+	\end{itemize}
+	\item Requirement-tree for documents
+	\item digital signatures
+	\item notifications (expired/soon-to-be expired documents)
+	\item Administration application
+	\begin{itemize}
+		\item validating data
+		\item granting permission for document release
+		\item preparing templates
+	\end{itemize}
+	\item IOS release
+\end{itemize}
 
 \section{Retrospective}
 In this section I review the development process and describe what would I do differently and why. 1-2 pages

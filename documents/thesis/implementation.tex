@@ -10,8 +10,76 @@
 \section{Technologies}
 Here I list the technologies used for building the application with logos, descriptions for each, 6-7 pages.
 
+\begin{itemize}
+	\item Backend
+	\begin{itemize}
+		\item .NET 5
+		\item Entity Framework Core 5
+		\begin{itemize}
+			\item Code-first
+			\item Microsoft SQL Server
+			\item additional Data Encryption layer
+		\end{itemize}
+		\item NSwag
+		\item Serilog
+		\item AutoMapper
+		\item Newtonsoft Json
+		\item Windows CNG (Cryptographic Next Generation) API
+	\end{itemize}
+	\item Frontend
+	\begin{itemize}
+		\item Xamarin Forms
+		\item Telerik UI for Xamarin
+		\item Telerik Document Processing Core
+		\item Syncfusion Xamarin PDF viewer
+		\item GoogleVision API - BarcodeScanner XF implementation
+	\end{itemize}
+\end{itemize}
+
 \section{Architecture}
 In this section I describe the architecture with multiple diagrams, 4-5 pages.
 
+\begin{itemize}
+	\item General 3-tier architecture
+	\begin{itemize}
+		\item diagram
+		\item general description
+	\end{itemize}
+	\item Backend multi-tier architecture
+	\begin{itemize}
+		\item diagram
+		\item general description
+	\end{itemize}
+	\item Model UML diagram
+	\begin{itemize}
+		\item diagram
+		\item general description
+	\end{itemize}
+	\item Frontend multi-tier architecture
+	\begin{itemize}
+		\item diagram
+		\item general description
+	\end{itemize}
+\end{itemize}
+
 \section{Security}
 Here I describe the Diffie-Hellman key exchange and the used encryption techniques in more detail, 3-4 pages.
+
+\begin{itemize}
+	\item data-layer security
+	\begin{itemize}
+		\item using built-in EF Data Encryption with AES256
+	\end{itemize}
+	\item transport-layer security (TLS)
+	\begin{itemize}
+		\item https
+		\item JWT auth and auth verification
+		\item protected and unprotected endpoints
+	\end{itemize}
+	\item End-To-End encryption
+	\begin{itemize}
+		\item Elliptic Curve Diffie-Hellman key derivation - open-source implementation
+		\item encryption of documents
+		\item hash-based message authentication (HMAC)
+	\end{itemize}
+\end{itemize}
