@@ -13,6 +13,7 @@ namespace e_me.Mobile.Services.DataStores
         Task<bool> DeleteItemAsync(Guid id);
 
         Task<T> GetItemAsync(Guid id);
+
         T GetItem(Guid id);
 
         Task<IEnumerable<T>> GetItemsAsync();

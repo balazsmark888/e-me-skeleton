@@ -1,0 +1,89 @@
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=4.520833in,
+height=3.565625in,
+at={(0.758333in,0.48125in)},
+scale only axis,
+xmin=0,
+xmax=18,
+xlabel={t},
+ymin=-1.22950713177336,
+ymax=1.22950713177336,
+axis x line*=bottom,
+axis y line*=left,
+legend style={legend cell align=left,align=left,draw=white!15!black}
+]
+\addplot[const plot,color=mycolor1,dash pattern=on 1pt off 3pt on 3pt off 3pt,line width=1.5pt,mark size=5.0pt,mark=x,mark options={solid}] plot table[row sep=crcr] {%
+1	1\\
+2	1\\
+3	1\\
+4	1\\
+5	1\\
+6	1\\
+7	-0.75\\
+8	-0.75\\
+9	-0.75\\
+10	-0.75\\
+11	-0.75\\
+12	-0.75\\
+13	0.5\\
+14	0.5\\
+15	0.5\\
+16	0.5\\
+17	0.5\\
+18	0.5\\
+};
+\addlegendentry{input};
+
+\addplot[const plot,color=mycolor2,dash pattern=on 1pt off 3pt on 3pt off 3pt,line width=1.5pt,mark size=5.0pt,mark=x,mark options={solid}] plot table[row sep=crcr] {%
+1	0\\
+2	0.77686983985157\\
+3	0.950212931632136\\
+4	0.988891003461758\\
+5	0.997521247823334\\
+6	0.999446915629852\\
+7	0.999876590195913\\
+8	-0.359549756189598\\
+9	-0.662878774568591\\
+10	-0.730560627017162\\
+11	-0.745662489593154\\
+12	-0.749032170608275\\
+13	-0.749784048072828\\
+14	0.221135485202557\\
+15	0.437776916153532\\
+16	0.486116153336409\\
+17	0.496902095070477\\
+18	0.499308763976951\\
+};
+\addlegendentry{noiseless output};
+
+\addplot [color=mycolor3,line width=2.0pt,mark size=5.0pt,only marks,mark=x,mark options={solid}]
+  table[row sep=crcr]{%
+1	-0.0171158725436316\\
+2	0.79642792496298\\
+3	0.947260960065984\\
+4	1.0245892764778\\
+5	0.964243249277863\\
+6	0.985474329324717\\
+7	0.980444587230978\\
+8	-0.247032186207499\\
+9	-0.692250877103177\\
+10	-0.74414209391833\\
+11	-0.726474734468424\\
+12	-0.777415085526794\\
+13	-0.674011298989881\\
+14	0.285739974648386\\
+15	0.40915252431161\\
+16	0.509170034644643\\
+17	0.47260499270241\\
+18	0.529934731031871\\
+};
+\addlegendentry{noisy output};
+
+\end{axis}
+\end{tikzpicture}%

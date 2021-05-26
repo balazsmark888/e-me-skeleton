@@ -3,10 +3,11 @@
 \usepackage[utf8]{inputenc}% FONTS
 \usepackage{times}
 \usepackage[T1]{fontenc}
-
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
 \usepackage{indentfirst}
 \usepackage[bottom]{footmisc}
-
+\usepackage{float}
 % FONTS for typewriter
 %\usepackage[scaled=0.7]{luximono}
 %\renewcommand\ttdefault{ul9}
@@ -23,8 +24,13 @@
 \addtolength{\abovecaptionskip}{-12pt}
 
 \usepackage{pgf,tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{filecontents}
+\pgfplotsset{width=20cm,height=10cm, compat=1.9}
 \usetikzlibrary{shapes,arrows,calc}
 \usepackage[final]{listings}
+
 
 \usepackage{amsmath,amssymb}
 \usepackage{array}
@@ -52,16 +58,7 @@
 \definecolor{linkCol}{rgb}{0.2, 0.0, 0.1}
 \definecolor{citeCol}{rgb}{0.1, 0.2, 0.3}
 \definecolor{urlCol} {rgb}{0.2, 0.2, 0.5}
-%%
-\usepackage[%
-    raiselinks=true,  %
-    colorlinks=true,  %
-    plainpages=true,  %
-    pdfpagelabels,    %
-    citecolor=citeCol,urlcolor=urlCol,linkcolor=linkCol,
-    unicode
-]{hyperref} % MUST be the LAST package included
-%%
+
 \definecolor{algBgCol}{rgb}{0.95,0.95,1.00}
 % define the wanted font for all highlightings here
 \def\lstbasicfont{\fontfamily{ul9}\selectfont}
@@ -202,3 +199,14 @@
   }
 
 \endgroup
+
+%%
+\usepackage[%
+    raiselinks=true,  %
+    colorlinks=true,  %
+    plainpages=true,  %
+    pdfpagelabels,    %
+    citecolor=citeCol,urlcolor=urlCol,linkcolor=linkCol,
+    unicode
+]{hyperref} % MUST be the LAST package included
+%%

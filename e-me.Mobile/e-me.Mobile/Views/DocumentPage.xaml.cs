@@ -40,18 +40,15 @@ namespace e_me.Mobile.Views
             return true;
         }
 
-        private void PdfViewer_OnDoubleTapped(object sender, TouchInteractionEventArgs e)
+        private async void PdfViewer_OnDoubleTapped(object sender, TouchInteractionEventArgs e)
         {
-            Task.Run(() =>
+            if (PdfViewer.ZoomPercentage == 100)
             {
-                if (PdfViewer.ZoomPercentage == 100)
-                {
-                    PdfViewer.ZoomPercentage = 200;
-                    return;
-                }
+                PdfViewer.ZoomPercentage = 200;
+                return;
+            }
 
-                PdfViewer.ZoomPercentage = 100;
-            });
+            PdfViewer.ZoomPercentage = 100;
         }
     }
 }
