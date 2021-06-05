@@ -4,7 +4,8 @@
 
 
 % milyen nyelveken akarunk forráskódot megjeleníteni
-\lstloadlanguages{Java,C++}
+\lstloadlanguages{Java,C++,[Sharp]C}
+\lstdefinestyle{sharpc}{language=[Sharp]C, frame=lr, rulecolor=\color{blue!80!black}}
 % más lehetőségek:
 % C, Matlab, Mathematica, Octave, Pascal, Perl, Python
 % SCilab, SQL, Haskell, Lisp, Lua, make, ML, PHP, Prolog
@@ -69,7 +70,6 @@ Assist prof. dr. Kolumbán Sándor
 % 
 %\includeonly{bevezet}
 
-
 \begin{document}
 
 %% ABSTRAKT
@@ -130,9 +130,9 @@ This work is the result of my own activity. I have neither given nor received un
 % a bevezetõ fejezet FILE-ja.
 \include{introduction}
 
-\include{basics}
+\include{user-documentation}
 
-\include{implementation}
+\include{technical-details}
 
 \include{results}
 
