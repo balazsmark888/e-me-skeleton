@@ -36,7 +36,7 @@ of maintainability.
 	\caption{Backend architecture}
 \end{figure}
 
-Due to this abstract layout, each layer can independently be replaced or upgraded. 
+Due to this abstract layout, each layer can independently be replaced or updated. 
 This aspect enables the utilization of external and/or third-party services and components without damaging the integrity of the application.
 
 The API structure of the presentation layer allows for a wide variety of applications or even services in which the backend can be used: desktop applications,
@@ -88,7 +88,7 @@ project structure when compared to a multilingual application design.
 \subsection{Backend}
 
 In terms of frameworks, the backend relies on .NET 5.0. Being the next major release of .NET Core following 3.1, this open-source cross-platform
-software framework unifies a wide variety of frameworks that .NET has to offer including Windows Forms, ASP.NET Core and more.
+software framework unifies a wide variety of frameworks .NET has to offer, including Windows Forms, ASP.NET Core, Azure and more.
 This unification made the framework a perfect candidate for the backend of an application like E-me, since it can be used on a wide variety of
 platforms and ensures long-term support.
 
@@ -97,9 +97,16 @@ It allows the application to communicate through HTTPS and provides it's separat
 layer. With the \emph{Development-time IIS support} feature, the web server allows \emph{hot reloading}, which speeds up the development and debugging
 processes.
 
-The main building block of the backend itself is the ASP.NET Core web framework.
+The main constituent of the backend itself is the ASP.NET Core web framework.
 Using it's built-in IoC, this framework allows for a high level of abstraction in order to build well-structured enterprise level applications
 using dependency injection.
+This framework is responsible for registering and configuring any other dependencies that may appear in the application backend.
+
+Alongside with ASP.NET Core, one of the main components of the backend is the Entity Framework Core, which is the base of the 
+\emph{Data Access Layer}.
+In terms of building and maintaining the data access layer, E-me uses the code-first approach through \emph{EF Migrations}.
+This approach provides flexibility in case of a potential database change and/or creation, but more importantly it allows 
+the entire structure of the entities to be managed based on the models and datasets present in the code.
 
 
 
