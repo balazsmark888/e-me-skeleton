@@ -88,18 +88,19 @@ project structure when compared to a multilingual application design.
 \subsection{Backend}
 
 In terms of frameworks, the backend relies on .NET 5.0. Being the next major release of .NET Core following 3.1, this open-source cross-platform
-software framework unifies a wide variety of frameworks that .NET has to offer including Windows Forms, ASP.NET Core etc.
+software framework unifies a wide variety of frameworks that .NET has to offer including Windows Forms, ASP.NET Core and more.
 This unification made the framework a perfect candidate for the backend of an application like E-me, since it can be used on a wide variety of
 platforms and ensures long-term support.
 
 E-me uses Internet Information Services (Microsoft IIS), which is an extensible web server software, as it's backend server.
 It allows the application to communicate through HTTPS and provides it's separate development-time SSL certificate in order to secure the transport
-layer. With the \emph{Development-time IIS support} feature, the web server allows \emph{hot reloading}, which speeds up the development/debugging
-process.
+layer. With the \emph{Development-time IIS support} feature, the web server allows \emph{hot reloading}, which speeds up the development and debugging
+processes.
 
-The main building block of the backend is the ASP.NET Core web framework.
+The main building block of the backend itself is the ASP.NET Core web framework.
 Using it's built-in IoC, this framework allows for a high level of abstraction in order to build well-structured enterprise level applications
 using dependency injection.
+
 
 
 Although the frameworks used by the layers of the application differ, these can have a shared codebase in the form
