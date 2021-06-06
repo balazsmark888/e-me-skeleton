@@ -108,38 +108,34 @@ In terms of building and maintaining the data access layer, E-me uses the code-f
 This approach provides flexibility in case of a potential database change and/or creation, but more importantly it allows 
 the entire structure of the entities to be managed based on the models and datasets present in the code.
 
+E-me heavily relies on encryption and security, which demands the utiliation of advanced cryptographic libraries.
+For this purpose, the application uses the \emph{Windows CNG (Cryptographic Next Generation) API}, which
+enables exchanging documents and other data in a secure environment.
+In terms of cryptography, this API provides a full implementation of the \emph{Elliptic-curve Diffie-Hellman} key agreement protocol,
+alongside with many other cryptographic protocols and algorithms such as RSA, AES (Advanced Encryption Standard) or DSA (Digital Signature Algorithm)
+and hash functions like SHA-2 or MD5.
+
+The documents handled by the application are created and managed by the \emph{Telerik Document Processing Core} framework, which
+provides flexibility and efficiency in terms of document management. 
+It enables processing the most commonly used text, PDF and spreadsheet file formats, allowing the application
+to create, import and export documents without relying on other external dependencies.
+
+\subsection{Frontend}
+
+Being a .NET-based application, E-me uses Microsoft's open-source mobile UI framework, \emph{Xamarin Forms} as a base for it's frontend.
+This library allows developing native mobile applications on multiple platforms, such as iOS, Android or UWP using \emph{.NET Standard}. 
+The multi-platform capability allows for a shared codebase and logic across all applications, which speed up the development process immensely.
+Xamarin uses an XML-based interface designer in order to create the visuals for the application.
+Alongside with the commonly used Xamarin UI components, E-me uses the \emph{Telerik UI for Xamarin, GoogleVision API and Syncfusion} UI
+libraries for additional components and controls in it's user interface.
 
 
-Although the frameworks used by the layers of the application differ, these can have a shared codebase in the form
-of a \emph{.NET Standard class library}, which can be used by both the backend and the frontend.
 
-\begin{itemize}
-	\item Backend
-	\begin{itemize}
-		\item .NET 5
-		\item Entity Framework Core 5
-		\begin{itemize}
-			\item Code-first
-			\item Microsoft SQL Server
-			\item additional Data Encryption layer
-		\end{itemize}
-		\item NSwag
-		\item Serilog
-		\item AutoMapper
-		\item Newtonsoft Json
-		\item Windows CNG (Cryptographic Next Generation) API
-	\end{itemize}
-	\item Frontend
-	\begin{itemize}
-		\item Xamarin Forms
-		\item Telerik UI for Xamarin
-		\item Telerik Document Processing Core
-		\item Syncfusion Xamarin PDF viewer
-		\item GoogleVision API - BarcodeScanner XF implementation
-	\end{itemize}
-\end{itemize}
+Although the frameworks used by the different layers of the application vary, these can have a shared codebase in the form
+of a \emph{.NET Standard class library}, which can be used by both the backend and the frontend, allowing for closely integrated layers.
 
 \section{Implementation}
+
 
 
 \section{Security}
