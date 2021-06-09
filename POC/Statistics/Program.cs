@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using ECDiffieHellman;
@@ -19,7 +20,9 @@ namespace Statistics
             var decryptionTimes = new List<long>();
             var messageSizes = new List<int>();
             var n = 300;
-            for (var i = 1; i <= n; i++)
+            var builder1 = new StringBuilder();
+            var builder2 = new StringBuilder();
+            for (var i = 0; i < n; i++)
             {
                 text += new string(Enumerable.Repeat(chars, 1024 * 5).Select(s => s[random.Next(s.Length)]).ToArray());
                 var bytes = Encoding.ASCII.GetBytes(text);
@@ -36,15 +39,23 @@ namespace Statistics
                 encryptionTimes.Add(stopWatch.ElapsedTicks);
                 stopWatch.Reset();
                 stopWatch.Start();
-                var decryptedMessage = participant2.Decrypt(encryptedMessage, iv, hash);
+                var _ = participant2.Decrypt(encryptedMessage, iv, hash);
                 stopWatch.Stop();
                 decryptionTimes.Add(stopWatch.ElapsedTicks);
+
+                
+
+                builder1.AppendLine($"{messageSizes[i]} {encryptionTimes[i]} \\\\");
+                builder2.AppendLine($"{messageSizes[i]} {decryptionTimes[i]} \\\\");
             }
             Console.WriteLine(string.Join(",", messageSizes));
             Console.WriteLine();
             Console.WriteLine(string.Join(",", encryptionTimes));
             Console.WriteLine();
             Console.WriteLine(string.Join(",", decryptionTimes));
+
+            File.WriteAllText("enc.txt",builder1.ToString());
+            File.WriteAllText("dec.txt",builder2.ToString());
         }
     }
 }

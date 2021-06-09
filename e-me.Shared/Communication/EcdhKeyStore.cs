@@ -42,10 +42,10 @@ namespace e_me.Shared.Communication
 
         public EcdhKeyStore(byte[] peerPublicKey) : this()
         {
-            SetOtherPartyPublicKey(peerPublicKey);
+            SetPeerPublicKey(peerPublicKey);
         }
 
-        public void SetOtherPartyPublicKey(byte[] peerPublicKey)
+        public void SetPeerPublicKey(byte[] peerPublicKey)
         {
             PeerPublicKey = peerPublicKey;
             SharedKey = Curve25519.GetSharedSecret(PrivateKey, peerPublicKey);

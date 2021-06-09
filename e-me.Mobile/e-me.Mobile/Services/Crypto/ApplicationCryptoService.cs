@@ -22,7 +22,7 @@ namespace e_me.Mobile.Services.Crypto
             var clientPrivateKey = _applicationContext.ApplicationSecureStorage[Constants.ClientPrivateKeyProperty] as byte[];
 
             var keyStore = new EcdhKeyStore(clientPrivateKey, clientPublicKey);
-            keyStore.SetOtherPartyPublicKey(userDto.PublicKey);
+            keyStore.SetPeerPublicKey(userDto.PublicKey);
 
             var model = new EcdhKeyInformation
             {

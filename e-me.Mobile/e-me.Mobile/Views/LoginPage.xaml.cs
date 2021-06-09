@@ -48,7 +48,7 @@ namespace e_me.Mobile.Views
             {
                 BusyLayout.IsVisible = true;
                 BusyIndicator.IsBusy = true;
-                var authDto = _mapper.Map<AuthDto>((LoginViewModel)_loginViewModel);
+                var authDto = _mapper.Map<AuthDto>(_loginViewModel);
                 authDto.PublicKey = _cryptoService.CreatePublicKey().ToBase64String();
                 var userDto = await _userService.LoginAsync(authDto);
                 if (userDto == null) throw new ApplicationException();

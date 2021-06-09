@@ -108,7 +108,7 @@ In terms of building and maintaining the data access layer, E-me uses the code-f
 This approach provides flexibility in case of a potential database change and/or creation, but more importantly it allows 
 the entire structure of the entities to be managed based on the models and datasets present in the code.
 
-E-me heavily relies on encryption and security, which demands the utiliation of advanced cryptographic libraries.
+E-me heavily relies on encryption and security, which demands the utilization of advanced cryptographic libraries.
 For this purpose, the application uses the \emph{Windows CNG (Cryptographic Next Generation) API}, which
 enables exchanging documents and other data in a secure environment.
 In terms of cryptography, this API provides a full implementation of the \emph{Elliptic-curve Diffie-Hellman} key agreement protocol,
@@ -136,10 +136,103 @@ of a \emph{.NET Standard class library}, which can be used by both the backend a
 
 \section{Implementation}
 
-
-
 \section{Security}
-Here I describe the Diffie-Hellman key exchange and the used encryption techniques in more detail, 3-4 pages.
+
+As a document-handling application, E-me relies heavily on secure communication, data storage and encryption.
+In order to achieve the required level of protection, the application uses a handful of libraries that target various layers within the backend and the frontend.
+
+\subsubsection{Data-layer security}
+
+First and foremost, E-me utilizes \emph{Entity Framework Core Data Encryption}, which is a plugin for the above mentioned \emph{Entity Framework Core},
+ to add support of encrypted fields using built-in or custom encryption providers.
+This library ensures the protected storage of the data via encryption.
+This way the data stored in the database cannot be interpreted by other parties, not even in a case of a security breach or database failure.
+In the case of E-me, a built-in encryption provider is used which enables \emph{AES-256} encryption configured with a CBC (cipher-block chaining) cipher.
+The algorithm uses a secret key stored in the configuration of the application.
+
+\begin{lstlisting}
+  private AesProvider CreateAesProvider()
+  {
+	var key = Encoding.ASCII.GetBytes(_authSettings.SecretKey);
+	var provider = new AesProvider(key, CipherMode.CBC,	 PaddingMode.Zeros);
+	return provider;
+  }
+\end{lstlisting}
+
+The data encryption library allows for independent protection of model attributes, providing flexibility for the developers in selecting sensitive fields
+that require encryption. This selection can greatly reduce the time consumption of the encryption and is preformed via the \emph{Encrypted} field attribute:
+
+\begin{lstlisting}
+  [Encrypted]
+  public string FullName { get; set; }
+\end{lstlisting}
+
+\subsubsection{End-to-end encryption (E2EE)}
+
+The second layer of security is located in the \emph{Business Layer} of the application backend.
+One of the main features of E-me is the end-to-end encrypted (E2EE) document transfer which is achieved by this second layer.
+In order to successfully perform an encryption on the backend followed by a decryption on the frontend, the two sides must complete a secure key exchange beforehand.
+This exchange occurs upon a user's successful login to the system.
+
+Upon receiving the user's credentials, a key pair (private and public keys) is generated on the frontend of the application.
+The key generation and derivation takes place in the \emph{EcdhKeyStore} class which uses a password-based key derivation functon (\emph{PBKDF2}) with a \emph{SHA512} hash function
+as the private key generator and \emph{X25519 Elliptic Curve Diffie-Hellman} to derive a public key from the generated private key.
+
+\begin{lstlisting}
+  public EcdhKeyStore()
+  {
+	using var rngCsp = new RNGCryptoServiceProvider();
+	var salt = new byte[SaltSize];
+	var rawKey = new byte[RawKeySize];
+	rngCsp.GetBytes(salt);
+	rngCsp.GetBytes(rawKey);
+	PrivateKey = new Rfc2898DeriveBytes(rawKey, salt, Iterations, HashAlgorithmName.SHA512).GetBytes(KeySize);
+	PublicKey = Curve25519.GetPublicKey(PrivateKey);  
+  }
+\end{lstlisting}
+
+The public part of the key pair is included in the login request in order to be processed on the backend server.
+Upon a successful verification of the login credentials, the backend's authentication service generates it's own private and public key pairs.
+These --- combined with the client's public key --- enable the derivation of a third key (shared secret) and a shared \emph{AES Initialization Vector (IV)} which can be used for encryption and hashing in the future.
+This key derivation process is followed by the storage of the keys and hash parameters in an encrypted form in the database.
+
+\begin{lstlisting}
+  public void SetPeerPublicKey(byte[] peerPublicKey)
+  {
+	PeerPublicKey = peerPublicKey;
+	SharedKey = Curve25519.GetSharedSecret(PrivateKey, peerPublicKey);
+	HmacKey = SharedKey;
+	DerivedHmacKey = Curve25519.GetSharedSecret(HmacKey, HmacKey);
+	using var aesProvider = new AesCryptoServiceProvider
+	{
+		Key = SharedKey
+	};
+	aesProvider.GenerateIV();
+	IV = aesProvider.IV;
+  }
+\end{lstlisting}
+
+The server's public key alongside with the \emph{IV} is then included in the response of the login request.
+This way the client is able to generate an identical shared secret using the same methodology.
+In the end of the authentication process both sides will possess a secret encryption key and hash parameters despite not sharing them directly.
+These secret values are used whenever a document is shared between the two parties.
+In addition to the encryption of these documents, the application makes use of the hash-based message authentication (\emph{HMAC}) in order to 
+ensure data integrity and authenticity.
+
+\subsubsection{Transport Layer Security (TLS)}
+
+The third and most general layer of security can be found on the transport layer in the form of \emph{HTTPS}.
+This layer is responsible for providing communications security over the network using a self-signed \emph{SSL Certificate}.
+It enables communication bewteen parties in an encrypted form and it is used in all of the application's requests.
+
+\subsubsection{Authentication and authorization}
+
+The majority of E-me's endpoints require authorization to be accessed.
+In order to authenticate, then authorize a user the application utilizes \emph{JSON Web Tokens (JWT)}.
+These tokens are generated by the authentication service upon providing the correct login credentials from the application frontend and are to be
+included in the header of the HTTP requests by the client.
+On the server-side, the \emph{JwtTokenValidatorMiddleware} is responsible for processing the request header and validating the incoming tokens for each request.
+
 
 \begin{itemize}
 	\item data-layer security

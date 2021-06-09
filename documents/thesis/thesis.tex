@@ -4,8 +4,29 @@
 
 
 % milyen nyelveken akarunk forráskódot megjeleníteni
-\lstloadlanguages{Java,C++,[Sharp]C}
-\lstdefinestyle{sharpc}{language=[Sharp]C, frame=lr, rulecolor=\color{blue!80!black}}
+\lstloadlanguages{[Sharp]C}
+\lstset{%
+    language=[Sharp]C,
+    frame=ltrb,
+    framesep=2pt,
+    basicstyle={\lstbasicfont\fontsize{10}{9}\selectfont},
+    keywordstyle=\bfseries\color{blue},
+    identifierstyle=\color{red}\bfseries,
+    commentstyle=\color{brown},
+    stringstyle=\slshape\color{green!30!red},
+    showstringspaces=true,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=5,
+    numbersep=5pt,
+    backgroundcolor=\color{algBgCol},
+    lineskip=-0.1ex,
+    breaklines=true,
+    nolol,
+    extendedchars=true,
+    inputencoding=utf8,
+    framesep=5pt
+}
 % más lehetőségek:
 % C, Matlab, Mathematica, Octave, Pascal, Perl, Python
 % SCilab, SQL, Haskell, Lisp, Lua, make, ML, PHP, Prolog
@@ -13,20 +34,9 @@
 % a teljes lista a LISTINGS csomagban.
 
 
-% ezt be lehet tenni MINDEGYIK megjelenítendő kód elé opcióként
-\lstset{language=Java}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%!!          EZT KELL VÁLTOZTATNI       !!%%%%
-%%     A DOLGOZAT CÍMOLDALÁNAK ELEMEI        %%
-
-%% MELYIK ÉVBEN ADJUK LE
 \submityear{%
 2021
 }
-
-% Az alábbi sorokat ki kell tölteni!!
 
 \titleEN{%
 E-me, the secure document-handling application

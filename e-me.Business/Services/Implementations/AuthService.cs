@@ -149,8 +149,7 @@ namespace e_me.Business.Services.Implementations
 
             var jwtToken = _jwtTokenRepository.GetByUserIdAndToken(user.Id, token);
 
-            return jwtToken != null &&
-                   !jwtToken.Cancelled;
+            return jwtToken is {Cancelled: false};
         }
 
         /// <summary>
