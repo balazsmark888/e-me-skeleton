@@ -10,7 +10,7 @@ This tier-based architectural approach adds modularity to the application which 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.40]{general-architecture.png}
+	\includegraphics[scale=0.37]{general-architecture.png}
 	\caption{General architecture}
 \end{figure}
 
@@ -166,42 +166,260 @@ This class is registered to the \emph{Host Builder} as soon as the application s
   }
 \end{lstlisting}
 
-This project defines the \emph{API Controllers} which are representing the endpoints of the backend.
+Representing the presentation layer, this project defines the \emph{API Controllers} which are representing the endpoints of the backend.
 These controllers are the connection points through which the backend is able to communicate with other layers of the application.
+The endpoints of these controllers follow the same route structure: \emph{[base-address]/api/[controller-name]/[action-name]},
+for example: \emph{https://e-me.Mvc/api/auth/login}.
+All endpoints of the application require \emph{HTTPS} to be accessed and send response in \emph{JSON} format to ensure that the receiving
+party is able to interpret the message.
 
 One of the most important of these controllers is the \emph{AuthController}, which is responsible for 
 registering, authenticating and de-authenticating the users of the application.
 This is the only controller that can be accessed by an unauthenticated user, since the rest of them handle more 
 sensitive data.
 
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.50]{use-case-diagram-unauth}
+	\includegraphics[scale=0.65]{auth-endpoints.png}
+	\caption{AuthController endpoints}
+\end{figure}
+
+Once a user is authenticated, they are able to access the protected endpoints.
+A controller's or and endpoint's protected nature is marked by the \emph{Authorize} declarative attribute.
+When accessed, the endpoints marked with this attribute automatically verify the authorization header of the request and the role of the current user if necessary.
+
+\begin{lstlisting}
+  [Authorize]
+  [ApiController]
+  public class UserDetailsController : Controller
+\end{lstlisting}
+
+Two of the main protected controllers are the \emph{UserDocumentsController} and the \emph{DocumentTemplatesController}.
+These two combined are responsible for handling any document-related user requests, such as reading or deleting by id, getting available or owned documents etc. 
+All of these actions contain an extra layer of validation in order to ensure that the current user is eligible for viewing, modifying or removing 
+the specified documents or types. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.65]{user-document-endpoints.png}
+	\caption{UserDocumentsController endpoints}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.65]{document-template-endpoints.png}
+	\caption{DocumentTemplatesController endpoints}
+\end{figure}
+
+Apart from these three major controllers, there are three that are significantly more compact and have much fewer endpoints:
+\emph{DocumentTypesController, OneTimeAccessTokensController} and \emph{UserDetailsController}.
+These three cover the non-document-related actions within the application, which include modifications of the personal information of the user, 
+requesting a \emph{document-sharing token} (represented as a QR code in the frontend) or listing the document types that can be managed through the application.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.65]{endpoints.png}
+	\caption{Endpoints of the minor controllers}
+\end{figure}
+
+\subsubsection{The Business project}
+
+As the name suggests, this intermediate project represents the Business Layer of the application backend.
+The project itself consists of service contracts (interfaces), factories and implementations that make use of the data-access objects from the 
+data layer.
+These services perform calculations, alterations and complex operations on the data provided by the underlying layer and are utilized by the 
+above mentioned MVC project as the source of processed data.
+They are registered in the \emph{Startup} class and injected in the constructors of the controllers by the \emph{IoC container} upon 
+accessing the endpoints of the corresponding controller:
+
+\begin{lstlisting}
+  public AuthController(IAuthService authService, IUserService userService)
+  {
+	_authService = authService;
+	_userService = userService;
+  }
+\end{lstlisting}
+
+This loose class coupling allows for multiple implementations of the services.
+These implementations follow the same structure (contract), but don't necessarily have matching outputs and/or dependencies.
+The implementation is selected either using the \emph{factory pattern} or in the moment of registering the service to the \emph{IoC container}.
+Example for a service contract:
+
+\begin{lstlisting}
+  public interface ITokenGeneratorService
+  {
+	string Generate(string userName, DateTime validTo, string role);
+	string GeneratePasswordResetToken(string username, DateTime validTo);
+	string GenerateOneTimeAccessToken(Guid userDocumentId, DateTime validTo);
+  }
+\end{lstlisting}
+
+\subsubsection{The Model project}
+
+One other major building block of the backend is the \emph{Model} project.
+As the \emph{MVC} represented the presentation layer of the application backend, the \emph{Model} implements the data-access layer.
+Having said that, this project is responsible for data persistence-related operations via \emph{Entity Framework Core}.
+In order to manage the data on the server, the project has to model the structure of the database in the form of classes (\emph{Models}) and \emph{DbSets} which represent
+tables and the underlying data respectively.
+
+The framework allows for multiple directions in managing the database structure (ex. database-first or code-first), out of which E-me 
+uses the code-first option.
+This kind of implementation denotes that the database is automatically generated by the framework using the pre-coded models and defined constraints.
+For representing various versions of the data structure that may appear during development, database migrations are used which contain the alterations
+that occured after the previous version of the database was generated.
+These migrations can be reverted and/or modified, providing flexibility when designing the data-layer and also ensuring that the structure of the database 
+is correctly representing the model-structure from the code at all times.
+
+The outermost layer of the Model project consists of \emph{repositories}.
+These classes represent the data-access objects (\emph{DAO}), which are used by the services in the Business Layer to retrieve raw or pre-processed data.
+Each data model has its own repository that allows for performing the basic operations on the corresponding table from the database.
+These operations include deletion, insertion and querying.
+Each repository is inherited from the \emph{BaseRepository} abstract class, which implements the above mentioned basic operations:
+
+\begin{lstlisting}
+  public abstract class BaseRepository<TEntity> : BaseRepository, IBaseRepository<TEntity> where TEntity : Models.BaseModel
+\end{lstlisting}
+
+The more complex operations and non-generic queries are implemented individually in each repository depending on the needs of the corresponding service
+that uses the DAO.
+This can be seen in the following example:
+
+\begin{lstlisting}
+  public class OneTimeAccessTokenRepository : BaseRepository<OneTimeAccessToken>, IOneTimeAccessTokenRepository
+  {
+	...
+    public async Task<OneTimeAccessToken> FindByUserDocumentIdAsync(Guid userDocumentId)
+	{
+		return await All.FirstOrDefaultAsync(p => p.UserDocumentId == userDocumentId);
+	}
+  }
+  public interface IOneTimeAccessTokenRepository : IBaseRepository<OneTimeAccessToken>
+  {
+	Task<OneTimeAccessToken> FindByUserDocumentIdAsync(Guid userDocumentId);
+  }
+\end{lstlisting}
+
+\subsection{Frontend}
+
+In terms of volume, the frontend of the application is substantially smaller than the backend.
+It consists of 3 projects, one of them being automatically generated as a result of using \emph{Xamarin Forms}.
+The main entrypoint here is the \emph{Mobile} projects which contains the majority of the frontend implementation and can be separated into 
+4 major building blocks: services, models, views and view models (MVVM).
+
+\subsubsection{The Mobile project}
+
+Being a \emph{Xamarin Forms} project, the Mobile part of the frontend is a \emph{.NET Standard 2.1} class library which contains the shared codebase across
+all the mobile platforms that are part of the application.
+This project serves as a template for Xamarin to generate the native code for each individual platform (Android, iOS or UWP).
+In case of E-me, the Android platform is targeted which denotes that the generated libraries and binaries are using \emph{Mono runtime}
+in order to access all of the native Android APIs.
+
+The setup of the project is similar to the \emph{MVC} project from the backend of E-me, since it uses the same concepts when it comes to
+inversion of control and dependency injection.
+Similarly, a \emph{Startup} class is used to register services, visual components (views) and view models to the \emph{IoC container} for loose coupling.
+
+The main component of the presentation layer is the \emph{AppShell}.
+This shell is a tab-based wrapper for the views of the frontend.
+The shell's visibility alters depending on the currently rendered view; some views are not required to be seen among the tabs of the application shell (ex. Login view, Registration view).
+
+The visual components/views of the frontend are refferred to as \emph{pages}.
+Each page consists of two parts: an XML file representing the visuals of the page and a C\# class that provides the functionality for these visuals.
+The various view models and services are injected into the constructors of these underlying classes:
+
+\begin{lstlisting}
+  public RegisterPage(RegisterViewModel registerViewModel, IUserService userService, IMapper mapper, INavigationService navigationService)
+  {
+	_userService = userService;
+	_mapper = mapper;
+	_registerViewModel = registerViewModel;
+	_navigationService = navigationService;
+	InitializeComponent();
+	BindingContext = registerViewModel;
+  }
+\end{lstlisting}
+
+The services of the frontend include \emph{cryptographic, communicaiton and storage services}.
+The cryptographic service makes use of the shared key-derivation and encryption methods implemented in the \emph{Shared} project.
+It is used in the decryption of documents received from the application backend and upon generating keys for the \emph{Diffie-Hellman key exchange}(see \hyperref[end-to-end-encryption]{End-to-end encryption}). 
+
+Communication services are responsible for establishing connection with the backend of the application.
+This connection is made possible by \emph{HttpClients} which are retrieved from a \emph{HttpClientFactory}.
+The role of this factory is to create clients that already include the authorization header (if the user is authenticated) and base address of the backend server.
+These services create request messages based on the needs of the user and handle the interpretation of the response from the server (deserialisation).
+
+E-me makes use of the \emph{Android Keystore system} in order to securely store sensitive information (keys, tokens etc.) via the storage services.
+These services are responsable for reliable data retrieval either from the keystore or from configuration files depending on the needs of the user.
+
+\subsection{Use cases}
+
+The use cases in E-me can be categorised by their actors, since they don't have overlapping instances.
+
+\subsubsection{Unauthenticated user}
+
+As for a unauthenticated user, there are two possible actions that can be perfomed: Login and Registration.
+The detailed description of the login process can be found in the \hyperref[end-to-end-encryption]{Security section}.
+
+The process of registration starts at the \emph{Registration page} on the frontend.
+Upon submitting the registration form, a \emph{UserRegistrationDto} object is created containing all the necessary information for creating a new user.
+After a successful backend validation via the \emph{UserService}, a new record in the User table is created, followed by new records in the \emph{UserSecurityRole} and 
+\emph{UserDetail} tables.
+If the creation of the new records was successful, the backend server sends an adequate response (200 OK) in order to signal the client about the successful registration.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.52]{use-case-diagram-unauth}
 	\caption{Use-case diagram (unauthenticated user)}
 \end{figure}
 
-Once a user is authenticated, they are able to access the rest of the endpoints.
-A controller's or and endpoint's 
+\subsubsection{Authenticated user}
+
+Following a successful login, a user is able to perform their document-related actions, which include viewing, sharing, deleting and/or requesting documents, 
+and also have access to their personal information.
+
+One of the main features of E-me is the automatic document creation using the personal details of the user.
+The process of requesting a document starts at selecting a document type (template) from the list of available documents.
+Using the \emph{DocumentService}, the frontend proceeds to send the id (GUID) of the template to the \emph{RequestFromTemplate} endpoint of the server.
+Upon receiving a valid template ID, the server loads the reuqested template document from the database.
+Using the \emph{Telerik Document Processing} library, the \emph{DocumentProcessorService} identifies the form fields of the corresponding document
+and looks for matching fields in the personal details of the user.
+Upon mapping the fields, the service proceeds to fill the ones that have matching information about the user.\pagebreak
+
+\begin{lstlisting}
+  public UserDocument GetDocumentFromTemplate(DocumentTemplate documentTemplate, UserDetail userDetail)
+  {
+	var userData = userDetail.MapToDictionary();
+	var radDocumentTemplate = DocumentProcessing.GetFixedDocumentFromBytes(documentTemplate.File);
+	DocumentProcessing.FillDocumentFormFieldsByFieldNames(radDocumentTemplate, userData);
+	var filledDocument = DocumentProcessing.GetBytesFromFixedDocument(radDocumentTemplate);
+	return filledDocument;
+  }
+\end{lstlisting}
+
+Upon successfully filling the forms of the document, the newly created instance is saved in the database.
+After successfully creating the necessary instances in the database, the server retrieves the encryption key information about the user from the database
+to encrypt and hash the newly created document.
+If the encryption was successful, a \emph{UserDocumentDto} is created which contains the encrypted file in \emph{base64} format and the hash of the file to
+ensure data integrity and authenticity.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.65]{swagger1.png}
-	\caption{API endpoints (1)}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.65]{swagger2.png}
-	\caption{API endpoints (2)}
-\end{figure}
-
-
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.50]{use-case-diagram}
+	\includegraphics[scale=0.52]{use-case-diagram}
 	\caption{Use-case diagram (authenticated user)}
 \end{figure}
+
+After receiving the DTO from the server, the frontend client validates the hash of the document and decrypts it using the shared encryption key stored in the \emph{Android Keystore}.
+If the decryption was successful, the client presents the PDF document to the user via the \emph{Syncfusion PDF Viewer}. 
+
+When sharing a document, the document ID is sent to the server by the \emph{DocumentService} from the frontend.
+Upon receiving a correct document ID and performing validations on the user's eligibility, the backend generates a token containing information about the
+document which is available for \emph{one hour} after being generated.
+After this token is received on the client side, it is represented as a QR code.
+
+When reading the QR code using the built-in scanner, the mobile client retrieves the above mentioned token and sends it to the backend.
+In case of a valid token, the server perform an encryption and hashing of the corresponding document identical to the one performed when creating a
+new one.
+After the client receives the encrypted document, it performs the same actions as mentioned above to present the document.
 
 \section{Security}
 
@@ -234,7 +452,7 @@ that require encryption. This selection can greatly reduce the time consumption 
   public string FullName { get; set; }
 \end{lstlisting}
 
-\subsection{End-to-end encryption (E2EE)}
+\subsection{End-to-end encryption (E2EE)}\label{end-to-end-encryption}
 
 The second layer of security is located in the \emph{Business Layer} of the application backend.
 One of the main features of E-me is the end-to-end encrypted (E2EE) document transfer which is achieved by this second layer.
