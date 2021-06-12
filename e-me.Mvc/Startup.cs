@@ -115,20 +115,6 @@ namespace e_me.Mvc
                     pattern: "api/{controller}/{id?}");
             });
 
-            //app.UseWebSockets();
-
-            //app.Use(async (httpContext, next) =>
-            //{
-            //    if (httpContext.WebSockets.IsWebSocketRequest && httpContext.Request.Path.StartsWithSegments("/wss"))
-            //    {
-            //        /*TODO: check if ECDF handshake*/
-            //    }
-            //    else
-            //    {
-            //        await next();
-            //    }
-            //});
-
             app.UseOpenApi();
             app.UseSwaggerUi3();
         }

@@ -8,9 +8,9 @@ E-me follows a commonly used N-tier architecture with three main parts: data, ap
 Each of these tiers can be broken down into layers that are defined by their responsibilities within the application.
 This tier-based architectural approach adds modularity to the application which results in a low cost of change when compared to a single-tier structure.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.57]{general-architecture}
+	\includegraphics[scale=0.40]{general-architecture.png}
 	\caption{General architecture}
 \end{figure}
 
@@ -32,7 +32,7 @@ of maintainability.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.57]{backend-architecture}
+	\includegraphics[scale=0.40]{backend-architecture.png}
 	\caption{Backend architecture}
 \end{figure}
 
@@ -47,13 +47,12 @@ The role of this layer is to provide the data requested by the Business Layer.
 By reason of abstraction, this layer is independent of the technology of the data source. 
 This enables the utilization of a wide range of data sources, including relational (SQL) and non-relational (NoSQL) databases, cloud services and/or APIs.
 
-\subsubsection{Entity relations in the application layer}
-
+\subsubsection{Entity relations in the database layer}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.29]{entity-relationship-diagram}
-	\caption{ER diagram}
+	\includegraphics[scale=0.37]{entity-relationship-diagram.png}
+	\caption{Entity-relationship diagram}
 \end{figure}
 
 \subsection{Presentation layer / Frontend}
@@ -72,7 +71,7 @@ of the backend.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.57]{frontend-architecture}
+	\includegraphics[scale=0.32]{frontend-architecture.png}
 	\caption{Frontend architecture}
 \end{figure}
 
@@ -136,12 +135,70 @@ of a \emph{.NET Standard class library}, which can be used by both the backend a
 
 \section{Implementation}
 
+Being cross-platform and having a wide range of possibilities in terms of future expansion and upgrades, E-me focuses heavily on scalability and maintainability.
+In order to achieve these characteristics, multiple factors have to be considered during development, such as project structure, dependencies and code reusability.
+For this purpose, both the backend and the frontend of the application relies on \emph{Dependency Injection}.
+This technique allows for a service-based structure within the application and it is an elegant way of implementing loosely coupled classes.
+
+\subsection{Backend}
+
+The backend of E-me is separated into 5 projects that are defined by their role within the application.
+These projects are targeting the \emph{.NET 5.0} framework, one exception being the \emph{Shared} project, which is used as the common
+codebase for the backend and the frontend.
+The majority of the projects are \emph{Class Libraries}, which are collections of pre-coded object-oriented templates and classes. 
+These libraries revolve around the main entry-point of the application, the \emph{MVC project}.
+
+\subsubsection{The MVC project}
+
+As the main entry-point of the application backend, this project is responsible for configuring and registering all dependencies and services
+E-me requires and utilizes.
+This configuration of the \emph{IoC (inversion of control)} and the registration of dependencies take place in the \emph{Startup} class.
+This class is registered to the \emph{Host Builder} as soon as the application starts.
+
+\begin{lstlisting}
+  public static IHostBuilder CreateHostBuilder(string[] args)
+  {
+	return Host.CreateDefaultBuilder(args)
+		.ConfigureWebHostDefaults(webBuilder =>
+		{
+			webBuilder.UseStartup<Startup>();
+		});
+  }
+\end{lstlisting}
+
+This project defines the \emph{API Controllers} which are representing the endpoints of the backend.
+These controllers are the connection points through which the backend is able to communicate with other layers of the application.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.65]{swagger1.png}
+	\caption{API endpoints (1)}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.65]{swagger2.png}
+	\caption{API endpoints (2)}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.50]{use-case-diagram-unauth}
+	\caption{Use-case diagram (unauthenticated user)}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.50]{use-case-diagram}
+	\caption{Use-case diagram (authenticated user)}
+\end{figure}
+
 \section{Security}
 
 As a document-handling application, E-me relies heavily on secure communication, data storage and encryption.
 In order to achieve the required level of protection, the application uses a handful of libraries that target various layers within the backend and the frontend.
 
-\subsubsection{Data-layer security}
+\subsection{Data-layer security}
 
 First and foremost, E-me utilizes \emph{Entity Framework Core Data Encryption}, which is a plugin for the above mentioned \emph{Entity Framework Core},
  to add support of encrypted fields using built-in or custom encryption providers.
@@ -167,7 +224,7 @@ that require encryption. This selection can greatly reduce the time consumption 
   public string FullName { get; set; }
 \end{lstlisting}
 
-\subsubsection{End-to-end encryption (E2EE)}
+\subsection{End-to-end encryption (E2EE)}
 
 The second layer of security is located in the \emph{Business Layer} of the application backend.
 One of the main features of E-me is the end-to-end encrypted (E2EE) document transfer which is achieved by this second layer.
@@ -228,27 +285,8 @@ It enables communication bewteen parties in an encrypted form and it is used in 
 \subsubsection{Authentication and authorization}
 
 The majority of E-me's endpoints require authorization to be accessed.
-In order to authenticate, then authorize a user the application utilizes \emph{JSON Web Tokens (JWT)}.
+In order to authenticate and authorize a user, the application utilizes \emph{JSON Web Tokens (JWT)}.
 These tokens are generated by the authentication service upon providing the correct login credentials from the application frontend and are to be
 included in the header of the HTTP requests by the client.
+These tokens contain information about the user, the generator of the token and timestamps which are used to verify a token's validity.
 On the server-side, the \emph{JwtTokenValidatorMiddleware} is responsible for processing the request header and validating the incoming tokens for each request.
-
-
-\begin{itemize}
-	\item data-layer security
-	\begin{itemize}
-		\item using built-in EF Data Encryption with AES256
-	\end{itemize}
-	\item transport-layer security (TLS)
-	\begin{itemize}
-		\item https
-		\item JWT auth and auth verification
-		\item protected and unprotected endpoints
-	\end{itemize}
-	\item End-To-End encryption
-	\begin{itemize}
-		\item Elliptic Curve Diffie-Hellman key derivation - open-source implementation
-		\item encryption of documents
-		\item hash-based message authentication (HMAC)
-	\end{itemize}
-\end{itemize}
