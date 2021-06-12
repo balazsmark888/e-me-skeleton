@@ -169,6 +169,20 @@ This class is registered to the \emph{Host Builder} as soon as the application s
 This project defines the \emph{API Controllers} which are representing the endpoints of the backend.
 These controllers are the connection points through which the backend is able to communicate with other layers of the application.
 
+One of the most important of these controllers is the \emph{AuthController}, which is responsible for 
+registering, authenticating and de-authenticating the users of the application.
+This is the only controller that can be accessed by an unauthenticated user, since the rest of them handle more 
+sensitive data.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.50]{use-case-diagram-unauth}
+	\caption{Use-case diagram (unauthenticated user)}
+\end{figure}
+
+Once a user is authenticated, they are able to access the rest of the endpoints.
+A controller's or and endpoint's 
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.65]{swagger1.png}
@@ -181,11 +195,7 @@ These controllers are the connection points through which the backend is able to
 	\caption{API endpoints (2)}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.50]{use-case-diagram-unauth}
-	\caption{Use-case diagram (unauthenticated user)}
-\end{figure}
+
 
 \begin{figure}[H]
 	\centering
