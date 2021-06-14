@@ -24,7 +24,7 @@
 }
 \addtolength{\belowcaptionskip}{1pt}
 \addtolength{\abovecaptionskip}{-12pt}
-
+\renewcommand{\labelitemi}{$\circ$}
 \usepackage{pgf,tikz}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
@@ -39,16 +39,6 @@
 \usepackage{latexsym}
 \usepackage{multicol}
 \usepackage{setspace}
-
-%%% bibliography
-% \usepackage[square]{natbib}
-% \usepackage[numbers,sort]{natbib}
-\usepackage[square,sort]{natbib}
-\usepackage{natbibspacing}
-%%
-
-\renewcommand{\cite}{\protect\citep}
-\newcommand{\citeN}{\protect\citet}
 
 %% CODE
 \definecolor{codeCol}{rgb}{0,0.15,0.15}
