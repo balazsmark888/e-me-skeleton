@@ -11,9 +11,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\e-me.Model\e-me.Model.csproj" />
-    <ProjectReference Include="..\e-me.Shared\e-me.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

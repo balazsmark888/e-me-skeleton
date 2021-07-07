@@ -1,5 +1,4 @@
 ﻿using System;
-using e_me.Mobile.MenuItems;
 using e_me.Mobile.Services.Navigation;
 using Xamarin.Forms;
 
@@ -11,22 +10,11 @@ namespace e_me.Mobile
 
         public TabBar MainTabBar { get; }
 
-        public AppShell(INavigationService navigationService,
-            DocumentsTab documentsTab,
-            DocumentTypesTab documentTypesTab,
-            UserDetailsTab userDetailsTab)
+        public AppShell(INavigationService navigationService)
         {
             _navigationService = navigationService;
             InitializeComponent();
-            MainTabBar = new TabBar
-            {
-                Items =
-                {
-                    documentsTab,
-                    documentTypesTab,
-                    userDetailsTab
-                }
-            };
+            MainTabBar = new TabBar();
             Items.Add(MainTabBar);
             SetTabBarIsVisible(this, false);
         }
